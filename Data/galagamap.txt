@@ -1,10 +1,4 @@
-game:Galaga+
-Stage 1 Enemies: 22
-+
-Stage 2 Enemies: 28
-+
-Stage 3 Enemies: 50
-+
+game:BurgerTime+
 size:{
   cellsize:20-
   gridsize:
@@ -12,65 +6,86 @@ size:{
     y: 15
   -
 +
+Stage 1 Map:Stage1.png+
+Stage 1 Map:Stage2.png+
+Stage 1 Map:Stage3.png+
 Test:
-  ladder|platform|platform|platform|ladder|platform|ladder|platform|ladder|platform|platform|platform|ladder|platform|platform|platform|ladder,
-  ladder|space|space|space|ladder|boss|ladder|boss|ladder|space|space|space|ladder|space|space|space|ladder,
-  ladder|space|space|space|ladder|boss|ladder|boss|ladder|space|space|space|ladder|space|space|space|ladder,
-  space|space|ladder|space|ladder|boss|ladder|boss|ladder|space|ladder|space|ladder|space|space|space|ladder,
-  space|space|ladder|space|ladder|boss|ladder|boss|ladder|space|ladder|space|ladder|space|space|space|ladder,
-  space|space|ladder|space|ladder|boss|boss|boss|ladder|space|ladder|space|ladder|space|space|space|ladder,
-  ladder|space|ladder|space|ladder|boss|boss|boss|ladder|space|ladder|space|ladder|space|ladder|space|space,
-  ladder|space|ladder|space|ladder|boss|boss|boss|ladder|space|ladder|space|ladder|space|ladder|space|space,
-  ladder|space|ladder|space|ladder|boss|boss|boss|ladder|space|space|space|ladder|space|ladder|space|space,
-  ladder|space|ladder|space|ladder|boss|boss|boss|ladder|space|space|space|ladder|space|ladder|space|space,
-  ladder|space|ladder|space|ladder|boss|boss|boss|ladder|space|space|space|ladder|space|ladder|space|space,
-  ladder|space|ladder|space|ladder|boss|boss|boss|ladder|space|space|space|ladder|space|ladder|space|space,
-  ladder|space|space|space|ladder|boss|boss|boss|ladder|space|space|space|ladder|space|ladder|space|space,
-  ladder|space|space|space|ladder|boss|boss|boss|ladder|space|space|space|ladder|space|ladder|space|space,
-  ladder|space|space|space|ladder|boss|boss|boss|ladder|space|space|space|ladder|space|ladder|space|space,
+  Ladders: 
+    10|10|10|100,
+  -
+  Platforms:
+    10|10|400|4,
+  -
+  PattyTop:
+    120|10|50|10,
+    240|10|50|10,
+    340|10|50|10,
+    440|10|50|10,
+  -
+  Veggie:
+  -
+  Burger:
+  -
+  PattyBottom:
+  -
 +
 Stage 1:
   Ladders: 
     10|10|10|100,
+    40|10|10|100,
+    80|10|10|100,-
   Platforms:
-    10|10|400|4,
+    10|10|400|4,-
   PattyTop:
-    20|10|50|10,
+    65|10|50|10,
+    230|10|50|10,
+    400|10|50|10,
+    565|10|50|10-
   Veggie:
+    65|20|50|10,
+    230|20|50|10,
+    400|20|50|10,
+    565|20|50|10-
   Burger:
+    65|30|50|10,
+    230|30|50|10,
+    400|30|50|10,
+    565|30|50|10-
   PattyBottom:
+    65|40|50|10,
+    230|40|50|10,
+    400|40|50|10,
+    565|40|50|10-
 +
 Stage 2:
-  space|space|boss|space|boss|space|space|boss|space|boss|space|space,
-  space|goei|space|goei|goei|space|space|goei|goei|space|goei|space,
-  space|goei|space|goei|goei|space|space|goei|goei|space|goei|space,
-  space|zako|space|zako|zako|space|space|zako|zako|space|zako|space,
-  space|zako|space|zako|zako|space|space|zako|zako|space|zako|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|player|space|space|space|space|space|space
+  Ladders: 
+    10|10|10|100,
+    40|10|10|100,
+    80|10|10|100,-
+  Platforms:
+    10|10|400|4,-
+  PattyTop:
+    20|10|50|10,-
+  Veggie:
+    20|20|50|10,-
+  Burger:
+    20|30|50|10,-
+  PattyBottom:
+    20|40|50|10,-
 +
 Stage 3:
-  space|boss|boss|boss|boss|space|space|boss|boss|boss|boss|space,
-  space|goei|goei|goei|goei|goei|goei|goei|goei|goei|goei|space,
-  space|goei|goei|goei|goei|goei|goei|goei|goei|goei|goei|space,
-  space|zako|zako|zako|zako|zako|zako|zako|zako|zako|zako|space,
-  space|zako|zako|zako|zako|zako|zako|zako|zako|zako|zako|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|space|space|space|space|space|space|space,
-  space|space|space|space|space|player|space|space|space|space|space|space
+  Ladders: 
+    10|10|10|100,
+    40|10|10|100,
+    80|10|10|100,-
+  Platforms:
+    10|10|400|4,-
+  PattyTop:
+    20|10|50|10,-
+  Veggie:
+    20|20|50|10,-
+  Burger:
+    20|30|50|10,-
+  PattyBottom:
+    20|40|50|10,-
 +

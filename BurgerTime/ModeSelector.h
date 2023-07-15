@@ -10,8 +10,8 @@ namespace dae
 
 	public:
 		ModeSelector(dae::Scene* scene, std::function<void(dae::Scene*, bool)> createMainGalaga, std::function<void(dae::Scene*)> createSecondaryGalaga, std::function<void(dae::Scene*)> createStage, std::function<void(dae::Scene*)> createVersusGalaga, std::function<void(dae::Scene*)> createScore) : m_pScene{ scene } {
-			CreateMainGalaga = createMainGalaga;
-			CreateSecondaryGalaga = createSecondaryGalaga;
+			CreateMainPlayer = createMainGalaga;
+			CreateSecondaryPlayer = createSecondaryGalaga;
 			CreateVersusGalaga = createVersusGalaga;
 			CreateStage = createStage;
 			CreateScore = createScore;
@@ -37,8 +37,8 @@ namespace dae
 
 		dae::Scene* m_pScene;
 
-		std::function<void(dae::Scene* scene, bool isVersus)> CreateMainGalaga;
-		std::function<void(dae::Scene* scene)> CreateSecondaryGalaga;		
+		std::function<void(dae::Scene* scene, bool isVersus)> CreateMainPlayer;
+		std::function<void(dae::Scene* scene)> CreateSecondaryPlayer;		
 		std::function<void(dae::Scene* scene)> CreateStage;
 		std::function<void(dae::Scene* scene)> CreateVersusGalaga;
 		std::function<void(dae::Scene* scene)> CreateScore;

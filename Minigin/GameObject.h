@@ -20,37 +20,32 @@
 		PlayerGeneral,
 		Enemy,
 		EnemyHolder,
-		BulletGeneral,
-		EnemyBullet,
-		NormalBullet,
 		ScoreBoard,
 		Score,
 		Life,
 		Values,
-		Bg_back1,
-		Bg_back2,
-		Bg_front1,
-		Bg_front2,
+		Ladders,
+		Platforms,
+		PattyTop,
+		PattyBottom,
+		Veggie,
+		Burger,
 		MainMenu,
 		EndScreen,
 		Selector,
 		Logo,
-		CapturedFighter,
-		Weapon,
-		Opposer,
 		Global,
+		Opposer,
 		NUM_ENUM_VALUES
 	};
 
 	const std::string EnumStrings[NUM_ENUM_VALUES] = {
 	"MainPlayer0", "MainPlayer1", "MainPlayer",
 	"Enemy", "EnemyHolder",
-	"ullet", "EnemyBullet","Bullet",
 	"ScoreBoard", "Score", "Life", "Values",
-	"Bg_back1", "Bg_back2", "Bg_front1", "Bg_front2",
+	"Ladders", "Platforms", "PattyTop", "PattyBottom", "Veggie", "Burger",
 	"MainMenu", "EndScreen", "Selector", "Logo",
-	"CapturedGalaga", "Weapon", "Opposer",
-	"Global"
+	"Global", "Opposer"
 	};
 
 	enum class Stages {

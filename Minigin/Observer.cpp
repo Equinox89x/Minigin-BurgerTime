@@ -46,9 +46,7 @@ void dae::GameOverObserver::Notify(GameObject* /*go*/, Event event)
 	auto enemies{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
 	auto opposer{ m_Scene->GetGameObject(EnumStrings[Opposer]) };
 	auto values{ m_Scene->GetGameObject(EnumStrings[Values]) };
-	auto capturedFighters{ m_Scene->GetGameObjects(EnumStrings[CapturedFighter], false) };
 	auto logo{ m_Scene->GetGameObject(EnumStrings[Logo])->GetTransform() };
-	auto bullets{ m_Scene->GetGameObjects(EnumStrings[BulletGeneral], false) };
 
 	switch (event)
 	{
@@ -79,16 +77,6 @@ void dae::GameOverObserver::Notify(GameObject* /*go*/, Event event)
 		if (values)
 			values->MarkForDestroy();
 
-		for (auto fighter : capturedFighters)
-		{
-			fighter->MarkForDestroy();
-		}
-
-		for (auto bullet : bullets)
-		{
-			bullet->MarkForDestroy();
-		}
-
 		logo->AddTranslate(0, WindowSizeY);
 
 		break;
@@ -106,9 +94,7 @@ void dae::StageCleared::Notify(GameObject* /*go*/, Event event)
 	auto enemyHolder{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
 	auto opposer{ m_pScene->GetGameObject(EnumStrings[Opposer]) };
 	auto values{ m_pScene->GetGameObject(EnumStrings[Values]) };
-	auto capturedFighters{ m_pScene->GetGameObjects(EnumStrings[CapturedFighter], false) };
 	auto logo{ m_pScene->GetGameObject(EnumStrings[Logo])->GetTransform() };
-	auto bullets{ m_pScene->GetGameObjects(EnumStrings[BulletGeneral], false) };
 
 	switch (event)
 	{
@@ -142,17 +128,7 @@ void dae::StageCleared::Notify(GameObject* /*go*/, Event event)
 			scoreboard->MarkForDestroy();
 			m_pScene->GetGameObject("Stage 3")->SetName("Stage 1");
 
-			for (auto fighter : capturedFighters)
-			{
-				fighter->MarkForDestroy();
-			}
-
 			logo->AddTranslate(0, WindowSizeY);
-
-			for (auto bullet : bullets)
-			{
-				bullet->MarkForDestroy();
-			}
 			
 			if (values)
 				values->MarkForDestroy();

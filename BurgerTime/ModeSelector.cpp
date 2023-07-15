@@ -29,27 +29,23 @@ void dae::ModeSelector::StartGame(GameObject* pMenu)
 	switch (m_SelectedGameMode)
 	{
 	case dae::ModeSelector::GameMode::SOLO:
-		CreateScore(m_pScene);
-		CreateMainGalaga(m_pScene, false);
-		//2. show first stage
 		CreateStage(m_pScene);
+		CreateScore(m_pScene);
+		CreateMainPlayer(m_pScene, false);
 		break;
 	case dae::ModeSelector::GameMode::COOP:
-		CreateScore(m_pScene);
-		CreateMainGalaga(m_pScene, false);
-		CreateSecondaryGalaga(m_pScene);
-		//2. show first stage
 		CreateStage(m_pScene);
+		CreateScore(m_pScene);
+		CreateMainPlayer(m_pScene, false);
+		CreateSecondaryPlayer(m_pScene);
 		break;
 	case dae::ModeSelector::GameMode::VERSUS:
-		CreateScore(m_pScene);
-		CreateMainGalaga(m_pScene, true);
-		//2. show versus stage
 		CreateVersusGalaga(m_pScene);
+		CreateScore(m_pScene);
+		CreateMainPlayer(m_pScene, true);
 		break;
 	default:
 		break;
 	}
-	//TODO 3. stage start sequence
 
 }

@@ -32,22 +32,50 @@ void dae::FileReader::Render() const
 
 void dae::FileReader::ExtractLevel(std::string levelName) {
 	auto grid{ std::any_cast<std::string>(ObjectList[levelName])};
-	std::vector<std::vector<std::string>> griditems;
+	std::map<std::string, std::vector<std::vector<int>>> holde;
+	//std::vector<std::string> griditems;
 	std::vector<std::string> splitStrings2;
 	std::string line2;
 	std::stringstream ss2(grid);
-	while (std::getline(ss2, line2, ',')) {
+	while (std::getline(ss2, line2, '-')) {
 		std::stringstream ss3(line2);
 		splitStrings2.push_back(line2);
 
-		std::vector<std::string> splitStrings3;
-		std::string line3;
-		while (std::getline(ss3, line3, '|')) {
-			splitStrings3.push_back(line3);
+		size_t delimiterPos = line2.find(':');
+		if (delimiterPos != std::string::npos) {
+			line2.erase(std::remove(line2.begin(), line2.end(), '\n'), line2.end());
+
+			std::string key = line2.substr(0, delimiterPos);
+			key.erase(std::remove(key.begin(), key.end(), ':'), key.end());
+			key.erase(std::remove(key.begin(), key.end(), ' '), key.end());
+			std::string value = line2.substr(delimiterPos + 1);
+
+			std::vector<std::vector<std::string>> griditems;
+			std::stringstream ss4(value);
+			std::vector<std::vector<int>> splitStrings3;
+			std::string line3;
+			while (std::getline(ss4, line3, ',')) {
+				//splitStrings3.push_back(line3);
+
+				std::stringstream ss5(line3);
+				std::vector<int> splitStrings4;
+				std::string line4;
+				while (std::getline(ss5, line4, '|')) {
+					line4.erase(std::remove(line4.begin(), line4.end(), ' '), line4.end());
+					if (line4 != " " && line4!= "") {
+						splitStrings4.push_back(std::stoi(line4));
+					}
+				}
+				splitStrings3.push_back(splitStrings4);
+			}
+			//griditems.push_back(splitStrings3);
+			//griditems.push_back(line2);
+
+			holde.insert(std::make_pair(key, splitStrings3));
+			ObjectList[levelName] = holde;
 		}
-		griditems.push_back(splitStrings3);
 	}
-	ObjectList[levelName] = griditems;
+	//ObjectList[levelName] = griditems;
 }
 
 std::map<std::string, std::any> dae::FileReader::ParseData(std::string contents, char seperator) {
@@ -75,7 +103,7 @@ std::map<std::string, std::any> dae::FileReader::ParseData(std::string contents,
 		}
 	}
 
-	//ExtractLevel("Test");
+	ExtractLevel("Test");
 	ExtractLevel("Stage 1");
 	ExtractLevel("Stage 2");
 	ExtractLevel("Stage 3");

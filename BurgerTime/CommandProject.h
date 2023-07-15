@@ -39,22 +39,10 @@ namespace dae{
 		void Execute() override
 		{
 			auto enemies{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
-			auto capturedFighters{ m_pScene->GetGameObjects(EnumStrings[CapturedFighter], false) };
-			auto bullets{ m_pScene->GetGameObjects(EnumStrings[BulletGeneral], false) };
 
 			
 			if (enemies)
 				enemies->MarkForDestroy();
-
-			for (auto fighter : capturedFighters)
-			{
-				fighter->MarkForDestroy();
-			}
-
-			for (auto bullet : bullets)
-			{
-				bullet->MarkForDestroy();
-			}
 
 			auto children{ m_pScene->GetGameObject(EnumStrings[ScoreBoard])->GetChildren(EnumStrings[Life]) };
 			for (size_t i = 0; i < 3; i++)
