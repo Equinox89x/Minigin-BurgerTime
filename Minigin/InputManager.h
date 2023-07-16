@@ -88,23 +88,36 @@ namespace dae
 	private:
 
 	};
+
+	class InputCollection {
+
+	public:
+		InputCollection(int nrOfControllers) : m_NrOfControllers{nrOfControllers-1} {
+			for (int i = 0; i < m_NrOfControllers; i++)
+			{
+				m_Inputs.push_back(std::make_unique<InputManager>(i));
+			} 
+		};
+		~InputCollection() {
+			for (int i = 0; i < m_NrOfControllers; i++)
+			{
+				m_Inputs[i].release();
+			}
+		};
+		InputCollection(const InputCollection& other) = delete;
+		InputCollection(InputCollection&& other) = delete;
+		InputCollection& operator=(const InputCollection& other) = delete;
+		InputCollection& operator=(InputCollection&& other) = delete;
+
+		void ProcessInput() {
+			for (int i = 0; i < m_NrOfControllers; i++)
+			{
+				m_Inputs[i]->HandleInput();
+			}
+		}
+
+	private:
+		int m_NrOfControllers{ 0 };
+		std::vector<std::unique_ptr<InputManager>> m_Inputs;
+	};
 }
-
-	//class XController final
-	//{
-	//	class XControllerImpl;
-	//	XControllerImpl* pImpl;
-	//public:
-
-	//	void Update();
-
-	//	bool IsButtonDownThisFrame(ControllerButton button) const;
-	//	bool IsButtonUpThisFrame(ControllerButton button) const;
-	//	bool IsPressed(ControllerButton button) const;
-	//	glm::vec2 GetLeftThumbStick() const;
-	//	glm::vec2 GetRightThumbStick() const;
-
-	//	explicit XController(int controllerIndex);
-	//	~XController();
-	//};
-//};

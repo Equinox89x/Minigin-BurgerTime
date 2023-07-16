@@ -51,6 +51,9 @@
     <ClInclude Include="ModeSelector.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="BurgerManager.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioComponent.cpp">
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="BurgerTime.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BurgerManager.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

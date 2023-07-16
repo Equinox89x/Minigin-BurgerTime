@@ -49,6 +49,13 @@ void dae::GameObject::Update(){
 		}
 
 		for (Component* comp : m_pComponents) {
+			if (comp->IsMarkedForDestroy()) {
+				RemoveComponent(comp);
+				break;
+			}
+		}		
+		
+		for (Component* comp : m_pComponents) {
 			comp->Update();
 		}
 

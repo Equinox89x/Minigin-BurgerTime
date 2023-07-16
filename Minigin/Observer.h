@@ -1,90 +1,18 @@
 #pragma once
-#include "GameObject.h"
-#include "TextObjectComponent.h"
-#include "Scene.h"
-#include <functional>
 
-namespace dae
-{
-	enum class Event
-	{
-		Live,
-		Score,
-		GameOver,
-		StageCleared,
-		ToMenu,
-		Reset,
-	};
-
+class Event;
+namespace dae {
+	class GameObject;
 	class Observer
 	{
 	public:
+		explicit Observer() = default;
 		virtual ~Observer() = default;
-		virtual void Notify(GameObject* go, Event event) = 0;
-		//CSteamAchievements* g_SteamAchievements = nullptr;
 
+		Observer(const Observer& other) = delete;
+		Observer(Observer&& other) = delete;
+		Observer& operator=(const Observer& other) = delete;
+		Observer& operator=(Observer&& other) = delete;
+		virtual void Notify(GameObject* object, Event& event) = 0;
 	};
-
-	class ScoreObserver final : public Observer
-	{
-	public:
-
-		ScoreObserver(TextObjectComponent* const textComponent) : m_pTextComponent(textComponent) {
-			//g_SteamAchievements = new CSteamAchievements(g_Achievements, 4);
-		};
-		void Notify(GameObject* go, Event event) override;
-
-	private:
-
-		TextObjectComponent* m_pTextComponent;
-
-	};
-
-	class HealthObserver final : public Observer
-	{
-	public:
-		HealthObserver(const std::vector<GameObject*> gameObjects, Scene* scene) : GameObjects{ gameObjects }, m_Scene{ scene } {};
-		void Notify(GameObject* go, Event event) override;
-
-	private:
-		const std::vector<GameObject*> GameObjects;
-		Scene* m_Scene;
-	};
-
-	class GameOverObserver final : public Observer
-	{
-	public:
-		GameOverObserver(std::function<void(Scene*)> createEndScreen, Scene* scene) : MakeEndScreen{ createEndScreen }, m_Scene{ scene } {};
-		void Notify(GameObject* go, Event event) override;
-
-	private:
-		std::function<void(Scene* scene)> MakeEndScreen;
-		Scene* m_Scene;
-	};
-
-
-	class StageCleared final : public Observer
-	{
-	public:
-		StageCleared(std::function<void(Scene*, Stages, float)> createStage, std::function<void(Scene*)> makeEndScreen, Scene* scene) : CreateStage(createStage), MakeEndScreen{ makeEndScreen }, m_pScene { scene } {}
-		void Notify(GameObject* go, Event event) override;
-
-	private:
-		std::function<void(Scene*, Stages, float)> CreateStage;
-		std::function<void(Scene*)> MakeEndScreen;
-		Scene* m_pScene;
-	};	
-	
-	class ToMenu final : public Observer
-	{
-	public:
-		ToMenu(GameObject* menu, std::function<void(Scene*)> createMenuInput, Scene* scene) : Menu{ menu }, CreateMenuInput{ createMenuInput }, m_pScene { scene } {}
-		void Notify(GameObject* go, Event event) override;
-
-	private:
-		GameObject* Menu;
-		Scene* m_pScene;
-		std::function<void(Scene*)> CreateMenuInput;
-	};
-
 }

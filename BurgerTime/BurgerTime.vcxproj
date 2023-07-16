@@ -198,6 +198,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AudioComponent.h" />
+    <ClInclude Include="BurgerManager.h" />
     <ClInclude Include="BurgerTime.h" />
     <ClInclude Include="CommandProject.h" />
     <ClInclude Include="EndScreenComponent.h" />
@@ -210,6 +211,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioComponent.cpp" />
+    <ClCompile Include="BurgerManager.cpp" />
     <ClCompile Include="BurgerTime.cpp" />
     <ClCompile Include="EndScreenComponent.cpp" />
     <ClCompile Include="EnemyComponent.cpp" />

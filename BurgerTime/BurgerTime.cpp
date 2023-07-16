@@ -94,6 +94,9 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	std::vector<std::vector<int>> burgers = stageItems[EnumStrings[Burger]];
 
 	burgerManager->GetComponent<TextureComponent>()->SetTexture(name2);
+
+	//burger maneger has to detect when another burger piece overlaps with another, if yes they fall down until they detect a platform. If that platform has a burger piece, that piece has to fall down as well.
+
 	//for (size_t i = 0; i < ladders.size(); i++)
 	//{
 
