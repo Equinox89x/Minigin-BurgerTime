@@ -2,6 +2,7 @@
 #include <mutex>
 #include <queue>
 #include "Audio.h"
+#include <thread>
 
 class ConsoleAudio final: public Audio
 {
@@ -33,6 +34,7 @@ private:
     std::condition_variable m_ConditionVariable;
     std::queue<int> m_Queue;
     std::vector<Mix_Chunk*> m_pSounds;
+    std::jthread m_AudioThread;
 
 };
 

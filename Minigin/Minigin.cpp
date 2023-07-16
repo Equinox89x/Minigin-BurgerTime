@@ -103,8 +103,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto input = InputCollection(3);
 
 	m_Running = true;
-	float lag{ 0.f };
-	const float MS_PER_UPDATE{ 0.02f };
+	//float lag{ 0.f };
+	//const float MS_PER_UPDATE{ 0.02f };
 
 	Timer::GetInstance().Start();
 	sceneManager.Initialize();
@@ -115,12 +115,12 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		input.ProcessInput();
 
-		lag += Timer::GetInstance().GetDeltaTime();
-		while (lag >= MS_PER_UPDATE)
-		{
+		//lag += Timer::GetInstance().GetDeltaTime();
+		//while (lag >= MS_PER_UPDATE)
+		//{
 			sceneManager.Update();
-			lag -= MS_PER_UPDATE;
-		}
+		//	lag -= MS_PER_UPDATE;
+		//}
 		renderer.Render();
 	}
 

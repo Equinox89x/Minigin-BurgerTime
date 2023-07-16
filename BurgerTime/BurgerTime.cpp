@@ -36,15 +36,16 @@
 #include "../3rdParty/SDL2_mixer-2.0.4/include/SDL_mixer.h"
 #include <random>
 #include "Observers.h"
+#include "PlatformComponent.h"
 
 
 using namespace dae;
 
 void CreateSelectorInput(dae::Scene* scene) {
 	auto selector{ scene->GetGameObject(EnumStrings[Selector]) };
-	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_UP, 0 }, std::make_unique<CycleGameMode>(selector->GetComponent<ModeSelector>(), true));
-	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_DOWN, 0 }, std::make_unique<CycleGameMode>(selector->GetComponent<ModeSelector>(), false));
-	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_SPACE, 0 }, std::make_unique<StartGame>(selector->GetComponent<ModeSelector>(), selector->GetParent()));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_UP, 0 }, std::make_unique<CycleGameMode>(selector.get(), true));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_DOWN, 0 }, std::make_unique<CycleGameMode>(selector.get(), false));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_SPACE, 0 }, std::make_unique<StartGame>(selector.get()));
 }
 
 void CreateEndScreen(dae::Scene* /*scene*/) {
@@ -98,14 +99,20 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 
 	//burger maneger has to detect when another burger piece overlaps with another, if yes they fall down until they detect a platform. If that platform has a burger piece, that piece has to fall down as well.
 
-	//for (size_t i = 0; i < ladders.size(); i++)
-	//{
-
-	//}
-	//for (size_t i = 0; i < platforms.size(); i++)
-	//{
-
-	//}
+	for (size_t i = 0; i < ladders.size(); i++)
+	{
+		auto ladder = std::make_shared<GameObject>();
+		SDL_Rect rect{ ladders[i][0], ladders[i][1],ladders[i][2],ladders[i][3] };
+		ladder->AddComponent(std::make_unique<PlatformComponent>(rect));
+		scene->Add(ladder);
+	}
+	for (size_t i = 0; i < platforms.size(); i++)
+	{
+		auto platform = std::make_shared<GameObject>();
+		SDL_Rect rect{ platforms[i][0], platforms[i][1],platforms[i][2],platforms[i][3] };
+		platform->AddComponent(std::make_unique<PlatformComponent>(rect));
+		scene->Add(platform);
+	}
 	for (size_t i = 0; i < pattiesTop.size(); i++)
 	{
 		GameObject* pattyTop = new GameObject();
@@ -197,22 +204,26 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVer
 		//Keyboard
 		mainPlayer->AddComponent(std::make_unique<MoveKeyboardComponent>(mainPlayer->GetTransform()->GetPosition()));
 
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveUp.png"));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(0.f, -600.f, 0.0f)));
+		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveUp.png"));
+		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(0.f, -200.f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveUp.png", glm::vec3(0.f, -200.f, 0.0f)));
 
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_s, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveDown.png"));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_s, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(0.f, 600.f, 0.0f)));
+		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_s, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveDown.png"));
+		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_s, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(0.f, 200.f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_s, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveDown.png", glm::vec3(0.f, 200.f, 0.0f)));
 		 
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_a, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveLeft.png"));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_a, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(-600.f, 0.0f, 0.0f)));
+		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_a, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveLeft.png"));
+		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_a, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(-200.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_a, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveLeft.png", glm::vec3(-200.f, 0.0f, 0.0f)));
 
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_d, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveRight.png"));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_d, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(600.f, 0.0f, 0.0f)));
+		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_d, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveRight.png"));
+		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_d, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(200.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_d, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveRight.png", glm::vec3(200.f, 0.0f, 0.0f)));
 
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_w, id }, std::make_unique<StopMoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>()));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_s, id }, std::make_unique<StopMoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>()));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_a, id }, std::make_unique<StopMoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>()));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_d, id }, std::make_unique<StopMoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>()));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_w, id }, std::make_unique<StopMoveKeyboard>(mainPlayer.get()));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_s, id }, std::make_unique<StopMoveKeyboard>(mainPlayer.get()));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_a, id }, std::make_unique<StopMoveKeyboard>(mainPlayer.get()));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_d, id }, std::make_unique<StopMoveKeyboard>(mainPlayer.get()));
 
 		////Controller
 		//mainPlayer->AddComponent(new MoveControllerComponent(mainPlayer->GetTransform()->GetPosition()));
@@ -228,15 +239,15 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVer
 		//Controller
 		mainPlayer->AddComponent(std::make_unique<MoveControllerComponent>(mainPlayer->GetTransform()->GetPosition()));
 
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadUp, id }, std::make_unique<MoveController>(mainPlayer->GetComponent<MoveControllerComponent>(), glm::vec3(-600.f, 0.0f, 0.0f)));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadDown, id }, std::make_unique<MoveController>(mainPlayer->GetComponent<MoveControllerComponent>(), glm::vec3(600.f, 0.0f, 0.0f)));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadLeft, id }, std::make_unique<MoveController>(mainPlayer->GetComponent<MoveControllerComponent>(), glm::vec3(-600.f, 0.0f, 0.0f)));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadRight, id }, std::make_unique<MoveController>(mainPlayer->GetComponent<MoveControllerComponent>(), glm::vec3(600.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadUp, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveUp.png", glm::vec3(-600.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadDown, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveDown.png", glm::vec3(600.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadLeft, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveLeft.png", glm::vec3(-600.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadRight, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveRight.png", glm::vec3(600.f, 0.0f, 0.0f)));
 
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadUp, id }, std::make_unique<StopMoveController>(mainPlayer->GetComponent<MoveControllerComponent>()));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadDown, id }, std::make_unique<StopMoveController>(mainPlayer->GetComponent<MoveControllerComponent>()));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadLeft, id }, std::make_unique<StopMoveController>(mainPlayer->GetComponent<MoveControllerComponent>()));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadRight, id }, std::make_unique<StopMoveController>(mainPlayer->GetComponent<MoveControllerComponent>()));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadUp, id }, std::make_unique<StopMoveController>(mainPlayer.get()));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadDown, id }, std::make_unique<StopMoveController>(mainPlayer.get()));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadLeft, id }, std::make_unique<StopMoveController>(mainPlayer.get()));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadRight, id }, std::make_unique<StopMoveController>(mainPlayer.get()));
 	}
 	
 	MakeValues(scene);

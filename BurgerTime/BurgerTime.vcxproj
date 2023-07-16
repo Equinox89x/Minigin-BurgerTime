@@ -206,6 +206,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClInclude Include="framework.h" />
     <ClInclude Include="ModeSelector.h" />
     <ClInclude Include="Observers.h" />
+    <ClInclude Include="PlatformComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -218,6 +219,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClCompile Include="EnemyComponent.cpp" />
     <ClCompile Include="ModeSelector.cpp" />
     <ClCompile Include="Observers.cpp" />
+    <ClCompile Include="PlatformComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
   </ItemGroup>
   <ItemGroup>

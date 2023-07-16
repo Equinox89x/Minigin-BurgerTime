@@ -63,6 +63,9 @@
     <ClInclude Include="Commands.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="PlatformComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioComponent.cpp">
@@ -88,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="Observers.cpp">
       <Filter>Source Files\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

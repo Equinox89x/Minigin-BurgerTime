@@ -26,67 +26,60 @@ namespace dae
 	class MoveKeyboard final : public Command
 	{
 	public:
-		MoveKeyboard(MoveKeyboardComponent* const object, const glm::vec3& moveSpeed) : m_pObject(object), m_MoveSpeed(moveSpeed) {}
+		MoveKeyboard(GameObject* object, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
 		void Execute() override
 		{
-			m_pObject->SetMoveSpeed(m_MoveSpeed);
+
+			m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
+			m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
+			m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
 		}
 	private:
-		MoveKeyboardComponent* m_pObject;
+		GameObject* m_pObject;
 		glm::vec3 m_MoveSpeed;
+		std::string m_TextureName;
 	};
 
 	class StopMoveKeyboard final : public Command
 	{
 	public:
-		StopMoveKeyboard(MoveKeyboardComponent* const object) : m_pObject(object) {};
+		StopMoveKeyboard(GameObject* object) : m_pObject(object) {};
 		void Execute() override
 		{
-			m_pObject->SetMoveSpeed(glm::vec3(0, 0, 0));
+			m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(glm::vec3(0, 0, 0));
 		}
 	private:
-		MoveKeyboardComponent* m_pObject;
+		GameObject* m_pObject;
 	};
 #pragma endregion
-
-	class ChangeAnim final : public Command
-	{
-	public:
-		ChangeAnim(TextureComponent* const object, std::string textureName) : m_pObject(object), m_TextureName(textureName) {}
-		void Execute() override
-		{
-			m_pObject->SetTexture(m_TextureName);
-			m_pObject->SetNrOfFrames(3);
-		}
-	private:
-		TextureComponent* m_pObject;
-		std::string m_TextureName;
-	};
 
 #pragma region Move Controller	
 	class MoveController final : public Command
 	{
 	public:
-		MoveController(MoveControllerComponent* const object, const glm::vec3& moveSpeed) : m_pObject(object), m_MoveSpeed(moveSpeed) {}
+		MoveController(GameObject* object, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
 		void Execute() override
 		{
-			m_pObject->SetMoveSpeed(m_MoveSpeed);
+			m_pObject->GetComponent<MoveControllerComponent>()->SetMoveSpeed(m_MoveSpeed);
+			m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
+			m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
 		}
 	private:
-		MoveControllerComponent* m_pObject;
+		GameObject* m_pObject;
 		glm::vec3 m_MoveSpeed;
+		std::string m_TextureName;
 	};
 
 	class StopMoveController final : public Command
 	{
 	public:
-		StopMoveController(MoveControllerComponent* const object) : m_pObject(object) {};
+		StopMoveController(GameObject* object) : m_pObject(object) {};
 		void Execute() override
 		{
-			m_pObject->SetMoveSpeed(glm::vec3(0, 0, 0));
+			m_pObject->GetComponent<MoveControllerComponent>()->SetMoveSpeed(glm::vec3(0, 0, 0));
 		}
 	private:
-		MoveControllerComponent* m_pObject;
+		GameObject* m_pObject;
 	};
 #pragma endregion
 
@@ -94,26 +87,27 @@ namespace dae
 	class IncreaseScore final : public Command
 	{
 	public:
-		IncreaseScore(ValuesComponent* const object) : m_pObject(object) {}
+		IncreaseScore(GameObject* object) : m_pObject(object) {}
 		void Execute() override
 		{
-			m_pObject->IncreaseScore(100);
+
+			m_pObject->GetComponent<ValuesComponent>()->IncreaseScore(100);
 		}
 	private:
-		ValuesComponent* m_pObject;
+		GameObject* m_pObject;
 	};
 
 
 	class DownLives final : public Command
 	{
 	public:
-		DownLives(ValuesComponent* const object) : m_pObject(object) {}
+		DownLives(GameObject* const object) : m_pObject(object) {}
 		void Execute() override
 		{
-			m_pObject->Damage();
+			m_pObject->GetComponent<ValuesComponent>()->Damage();
 		}
 	private:
-		ValuesComponent* m_pObject;
+		GameObject* m_pObject;
 	};
 #pragma endregion
 
@@ -122,27 +116,26 @@ namespace dae
 	class CycleGameMode final : public Command
 	{
 	public:
-		CycleGameMode(ModeSelector* const object, bool isMoveUp) : m_pObject(object), m_IsMoveUp{ isMoveUp } {}
+		CycleGameMode(GameObject* object, bool isMoveUp) : m_pObject(object), m_IsMoveUp{ isMoveUp } {}
 		void Execute() override
 		{
-			m_pObject->CycleGameMode(m_IsMoveUp);
+			m_pObject->GetComponent<ModeSelector>()->CycleGameMode(m_IsMoveUp);
 		}
 	private:
-		ModeSelector* m_pObject;
+		GameObject* m_pObject;
 		bool m_IsMoveUp{};
 	};
 
 	class StartGame final : public Command
 	{
 	public:
-		StartGame(ModeSelector* const object, GameObject* menu) : m_pObject(object), m_pMenu{ menu } {}
+		StartGame(GameObject* object) : m_pObject(object) {}
 		void Execute() override
 		{
-			m_pObject->StartGame(m_pMenu);
+			m_pObject->GetComponent<ModeSelector>()->StartGame(m_pObject->GetParent());
 		}
 	private:
-		ModeSelector* m_pObject;
-		GameObject* m_pMenu;
+		GameObject* m_pObject;
 	};
 #pragma endregion
 

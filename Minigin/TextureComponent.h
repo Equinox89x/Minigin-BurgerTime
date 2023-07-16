@@ -29,7 +29,7 @@ namespace dae {
 		//void Initialize();
 		void Render() const;
 
-		void SetTexture(const std::string& filename, float animSpeed = 0.3f, int nrOfFrames = 1, bool resetAnim = true);
+		void SetTexture(const std::string& filename, float animSpeed = 0.1f, int nrOfFrames = 1, bool resetAnim = true);
 		void SetPosition(const float x, const float y);
 		void AddPosition(const float x, const float y);
 		void SetWorldPosition(const float x, const float y);
@@ -52,7 +52,7 @@ namespace dae {
 		float Angle{ 0 };
 		int NrOfFrames{ 1 };
 		int CurrentFrame{ 1 };
-		float DefaultAnimTime{ 0.3f };
+		float DefaultAnimTime{ 0.1f };
 		float AnimTimer{ DefaultAnimTime };
 		SDL_Rect m_Rect{};
 		SDL_Rect m_SrcRect{};

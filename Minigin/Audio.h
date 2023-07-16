@@ -29,5 +29,4 @@ public:
 
     virtual void SetEffectVolume(int volume) = 0;
     virtual void SetMusicVolume(int volume) = 0;
-
 };

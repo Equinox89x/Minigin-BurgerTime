@@ -7,7 +7,7 @@ Minigin is a very small project using [SDL2](https://www.libsdl.org/) and [glm](
 
 # Project
 
-This project includes the recreated retro game "Galaga". 
+This project includes the recreated retro game "Burger Time". 
 To prove this engine now works, this game was created to showcase the progress of the 2d Engine.
 
 # Disclaimer
@@ -16,4 +16,4 @@ Minigin is, despite perhaps the suggestion in its name, not a game engine. It is
 
 # Use
 
-Download the latest release of this project and compile/run the "Galaga" project in the solution in visual studio.
+Download the latest release of this project and compile/run the "Burger Time" project in the solution in visual studio.

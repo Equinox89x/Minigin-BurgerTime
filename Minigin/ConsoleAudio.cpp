@@ -29,10 +29,13 @@ void ConsoleAudio::Initialize()
 	}
 	// 8 mixing channels get created
 	MIX_CHANNELS;
+
+
 }
 
 void ConsoleAudio::Update()
 {
+	m_AudioThread = std::jthread([this]() {
 	while(m_Running)
 	{
 		std::unique_lock<std::mutex> lock(m_Mutex);
@@ -47,6 +50,8 @@ void ConsoleAudio::Update()
 		lock.unlock();
 	}
 	std::cout << "Exiting console audio update" << std::endl;
+	});
+	m_AudioThread.detach();
 }
 
 void ConsoleAudio::PlaySound(int soundID)
