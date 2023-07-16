@@ -123,7 +123,7 @@ void dae::GameObject::RemoveChild(GameObject* pObject)
 void dae::GameObject::AddChild(GameObject* const go)
 {
 	// Remove the given child from the child's previous parent
-	//go->m_pParent->
+	//go->m_pParent
 	//Set itself as parent of the child
 	go->m_pParent = this;
 	//Add the child to its children list.

@@ -76,6 +76,8 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	ResourceManager::GetInstance().Init(dataPath);
 
 	Timer::GetInstance().Init();
+
+	Locator::provide(new ConsoleAudio());
 }
 
 dae::Minigin::~Minigin()
@@ -91,9 +93,9 @@ void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
 
-	Audio* audioService = new ConsoleAudio();
-	Locator::provide(audioService);
-	std::thread audioThread(&Audio::Update, audioService);
+	//Audio* audioService = new ConsoleAudio();
+	//Locator::provide(audioService);
+	/*std::thread audioThread(&Audio::Update, audioService);*/
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
@@ -122,7 +124,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		renderer.Render();
 	}
 
-	audioThread.join();
+	//audioThread.join();
 
 	Timer::GetInstance().Stop();
 }

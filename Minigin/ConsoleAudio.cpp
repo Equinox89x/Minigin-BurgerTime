@@ -44,6 +44,7 @@ void ConsoleAudio::Update()
 			m_Queue.pop();
 			Mix_PlayChannel(-1, m_pSounds.at(id), 0);
 		}
+		lock.unlock();
 	}
 	std::cout << "Exiting console audio update" << std::endl;
 }
