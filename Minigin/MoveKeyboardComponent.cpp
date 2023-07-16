@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include "GameObject.h"
 #include "MoveKeyboardComponent.h"
 
 void dae::MoveKeyboardComponent::UpdatePos(float dt)

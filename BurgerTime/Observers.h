@@ -1,5 +1,12 @@
 #pragma once
 #include "Observer.h"
+#include "vector"
+#include "Event.h"
+#include "Scene.h"
+#include "GameObject.h"
+#include "TransformComponent.h"
+#include <functional>
+
 
 namespace dae
 {

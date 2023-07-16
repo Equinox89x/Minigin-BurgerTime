@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Observer.h"
+#include "Event.h"
 #include <memory>
 
 
@@ -8,9 +9,8 @@ namespace dae
 {
 	class Observer;
 	class GameObject;
-	enum class Event;
 
-	class Subject final
+	class Subject
 	{
 	public:
 		void AddObserver(std::shared_ptr<Observer> observer)
@@ -23,7 +23,7 @@ namespace dae
 			m_Callbacks.erase(it);
 		}
 
-		void Notify(GameObject* go, Event event)
+		void Notify(GameObject* go, Event& event)
 		{
 			for (auto& observer : m_Callbacks)
 			{

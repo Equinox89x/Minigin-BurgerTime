@@ -25,9 +25,6 @@
     <Filter Include="Header Files\Observers">
       <UniqueIdentifier>{ed1fa11f-c7ae-45ae-bd83-3cdb0445dc22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Observers">
-      <UniqueIdentifier>{cfd6cabb-7651-420c-8590-c900a89b26cf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Audio">
       <UniqueIdentifier>{d0b6d58e-9814-4d45-a988-121485a0eff1}</UniqueIdentifier>
     </Filter>
@@ -135,7 +132,7 @@
     <ClInclude Include="Observer.h">
       <Filter>Header Files\Observers</Filter>
     </ClInclude>
-    <ClInclude Include="Callback.h">
+    <ClInclude Include="Subject.h">
       <Filter>Header Files\Observers</Filter>
     </ClInclude>
     <ClInclude Include="ValuesComponent.h">
@@ -158,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="Audio.h">
       <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header Files\Observers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -212,9 +212,6 @@
     <ClCompile Include="FileReader.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="imgui_widgets.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
@@ -245,9 +242,6 @@
     <ClCompile Include="MoveControllerComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Callback.cpp">
-      <Filter>Source Files\Observers</Filter>
-    </ClCompile>
     <ClCompile Include="ValuesComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -259,9 +253,6 @@
     </ClCompile>
     <ClCompile Include="ConsoleAudio.cpp">
       <Filter>Source Files\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Observer.cpp">
-      <Filter>Source Files\Observers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

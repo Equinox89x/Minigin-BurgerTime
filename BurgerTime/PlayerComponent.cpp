@@ -1,4 +1,5 @@
 #include "PlayerComponent.h"
+#include "GameObject.h"
 #include <GalagaMath.h>
 #include <TextureComponent.h>
 #include <ValuesComponent.h>

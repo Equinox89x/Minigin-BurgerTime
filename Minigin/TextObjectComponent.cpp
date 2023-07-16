@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include "TextObjectComponent.h"
+#include "GameObject.h"
 #include "TransformComponent.h"
 #include "Renderer.h"
 #include "Font.h"

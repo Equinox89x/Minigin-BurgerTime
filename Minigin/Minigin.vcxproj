@@ -215,7 +215,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
-    <ClInclude Include="Callback.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="Subject.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ConsoleAudio.h" />
@@ -257,8 +258,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClInclude Include="ValuesComponent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Callback.cpp" />
-    <ClCompile Include="Component.cpp" />
     <ClCompile Include="ConsoleAudio.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -274,7 +273,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClCompile Include="Locator.cpp" />
     <ClCompile Include="MoveControllerComponent.cpp" />
     <ClCompile Include="MoveKeyboardComponent.cpp" />
-    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="OverlapComponent.cpp" />
     <ClCompile Include="RotatorComponent.cpp" />
     <ClCompile Include="TextureComponent.cpp" />

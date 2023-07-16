@@ -17,6 +17,7 @@
 #include "Audio.h"
 #include "ConsoleAudio.h"
 #include "Locator.h"
+#include "GameObject.h"
 
 SDL_Window* g_window{};
 

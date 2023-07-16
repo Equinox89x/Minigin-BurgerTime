@@ -1,5 +1,6 @@
 #include "Timer.h"
 #include "MoveControllerComponent.h"
+#include "GameObject.h"
 
 void dae::MoveControllerComponent::UpdatePos(float dt)
 {

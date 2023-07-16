@@ -1,6 +1,6 @@
 #pragma once
+#include "Event.h"
 
-class Event;
 namespace dae {
 	class GameObject;
 	class Observer
@@ -13,6 +13,6 @@ namespace dae {
 		Observer(Observer&& other) = delete;
 		Observer& operator=(const Observer& other) = delete;
 		Observer& operator=(Observer&& other) = delete;
-		virtual void Notify(GameObject* object, Event& event) = 0;
+		virtual void Notify(GameObject* go, Event& event) = 0;
 	};
 }

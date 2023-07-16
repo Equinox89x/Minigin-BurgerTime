@@ -4,21 +4,19 @@
 #include "TransformComponent.h"
 #include "TextureComponent.h"
 
-dae::GameObject::GameObject() : 
-	m_pTransform(new TransformComponent())
+dae::GameObject::GameObject()
 {
-	AddComponent(m_pTransform);
+	auto comp{ std::make_unique<TransformComponent>() };
+	m_pTransform = comp.get();
+	AddComponent(std::move(comp));
 }
 
 dae::GameObject::~GameObject() {
-	for (auto comp : m_pComponents) {
-		delete comp;
-	}
 	m_pComponents.clear();
 };
 
 void dae::GameObject::PostInitialize(){
-	for (Component* comp : m_pComponents) {
+	for (const std::unique_ptr<Component>& comp : m_pComponents) {
 		comp->PostInitialize();
 	}
 
@@ -29,7 +27,7 @@ void dae::GameObject::PostInitialize(){
 
 void dae::GameObject::Initialize()
 {
-	for (Component* comp : m_pComponents) {
+	for (const std::unique_ptr<Component>& comp : m_pComponents) {
 		comp->Initialize();
 	}
 
@@ -48,14 +46,14 @@ void dae::GameObject::Update(){
 			}
 		}
 
-		for (Component* comp : m_pComponents) {
+		for (const std::unique_ptr<Component>& comp : m_pComponents) {
 			if (comp->IsMarkedForDestroy()) {
 				RemoveComponent(comp);
 				break;
 			}
 		}		
 		
-		for (Component* comp : m_pComponents) {
+		for (const std::unique_ptr<Component>& comp : m_pComponents) {
 			comp->Update();
 		}
 
@@ -68,7 +66,7 @@ void dae::GameObject::Update(){
 void dae::GameObject::Render() const
 {
 	if(!m_IsHidden){
-		for (const Component* comp : m_pComponents) {
+		for (const std::unique_ptr<Component>& comp : m_pComponents) {
 			comp->Render();
 		}
 
@@ -79,13 +77,10 @@ void dae::GameObject::Render() const
 }
 
 #pragma region Component
-void dae::GameObject::RemoveComponent(Component* comp)
+void dae::GameObject::RemoveComponent(const std::unique_ptr<Component>& comp)
 {
 	if (comp) {
-		auto it = find(m_pComponents.begin(), m_pComponents.end(), comp);
-		m_pComponents.erase(it);
-		delete comp;
-		comp = nullptr;
+		m_pComponents.erase(std::remove(m_pComponents.begin(), m_pComponents.end(), comp));
 	}
 }
 

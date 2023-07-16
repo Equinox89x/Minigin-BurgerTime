@@ -1,8 +1,9 @@
 #pragma once
 #include "Component.h"
+#include "Subject.h"
 namespace dae {
 
-	class EndScreenComponent final : public Component
+	class EndScreenComponent final : public Component, public Subject
 	{
 	public:
 		EndScreenComponent() = default;

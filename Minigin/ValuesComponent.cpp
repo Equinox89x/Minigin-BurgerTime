@@ -1,31 +1,28 @@
 #include "ValuesComponent.h"
-#include "Callback.h"
+#include "Subject.h"
 #include "FileReader.h"
+#include "Event.h"
 
 dae::ValuesComponent::~ValuesComponent()
-{
-	delete m_pCallback;
-	m_pCallback = nullptr;
-}
+{}
 
 void dae::ValuesComponent::Update()
-{
-}
+{}
 
 void dae::ValuesComponent::FixedUpdate()
-{
-}
+{}
 
 void dae::ValuesComponent::Render() const
-{
-}
+{}
 
 void dae::ValuesComponent::Damage()
 {
 	m_Lives--;
-	m_pCallback->Notify(GetGameObject(), Event::Live);
+	Event live{ EventType::Live };
+	Notify(GetGameObject(), live);
 	if (m_Lives <= 0) {
-		m_pCallback->Notify(GetGameObject(), Event::GameOver);
+		Event gameOver{ EventType::GameOver };
+		Notify(GetGameObject(), gameOver);
 	}
 }
 
@@ -33,7 +30,8 @@ void dae::ValuesComponent::IncreaseScore(int score)
 {
 	m_Score += score;
 	auto go{ GetGameObject() };
-	m_pCallback->Notify(go, Event::Score);	
+	Event scoreEvent{ EventType::Score };
+	Notify(go, scoreEvent);
 }
 
 int dae::ValuesComponent::GetLives() const
@@ -53,7 +51,8 @@ int dae::ValuesComponent::GetScores() const
 
 void dae::ValuesComponent::ResetObserver()
 {
-	m_pCallback->Notify(GetGameObject(), Event::Reset);
+	Event reset{ EventType::Reset };
+	Notify(GetGameObject(), reset);
 }
 
 void dae::ValuesComponent::Reset()

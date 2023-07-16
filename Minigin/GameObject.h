@@ -4,7 +4,9 @@
 #include <vector>
 #include <map>
 #include <SDL.h>
+#include <typeindex>
 #include <glm/ext/vector_float3.hpp>
+#include "Component.h"
 
 #define WindowSizeX 720
 #define GameWindowSizeX WindowSizeX-140
@@ -82,25 +84,33 @@ namespace dae
 		bool IsCollisionEnabled() { return CollisionEnabled; };
 
 		template<typename Comp>
-		std::enable_if_t<std::is_base_of_v<Component, Comp>, Comp*>
-		AddComponent(Comp* comp) {
+		//std::enable_if_t<std::is_base_of_v<Component, Comp>, Comp*>
+		Comp* AddComponent(std::unique_ptr<Comp> comp) {
 			if (comp) {
-				m_pComponents.push_back(comp);
+				//auto component{ std::make_unique<Component*>(comp) }
 				comp->m_pGameObject = this;
-				dynamic_cast<Component*>(comp)->Initialize();
-				dynamic_cast<Component*>(comp)->PostInitialize();
-				return comp;
+				dynamic_cast<Component*>(comp.get())->Initialize();
+				dynamic_cast<Component*>(comp.get())->PostInitialize();
+				m_pComponents.push_back(std::move(comp));
+				return dynamic_cast<Comp*>(comp.get());
 			}
 			return nullptr;
 		}
 
+		//template <typename Comp> 
+		//Comp* AddComponent(std::unique_ptr<Comp> comp) {
+		//	if (comp.get()) {
+		//		m_pComponents.push_back(std::move(comp));
+		//	}
+		//	return comp;
+		//}
+
 		template<typename Comp>
 		Comp* GetComponent() {
 			const type_info& ti = typeid(Comp);
-			for (auto* component : m_pComponents)
-			{
-				if (component && typeid(*component) == ti)
-					return static_cast<Comp*>(component);
+			for (const auto& component : m_pComponents) {
+				if (component && typeid(*component.get()) == ti)
+					return static_cast<Comp*>(component.get());
 			}
 			return nullptr;
 		}
@@ -108,15 +118,15 @@ namespace dae
 		template<typename Comp>
 		Comp* GetComponent(std::string name) {
 			const type_info& ti = typeid(Comp);
-			for (auto* component : m_pComponents)
+			for (const auto& component : m_pComponents)
 			{
-				if (component && typeid(*component) == ti && component->GetName() == name)
-					return static_cast<Comp*>(component);
+				if (component && typeid(*component.get()) == ti && component->GetName() == name)
+					return static_cast<Comp*>(component.get());
 			}
 			return nullptr;
 		}
 
-		void RemoveComponent(Component* comp);
+		void RemoveComponent(const std::unique_ptr<Component>& comp);
 
 		void SetParent(GameObject* const parent);
 		GameObject* GetParent() const;
@@ -135,7 +145,7 @@ namespace dae
 
 	private:
 		std::vector<GameObject*> m_pChildren{ std::vector<GameObject*>() };
-		std::vector<Component*> m_pComponents{ std::vector<Component*>() };
+		std::vector<std::unique_ptr<Component>> m_pComponents{ };
 		GameObject* m_pParent{ nullptr };
 		TransformComponent* m_pTransform{};
 		std::string m_ObjectName{};

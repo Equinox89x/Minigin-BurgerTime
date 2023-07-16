@@ -3,6 +3,7 @@
 #include "TextureComponent.h"
 #include "GalagaMath.h"
 #include "ValuesComponent.h"
+#include "GameObject.h"
 
 std::vector<dae::GameObject*> dae::OverlapComponent::GetOverlappingObjects(bool hasDimensions)
 {

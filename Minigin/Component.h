@@ -1,8 +1,12 @@
 #pragma once
-#include "GameObject.h"
+
+#include <string>
+//#include "GameObject.h"
 
 namespace dae
 {
+	class GameObject;
+	class Subject;
 	class Component
 	{
 	public:
@@ -28,6 +32,7 @@ namespace dae
 
 	protected:
 		GameObject* m_pGameObject{};
+		Subject* m_pCallback{};
 
 	private:
 		friend class GameObject;

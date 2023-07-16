@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <string>
+#include <vector>
 #include <memory>
 #include <fstream>
 #include <any>

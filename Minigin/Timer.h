@@ -14,6 +14,7 @@ namespace dae {
 
 
 		float GetDeltaTime() const { return static_cast<float>(m_ElapsedTime); };
+		float GetDeltaTimeSec() const { return static_cast<float>(m_DeltaTime); };
 		uint32_t GetFPS() const { return m_FPS; };
 		float GetTotal() const { return m_TotalTime; };
 

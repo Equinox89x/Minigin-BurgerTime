@@ -1,11 +1,12 @@
 #pragma once
 #include "Component.h"
 #include "Scene.h"
+#include "Subject.h"
 
 namespace dae
 {
 
-	class ValuesComponent final : public Component
+	class ValuesComponent final : public Component, public Subject
 	{
 
 	public:

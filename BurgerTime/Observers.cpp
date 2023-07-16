@@ -3,7 +3,6 @@
 #include <string>
 #include "Minigin.h"
 #include "Observer.h"
-#include "Event.h"
 #include "FileReader.h"
 #include "InputManager.h"
 #include "../BurgerTime/AudioComponent.h"
@@ -41,7 +40,7 @@ void dae::HealthObserver::Notify(GameObject* go, Event& event)
 
 void dae::GameOverObserver::Notify(GameObject* /*go*/, Event& event)
 {
-	auto players{ m_Scene->GetGameObjects(EnumStrings[PlayerGeneral], false) };
+	std::vector<std::shared_ptr<GameObject>> players{ m_Scene->GetGameObjects(EnumStrings[PlayerGeneral], false) };
 	/*auto player0{ m_Scene->GetGameObject("Player0") };
 	auto player1{ m_Scene->GetGameObject("Player1") };*/
 	auto scoreboard{ m_Scene->GetGameObject(EnumStrings[ScoreBoard]) };

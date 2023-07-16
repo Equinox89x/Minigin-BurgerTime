@@ -2,6 +2,7 @@
 #include "TextObjectComponent.h"
 #include "Transformcomponent.h"
 #include "Minigin.h"
+#include <GameObject.h>
 
 void dae::ModeSelector::CycleGameMode(bool isMoveUp)
 {

@@ -1,8 +1,9 @@
 #include "TransformComponent.h"
+#include "GameObject.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-dae::TransformComponent::TransformComponent():
+dae::TransformComponent::TransformComponent() : 
 	m_Position{ 0, 0, 0 },
 	m_WorldPosition{ 0, 0, 0 },
 	m_Rotation{ 0, 0, 0 },
