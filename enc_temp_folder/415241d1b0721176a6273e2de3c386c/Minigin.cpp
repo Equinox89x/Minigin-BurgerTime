@@ -118,10 +118,10 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		sceneManager.Update();
 		renderer.Render();
 
-		const float sleepTime{ frame_time - Timer::GetInstance().GetDeltaTime()};
-		const auto& sleepDuration{ std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::duration<float, std::milli>(sleepTime)) };
-		if (sleepTime > 0)
-			std::this_thread::sleep_for(sleepDuration);
+		const float sleep_time{ frame_time - Timer::GetInstance().GetDeltaTime()};
+		const auto& sleep_duration{ std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::duration<float, std::milli>(sleep_time)) };
+		if (sleep_time > 0)
+			std::this_thread::sleep_for(sleep_duration);
 	}
 
 	//audioThread.join();
