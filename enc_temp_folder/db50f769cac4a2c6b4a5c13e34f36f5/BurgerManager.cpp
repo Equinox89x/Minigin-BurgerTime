@@ -20,22 +20,29 @@ void dae::BurgerManager::Update()
 		auto burgerRect{ burger->GetComponent<TextureComponent>()->GetRect() };
 
 		//player overlap
-		HandleOverlap(charRect, pattyTopRect, pattyTop);
-		HandleOverlap(charRect, pattyBottomRect, pattyBottom);
-		HandleOverlap(charRect, veggieRect, veggie);
-		HandleOverlap(charRect, burgerRect, burger);
+		if (GalagaMath::IsOverlapping(charRect, pattyTopRect)) {
+			pattyTop->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		}		
+		if (GalagaMath::IsOverlapping(charRect, pattyBottomRect)) {
+			pattyBottom->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		}
+		if (GalagaMath::IsOverlapping(charRect, veggieRect)) {
+			veggie->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		}
+		if (GalagaMath::IsOverlapping(charRect, burgerRect)) {
+			burger->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		}
 
 		//burger overlap
-		HandleOverlap(pattyTopRect, veggieRect, veggie);
-		HandleOverlap(veggieRect, burgerRect, burger);
-		HandleOverlap(burgerRect, pattyBottomRect, pattyBottom);
-	}
-}
-
-void dae::BurgerManager::HandleOverlap(SDL_Rect& charRect, SDL_Rect& pattyTopRect, dae::GameObject*& pattyTop)
-{
-	if (GalagaMath::IsOverlapping(charRect, pattyTopRect)) {
-		pattyTop->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		if (GalagaMath::IsOverlapping(pattyTopRect, veggieRect)) {
+			veggie->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		}
+		if (GalagaMath::IsOverlapping(veggieRect, burgerRect)) {
+			burger->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		}
+		if (GalagaMath::IsOverlapping(burgerRect, pattyBottomRect)) {
+			pattyBottom->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		}
 	}
 }
 

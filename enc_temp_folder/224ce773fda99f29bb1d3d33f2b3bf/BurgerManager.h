@@ -19,7 +19,6 @@ namespace dae {
 
 		//void Initialize() override;
 		void Update() override;
-		void HandleOverlap(SDL_Rect& charRect, SDL_Rect& pattyTopRect, dae::GameObject*& pattyTop);
 		//void Render() const;
 
 		std::map<std::string, GameObject*> AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger);

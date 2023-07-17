@@ -37,6 +37,8 @@
 #include <random>
 #include "Observers.h"
 #include "PlatformComponent.h"
+#include "BurgerManager.h"
+#include "BurgerComponent.h"
 
 
 using namespace dae;
@@ -96,6 +98,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	std::vector<std::vector<int>> burgers = stageItems[EnumStrings[Burger]];
 
 	burgerManager->GetComponent<TextureComponent>()->SetTexture(name2);
+	burgerManager->AddComponent(std::make_unique<BurgerManager>(scene));
 
 	//burger maneger has to detect when another burger piece overlaps with another, if yes they fall down until they detect a platform. If that platform has a burger piece, that piece has to fall down as well.
 
@@ -120,7 +123,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		pattyTop->GetComponent<TextureComponent>()->SetTexture("pattyTop.png");
 		pattyTop->GetComponent<TextureComponent>()->Scale(3, 3);
 		pattyTop->GetComponent<TransformComponent>()->Translate(static_cast<float>(pattiesTop[i][0]), static_cast<float>(pattiesTop[i][1]));
-		//pattyTop->AddComponent(new BurgerComponent("pattyTop", "png"));		
+		pattyTop->AddComponent(std::make_unique<BurgerComponent>());		
 		burgerManager->AddChild(pattyTop);
 
 
@@ -129,7 +132,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		veggie->GetComponent<TextureComponent>()->SetTexture("veggie.png");
 		veggie->GetComponent<TextureComponent>()->Scale(3, 3);
 		veggie->GetComponent<TransformComponent>()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]));
-		//veggie->AddComponent(new BurgerComponent("veggie", "png"));
+		veggie->AddComponent(std::make_unique<BurgerComponent>());
 		burgerManager->AddChild(veggie);
 
 		GameObject * burger = new GameObject();
@@ -137,7 +140,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		burger->GetComponent<TextureComponent>()->SetTexture("burger.png");
 		burger->GetComponent<TextureComponent>()->Scale(3, 3);
 		burger->GetComponent<TransformComponent>()->Translate(static_cast<float>(burgers[i][0]), static_cast<float>(burgers[i][1]));
-		//burger->AddComponent(new BurgerComponent("burger", "png"));
+		burger->AddComponent(std::make_unique<BurgerComponent>());
 		burgerManager->AddChild(burger);
 
 		GameObject * pattyBottom = new GameObject();
@@ -145,10 +148,10 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		pattyBottom->GetComponent<TextureComponent>()->SetTexture("pattyBottom.png");
 		pattyBottom->GetComponent<TextureComponent>()->Scale(3, 3);
 		pattyBottom->GetComponent<TransformComponent>()->Translate(static_cast<float>(pattiesBottom[i][0]), static_cast<float>(pattiesBottom[i][1]));
-		//pattyBottom->AddComponent(new BurgerComponent("pattyBottom", "png"));
+		pattyBottom->AddComponent(std::make_unique<BurgerComponent>());
 		burgerManager->AddChild(pattyBottom);
 
-		//burgerManager->AddBurger(pattyTop, veggie, burger, pattyBottom);
+		burgerManager->GetComponent<BurgerManager>()->AddBurger(pattyTop, pattyBottom, veggie, burger);
 		//scene->Add(pattyTop);
 		//scene->Add(veggie);
 		//scene->Add(burger);
