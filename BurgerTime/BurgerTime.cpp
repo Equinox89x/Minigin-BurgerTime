@@ -96,6 +96,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	std::vector<std::vector<int>> pattiesBottom = stageItems[EnumStrings[PattyBottom]];
 	std::vector<std::vector<int>> veggies = stageItems[EnumStrings[Veggie]];
 	std::vector<std::vector<int>> burgers = stageItems[EnumStrings[Burger]];
+	std::vector<std::vector<int>> plates = stageItems[EnumStrings[Plates]];
 
 	burgerManager->GetComponent<TextureComponent>()->SetTexture(name2);
 	burgerManager->AddComponent(std::make_unique<BurgerManager>(scene));
@@ -107,6 +108,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		auto ladder = std::make_shared<GameObject>();
 		SDL_Rect rect{ ladders[i][0], ladders[i][1],ladders[i][2],ladders[i][3] };
 		ladder->AddComponent(std::make_unique<PlatformComponent>(rect));
+		burgerManager->GetComponent<BurgerManager>()->AddLadder(rect, ladder.get());
 		scene->Add(ladder);
 	}
 	for (size_t i = 0; i < platforms.size(); i++)
@@ -114,7 +116,16 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		auto platform = std::make_shared<GameObject>();
 		SDL_Rect rect{ platforms[i][0], platforms[i][1],platforms[i][2],platforms[i][3] };
 		platform->AddComponent(std::make_unique<PlatformComponent>(rect));
+		burgerManager->GetComponent<BurgerManager>()->AddPlatform(rect, platform.get());
 		scene->Add(platform);
+	}	
+	for (size_t i = 0; i < plates.size(); i++)
+	{
+		auto plate = std::make_shared<GameObject>();
+		SDL_Rect rect{ plates[i][0], plates[i][1],plates[i][2],plates[i][3] };
+		plate->AddComponent(std::make_unique<PlatformComponent>(rect));
+		burgerManager->GetComponent<BurgerManager>()->AddPlate(rect, plate.get());
+		scene->Add(plate);
 	}
 	for (size_t i = 0; i < pattiesTop.size(); i++)
 	{

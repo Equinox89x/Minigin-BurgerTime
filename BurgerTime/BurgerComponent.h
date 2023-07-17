@@ -4,6 +4,7 @@
 
 namespace dae {
 	enum class BurgerState {
+		FALLING_NO_INTERUPT,
 		FALLING,
 		STATIC,
 		FINISHED
@@ -24,10 +25,17 @@ namespace dae {
 		//void Render() const;
 
 		void SetState(BurgerState state) { m_BurgerState = state; };
+		BurgerState GetState() { return m_BurgerState; };
+
+		void HandleOverlap(SDL_Rect& otherRect);
+		void HandlePlatformOverlap(SDL_Rect& otherRect, bool isFinished);
+
 
 	private:
 		BurgerState m_BurgerState{ BurgerState::STATIC };
 		const float m_FallSpeed{ 100 };
+		const float m_NoInterruptTimerDefault{ 0.3f };
+		float m_NoInterruptTimer{ m_NoInterruptTimerDefault };
 	};
 }
 

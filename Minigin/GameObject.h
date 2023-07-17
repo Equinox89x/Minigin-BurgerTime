@@ -38,6 +38,7 @@
 		Logo,
 		Global,
 		Opposer,
+		Plates,
 		NUM_ENUM_VALUES
 	};
 
@@ -47,7 +48,7 @@
 	"ScoreBoard", "Score", "Life", "Values",
 	"Ladders", "Platforms", "PattyTop", "PattyBottom", "Veggie", "Burger",
 	"MainMenu", "EndScreen", "Selector", "Logo",
-	"Global", "Opposer"
+	"Global", "Opposer", "Plates"
 	};
 
 	enum class Stages {

@@ -19,14 +19,19 @@ namespace dae {
 
 		//void Initialize() override;
 		void Update() override;
-		void HandleOverlap(SDL_Rect& charRect, SDL_Rect& pattyTopRect, dae::GameObject*& pattyTop);
-		//void Render() const;
+		void Render() const;
 
 		std::map<std::string, GameObject*> AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger);
+		std::pair<SDL_Rect, GameObject*> AddPlatform(SDL_Rect rect, GameObject* go);
+		std::pair<SDL_Rect, GameObject*> AddLadder(SDL_Rect rect, GameObject* go);
+		std::pair<SDL_Rect, GameObject*> AddPlate(SDL_Rect rect, GameObject* go);
 
 	private:
 		Scene* m_Scene{};
 		std::vector<std::map<std::string, GameObject*>> m_Burgers;
+		std::vector<std::pair<SDL_Rect, GameObject*>> m_Platforms;
+		std::vector<std::pair<SDL_Rect, GameObject*>> m_pPlates;
+		std::vector<std::pair<SDL_Rect, GameObject*>> m_pLadders;
 	};
 
 }
