@@ -1,9 +1,9 @@
 #include "PlayerComponent.h"
 #include "GameObject.h"
-#include <GalagaMath.h>
 #include <TextureComponent.h>
 #include <ValuesComponent.h>
 #include <Timer.h>
+#include <Renderer.h>
 #include "AudioComponent.h"
 
 void dae::PlayerComponent::Update()
@@ -23,6 +23,148 @@ void dae::PlayerComponent::Update()
         HandleEnemyOverlap();
     }
 }
+
+void dae::PlayerComponent::Render() const
+{
+
+    auto r = GetGameObject()->GetComponent<TextureComponent>()->GetRect();
+    auto charRect{ SDL_Rect{r.x, r.y, r.w, r.h } };
+    auto charRectLeft{ charRect };
+    charRectLeft.w /= 5;
+    charRectLeft.x -= charRectLeft.w;
+    charRectLeft.h /= 2;
+    charRectLeft.y += charRect.h/4;
+
+    auto charRectRight{ charRect };
+    charRectRight.x += charRect.w;
+    charRectRight.w /= 5;
+    charRectRight.h /= 2;
+    charRectRight.y += charRect.h/4;
+
+    auto charRectTop{ charRect };
+    charRectTop.h /= 5;
+    charRectTop.w /= 2;
+    charRectTop.x += charRect.w/4;
+    charRectTop.y -= charRectTop.h;
+
+    auto charRectBottom{ charRect };
+    charRectBottom.h /= 5;
+    charRectBottom.y += charRect.h;
+    charRectBottom.w /= 2;
+    charRectBottom.x += charRect.w/4;
+
+    SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
+    SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &charRectLeft);
+    SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 0, 255); // Set the color to red
+    SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &charRectRight);
+    SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 255, 255); // Set the color to red
+    SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &charRectTop);
+    SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 0, 255); // Set the color to red
+    SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &charRectBottom);
+}
+
+void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& rects, bool /*isVertical*/)
+{
+    GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Right, true);
+    GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Left, true);
+    GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Top, true);
+    GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Bottom, true);
+
+    auto r = GetGameObject()->GetComponent<TextureComponent>()->GetRect();
+    for (auto item : rects)
+    {
+        auto charRect{ SDL_Rect{r.x, r.y, r.w, r.h } };
+        auto charRectLeft{ charRect };
+        charRectLeft.w /= 5;
+        charRectLeft.x -= charRectLeft.w;
+        charRectLeft.h /= 2;
+        charRectLeft.y += charRect.h / 4;
+
+        auto charRectRight{ charRect };
+        charRectRight.x += charRect.w;
+        charRectRight.w /= 5;
+        charRectRight.h /= 2;
+        charRectRight.y += charRect.h / 4;
+
+        auto charRectTop{ charRect };
+        charRectTop.h /= 5;
+        charRectTop.w /= 2;
+        charRectTop.x += charRect.w / 4;
+        charRectTop.y -= charRectTop.h;
+
+        auto charRectBottom{ charRect };
+        charRectBottom.h /= 5;
+        charRectBottom.y += charRect.h;
+        charRectBottom.w /= 2;
+        charRectBottom.x += charRect.w / 4;
+
+        //if(isVertical){
+        if (GalagaMath::IsOverlapping(charRectRight, item.first)) { 
+            GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Right, false); break; }
+          if (GalagaMath::IsOverlapping(charRectLeft, item.first)){ 
+              GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Left, false);break;}
+          if (GalagaMath::IsOverlapping(charRectTop, item.first)){ 
+              GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Top, false);break;}
+          if (GalagaMath::IsOverlapping(charRectBottom, item.first)) { 
+              GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Bottom, false); break;}
+      /*  }
+        else {
+            switch (GalagaMath::GetNonOverlappingSide(item.first, charRect))
+            {
+            case GalagaMath::Side::Left:
+                left = true;
+                break;
+            case GalagaMath::Side::Right:
+                right= true;
+                break;
+
+            default:
+                break;
+            }
+
+        }*/
+
+
+      /*  if (GalagaMath::IsCompletelyOverlapping(item.first, charRect)) {
+            if (isVertical) { 
+                GetGameObject()->GetComponent<PlayerComponent>()->SetCanMoveVertically(true); 
+                didVertOverlap = true;
+            }
+            else { 
+                GetGameObject()->GetComponent<PlayerComponent>()->SetCanMoveHorizontally(true); 
+                didHorOverlap = true;
+            }
+        }
+
+        if (GalagaMath::IsOverlapping(item.first, charRect)) {
+            if (isVertical) {
+                GetGameObject()->GetComponent<PlayerComponent>()->SetCanMoveVertically(false);
+                didVertOverlap = false;
+            }
+            else {
+                GetGameObject()->GetComponent<PlayerComponent>()->SetCanMoveHorizontally(false);
+                didHorOverlap = false;
+            }
+        }*/
+    }
+    /*if (isVertical) {
+        if(!didVertOverlap) GetGameObject()->GetComponent<PlayerComponent>()->SetCanMoveVertically(false);
+    }
+    else {
+        if(!didHorOverlap) GetGameObject()->GetComponent<PlayerComponent>()->SetCanMoveHorizontally(false);
+    }*/
+    //if (isVertical) {
+
+    //    GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Bottom, bottom);
+    //    GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Top, top);
+    //    GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Left, left);
+    //}
+    //else {
+    //    GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::Right, right);
+    //    GetGameObject()->GetComponent<PlayerComponent>()->SetCanMove(GalagaMath::Side::None, none);
+    //}
+}
+
 
 void dae::PlayerComponent::HandleEnemyOverlap()
 {

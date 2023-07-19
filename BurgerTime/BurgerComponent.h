@@ -28,7 +28,8 @@ namespace dae {
 		BurgerState GetState() { return m_BurgerState; };
 
 		void HandleOverlap(SDL_Rect& otherRect);
-		void HandlePlatformOverlap(SDL_Rect& otherRect, bool isFinished);
+		void HandleOverlap(GameObject* otherObj);
+		void HandlePlatformOverlap(SDL_Rect& otherRect, bool isFinished = false);
 
 
 	private:

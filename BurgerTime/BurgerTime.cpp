@@ -105,11 +105,18 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 
 	for (size_t i = 0; i < ladders.size(); i++)
 	{
+		SDL_Rect rect{ ladders[i][0]+36, ladders[i][1],ladders[i][2],ladders[i][3] };
+		SDL_Rect rect2{ ladders[i][0]-36, ladders[i][1],ladders[i][2],ladders[i][3] };
+
 		auto ladder = std::make_shared<GameObject>();
-		SDL_Rect rect{ ladders[i][0], ladders[i][1],ladders[i][2],ladders[i][3] };
 		ladder->AddComponent(std::make_unique<PlatformComponent>(rect));
 		burgerManager->GetComponent<BurgerManager>()->AddLadder(rect, ladder.get());
 		scene->Add(ladder);
+		
+		auto ladder2 = std::make_shared<GameObject>();
+		ladder2->AddComponent(std::make_unique<PlatformComponent>(rect2));
+		burgerManager->GetComponent<BurgerManager>()->AddLadder(rect2, ladder2.get());
+		scene->Add(ladder2);
 	}
 	for (size_t i = 0; i < platforms.size(); i++)
 	{
@@ -214,24 +221,18 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVer
 	//bullets
 	mainPlayer->AddComponent(std::make_unique<PlayerComponent>(scene));
 
+	mainPlayer->GetComponent<TransformComponent>()->Translate(320, 525);
+
 	if (id == 0) {
 		//Keyboard
 		mainPlayer->AddComponent(std::make_unique<MoveKeyboardComponent>(mainPlayer->GetTransform()->GetPosition()));
 
-		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveUp.png"));
-		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(0.f, -200.f, 0.0f)));
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveUp.png", glm::vec3(0.f, -200.f, 0.0f)));
 
-		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_s, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveDown.png"));
-		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_s, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(0.f, 200.f, 0.0f)));
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_s, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveDown.png", glm::vec3(0.f, 200.f, 0.0f)));
 		 
-		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_a, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveLeft.png"));
-		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_a, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(-200.f, 0.0f, 0.0f)));
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_a, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveLeft.png", glm::vec3(-200.f, 0.0f, 0.0f)));
 
-		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_d, id }, std::make_unique<ChangeAnim>(mainPlayer->GetComponent<TextureComponent>(), "moveRight.png"));
-		//Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_d, id }, std::make_unique<MoveKeyboard>(mainPlayer->GetComponent<MoveKeyboardComponent>(), glm::vec3(200.f, 0.0f, 0.0f)));
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_d, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveRight.png", glm::vec3(200.f, 0.0f, 0.0f)));
 
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_w, id }, std::make_unique<StopMoveKeyboard>(mainPlayer.get()));

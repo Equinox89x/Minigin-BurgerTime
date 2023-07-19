@@ -9,12 +9,12 @@
 #include "Component.h"
 
 #define WindowSizeX 720
-#define GameWindowSizeX WindowSizeX-140
+#define GameWindowSizeX WindowSizeX-0
 #define WindowSizeY 720
 #define Margin 40.f
 #define SubMargin Margin * 2
 #define Cellsize 48.3f
-#define GalagaSize 40.f
+#define GalagaSize 14.f
 
 	const enum Names {
 		Player0,

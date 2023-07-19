@@ -1,7 +1,9 @@
 #include "BurgerManager.h"
 #include "TextureComponent.h"
 #include "BurgerComponent.h"
+#include "Galagamath.h"
 #include "Renderer.h"
+#include "PlayerComponent.h"
 
 void dae::BurgerManager::Update()
 {
@@ -13,11 +15,6 @@ void dae::BurgerManager::Update()
 		auto veggie{ map[EnumStrings[Veggie]] };
 		auto burger{ map[EnumStrings[Burger]] };
 
-		auto pattyTopRect{ pattyTop->GetComponent<TextureComponent>()->GetRect() };
-		auto pattyBottomRect{ pattyBottom->GetComponent<TextureComponent>()->GetRect() };
-		auto veggieRect{ veggie->GetComponent<TextureComponent>()->GetRect() };
-		auto burgerRect{ burger->GetComponent<TextureComponent>()->GetRect() };
-
 		//player overlap
 		pattyTop->GetComponent<BurgerComponent>()->HandleOverlap(charRect);
 		pattyBottom->GetComponent<BurgerComponent>()->HandleOverlap(charRect);
@@ -25,40 +22,48 @@ void dae::BurgerManager::Update()
 		burger->GetComponent<BurgerComponent>()->HandleOverlap(charRect);
 
 		//burger overlap
-		veggie->GetComponent<BurgerComponent>()->HandleOverlap(pattyTopRect);
-		burger->GetComponent<BurgerComponent>()->HandleOverlap(veggieRect);
-		pattyBottom->GetComponent<BurgerComponent>()->HandleOverlap(burgerRect);
+		pattyTop->GetComponent<BurgerComponent>()->HandleOverlap(veggie);
+		veggie->GetComponent<BurgerComponent>()->HandleOverlap(burger);
+		burger->GetComponent<BurgerComponent>()->HandleOverlap(pattyBottom);
 
 		//platform overlap
-		for (auto platform : m_Platforms) {
+		for (const auto& platform : m_Platforms) {
 			auto rect{ platform.first };
 			pattyTop->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
 			pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
 			veggie->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
 			burger->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
-		}
 
-		for (auto platform : m_pPlates) {
-			auto rect{ platform.first };
-			pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
+		}
+		player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
+
+		for (const auto& ladder : m_pLadders)
+		{
+			auto rect{ ladder.first };
+		}
+		player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+
+		for (const auto& plate : m_pPlates) {
+			auto rect{ plate.first };
+			pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect, true);
 		}
 	}
 }
 
 void dae::BurgerManager::Render() const
 {
-	for (auto platform : m_Platforms) {
+	for (const auto& platform : m_Platforms) {
 		auto rect{ platform.first };
 		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
 		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
 	}	
-	for (auto platform : m_pPlates) {
-		auto rect{ platform.first };
+	for (const auto& plate : m_pPlates) {
+		auto rect{ plate.first };
 		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
 		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
 	}	
-	for (auto platform : m_pLadders) {
-		auto rect{ platform.first };
+	for (const auto& ladder : m_pLadders) {
+		auto rect{ ladder.first };
 		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
 		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
 	}
