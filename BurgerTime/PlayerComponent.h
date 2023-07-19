@@ -38,8 +38,6 @@ namespace dae {
 
         bool GetCanMoveHorizontally() { return m_CanMoveHorizontally; };
         bool GetCanMoveVertically() { return m_CanMoveVertically; };
-        void SetCanMove(GalagaMath::Side side, bool canMove) { m_Movement[side] = canMove; };
-        const std::map<GalagaMath::Side, bool>& GetCanMove() { return m_Movement; };
 
         void CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& rects, bool isVertical);
 
@@ -48,13 +46,7 @@ namespace dae {
         bool HasDied{ false };
         float DefaultDeathTimer{ 4 }, DeathTimer{ DefaultDeathTimer };
         bool m_CanMoveHorizontally{ true }, m_CanMoveVertically{ true };
-        std::map<GalagaMath::Side, bool> m_Movement{
-            std::make_pair(GalagaMath::Side::Top, false),
-            std::make_pair(GalagaMath::Side::Left, false),
-            std::make_pair(GalagaMath::Side::Right, false),
-            std::make_pair(GalagaMath::Side::Bottom, false),
-            std::make_pair(GalagaMath::Side::None, true),
-        };
+ 
 
         void HandleEnemyOverlap();
         void HandleDeathEnd();

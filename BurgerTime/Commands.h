@@ -28,87 +28,10 @@ namespace dae
 	public:
 		MoveKeyboard(GameObject* object, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
 		void Execute() override
-		{
-
-			auto player{ m_pObject->GetComponent<PlayerComponent>() };
-			auto moves{ player->GetCanMove() };
-			if (m_MoveSpeed.y > 0.f && moves[GalagaMath::Side::Bottom]) {
+		{			
 				m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
 				m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
 				m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-			}
-			if (m_MoveSpeed.y < 0.f && moves[GalagaMath::Side::Top]) {
-				m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-				m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-				m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-			}
-			if (m_MoveSpeed.x < 0.f && moves[GalagaMath::Side::Left]) {
-				m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-				m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-				m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-			}
-			if (m_MoveSpeed.x > 0.f && moves[GalagaMath::Side::Right]) {
-				m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-				m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-				m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-			}
-
-
-
-			//for (auto item : player->GetCanMove())
-			//{
-			//	switch (item.first)
-			//	{
-			//		 case GalagaMath::Side::Bottom:
-			//			 if (m_MoveSpeed.y < 0.f && !item.second) {
-			//				 m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-			//				 m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-			//				 m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-			//			 }
-			//			 break;
-			//		 case GalagaMath::Side::Left:
-			//			 if (m_MoveSpeed.x < 0.f && !item.second){
-			//				 m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-			//			 m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-			//			 m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);}
-			//			 break;
-			//		 case GalagaMath::Side::Top:
-			//			 if (m_MoveSpeed.y > 0.f && !item.second){
-			//				 m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-			//			 m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-			//			 m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);}
-			//			 break;
-			//		 case GalagaMath::Side::Right:
-			//			 if (m_MoveSpeed.x > 0.f && !item.second){
-			//				 m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-			//			 m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-			//			 m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);}
-			//			 break;
-			//		/* case GalagaMath::Side::None:
-			//			 if (item.second){
-			//				 m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-			//			 m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-			//			 m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);}*/
-			//			 break;
-			//	default:
-			//		break;
-			//	}
-			//}
-
-			/*if (m_MoveSpeed.x != 0.f) {
-				if (player->GetCanMoveHorizontally()) {
-					m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-					m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-					m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-				}
-			}
-			if (m_MoveSpeed.y != 0.f) {
-				if (player->GetCanMoveVertically()) {
-					m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-					m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-					m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-				}
-			}*/
 		}
 	private:
 		GameObject* m_pObject;
