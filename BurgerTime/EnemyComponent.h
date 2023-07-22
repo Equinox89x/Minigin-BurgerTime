@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <glm/ext/vector_float2.hpp>
-#include <GalagaMath.h>
+#include <MathLib.h>
 #include <Scene.h>
 #include <TextureComponent.h>
 

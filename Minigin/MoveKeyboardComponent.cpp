@@ -13,9 +13,10 @@ void dae::MoveKeyboardComponent::UpdatePos(float dt)
 
 		if (furPos.x < 0 || furPos.x >(GameWindowSizeX) -GalagaSize) return;
 
-		if (!m_Movement[GalagaMath::Side::Bottom] && m_Movespeed.y > 0) return;
-		if (!m_Movement[GalagaMath::Side::Left] && m_Movespeed.x < 0) return;
-		if (!m_Movement[GalagaMath::Side::Right] && m_Movespeed.x > 0) return;
+		if (!m_Movement[MathLib::Side::Top] && m_Movespeed.y < 0) return;
+		if (!m_Movement[MathLib::Side::Bottom] && m_Movespeed.y > 0) return;
+		if (!m_Movement[MathLib::Side::Left] && m_Movespeed.x < 0) return;
+		if (!m_Movement[MathLib::Side::Right] && m_Movespeed.x > 0) return;
 		go->GetTransform()->Translate(furPos.x, furPos.y, 0);
 	}
 }

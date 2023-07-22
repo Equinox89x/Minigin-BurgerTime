@@ -108,10 +108,10 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		SDL_Rect rect{ ladders[i][0]+36, ladders[i][1],ladders[i][2],ladders[i][3] };
 		SDL_Rect rect2{ ladders[i][0]-36, ladders[i][1],ladders[i][2],ladders[i][3] };
 
-		auto ladder = std::make_shared<GameObject>();
-		ladder->AddComponent(std::make_unique<PlatformComponent>(rect));
-		burgerManager->GetComponent<BurgerManager>()->AddLadder(rect, ladder.get());
-		scene->Add(ladder);
+		//auto ladder = std::make_shared<GameObject>();
+		//ladder->AddComponent(std::make_unique<PlatformComponent>(rect));
+		//burgerManager->GetComponent<BurgerManager>()->AddLadder(rect, ladder.get());
+		//scene->Add(ladder);
 		
 		auto ladder2 = std::make_shared<GameObject>();
 		ladder2->AddComponent(std::make_unique<PlatformComponent>(rect2));
@@ -120,8 +120,9 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	}
 	for (size_t i = 0; i < platforms.size(); i++)
 	{
-		auto platform = std::make_shared<GameObject>();
 		SDL_Rect rect{ platforms[i][0], platforms[i][1],platforms[i][2],platforms[i][3] };
+
+		auto platform = std::make_shared<GameObject>();
 		platform->AddComponent(std::make_unique<PlatformComponent>(rect));
 		burgerManager->GetComponent<BurgerManager>()->AddPlatform(rect, platform.get());
 		scene->Add(platform);

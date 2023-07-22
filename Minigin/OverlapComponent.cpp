@@ -1,7 +1,7 @@
 #include "OverlapComponent.h"
 #include "TransformComponent.h"
 #include "TextureComponent.h"
-#include "GalagaMath.h"
+#include "MathLib.h"
 #include "ValuesComponent.h"
 #include "GameObject.h"
 

@@ -234,7 +234,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="GalagaMath.h" />
+    <ClInclude Include="MathLib.h" />
     <ClInclude Include="MoveControllerComponent.h" />
     <ClInclude Include="MoveKeyboardComponent.h" />
     <ClInclude Include="Observer.h" />

@@ -2,7 +2,7 @@
 #include "Timer.h"
 #include "TextureComponent.h"
 #include "TransformComponent.h"
-#include <GalagaMath.h>
+#include <MathLib.h>
 
 
 void dae::BurgerComponent::Update()
@@ -41,18 +41,18 @@ void dae::BurgerComponent::HandleOverlap(GameObject* otherObj)
 	switch (m_BurgerState)
 	{
 	case BurgerState::STATIC:
-		if (GalagaMath::IsOverlapping(otherRect, rect)) {
+		if (MathLib::IsOverlapping(otherRect, rect)) {
 			GetGameObject()->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING_NO_INTERUPT);
 
 		}
 		break;
-	//case BurgerState::FALLING_NO_INTERUPT:
-	//	if (GalagaMath::IsOverlapping(otherRect, rect)) {
-	//		GetGameObject()->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
-	//	}
-	//	break;
+		//case BurgerState::FALLING_NO_INTERUPT:
+		//	if (GalagaMath::IsOverlapping(otherRect, rect)) {
+		//		GetGameObject()->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		//	}
+		//	break;
 	case BurgerState::FALLING:
-		if (GalagaMath::IsOverlapping(otherRect, rect)) {
+		if (MathLib::IsOverlapping(otherRect, rect)) {
 			GetGameObject()->GetComponent<BurgerComponent>()->SetState(otherObj->GetComponent<BurgerComponent>()->GetState() == BurgerState::FINISHED ? BurgerState::FINISHED : BurgerState::STATIC);
 		}
 		break;
@@ -69,18 +69,18 @@ void dae::BurgerComponent::HandleOverlap(SDL_Rect& otherRect)
 	switch (m_BurgerState)
 	{
 	case BurgerState::STATIC:
-		if (GalagaMath::IsOverlapping(otherRect, rect)) {
+		if (MathLib::IsOverlapping(otherRect, rect)) {
 			GetGameObject()->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING_NO_INTERUPT);
 
 		}
 		break;
-	//case BurgerState::FALLING_NO_INTERUPT:
-	//	if (GalagaMath::IsOverlapping(otherRect, rect)) {
-	//		GetGameObject()->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
-	//	}
-	//	break;
+		//case BurgerState::FALLING_NO_INTERUPT:
+		//	if (GalagaMath::IsOverlapping(otherRect, rect)) {
+		//		GetGameObject()->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING);
+		//	}
+		//	break;
 	case BurgerState::FALLING:
-		if (GalagaMath::IsOverlapping(otherRect, rect)) {
+		if (MathLib::IsOverlapping(otherRect, rect)) {
 			GetGameObject()->GetComponent<BurgerComponent>()->SetState(BurgerState::STATIC);
 		}
 		break;
@@ -94,7 +94,7 @@ void dae::BurgerComponent::HandlePlatformOverlap(SDL_Rect& otherRect, bool isFin
 	if (m_BurgerState != BurgerState::FALLING) return;
 	
 	auto rect{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
-	if (GalagaMath::IsOverlapping(otherRect, rect)) {
+	if (MathLib::IsOverlapping(otherRect, rect)) {
 		GetGameObject()->GetComponent<BurgerComponent>()->SetState(isFinished ? BurgerState::FINISHED : BurgerState::STATIC);
 	}
 	

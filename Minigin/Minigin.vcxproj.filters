@@ -144,7 +144,7 @@
     <ClInclude Include="OverlapComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="GalagaMath.h">
+    <ClInclude Include="MathLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Locator.h">

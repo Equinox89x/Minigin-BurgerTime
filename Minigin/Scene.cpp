@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "TextureComponent.h"
-#include "GalagaMath.h"
+#include "MathLib.h"
 
 using namespace dae;
 
@@ -141,7 +141,7 @@ std::vector<dae::GameObject*> Scene::GetOverlappingObjects(GameObject* objectToO
 				overlapRect = { static_cast<int>(overlapPos.x), static_cast<int>(overlapPos.y) ,1,1 };
 			}
 
-			if (GalagaMath::IsOverlapping(overlapRect, rect)) {
+			if (MathLib::IsOverlapping(overlapRect, rect)) {
 				children.push_back(obj);
 			}
 		}
@@ -158,7 +158,7 @@ std::vector<dae::GameObject*> Scene::GetOverlappingObjects(GameObject* objectToO
 				overlapRect = { static_cast<int>(overlapPos.x), static_cast<int>(overlapPos.y) ,1,1 };
 			}
 
-			if (GalagaMath::IsOverlapping(overlapRect, rect)) {
+			if (MathLib::IsOverlapping(overlapRect, rect)) {
 				children.push_back(obj.get());
 			}
 		}

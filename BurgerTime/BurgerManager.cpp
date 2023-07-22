@@ -1,7 +1,6 @@
 #include "BurgerManager.h"
 #include "TextureComponent.h"
 #include "BurgerComponent.h"
-#include "Galagamath.h"
 #include "Renderer.h"
 #include "PlayerComponent.h"
 
@@ -26,6 +25,10 @@ void dae::BurgerManager::Update()
 		veggie->GetComponent<BurgerComponent>()->HandleOverlap(burger);
 		burger->GetComponent<BurgerComponent>()->HandleOverlap(pattyBottom);
 
+		//player movement overlap
+		player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
+		player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+
 		//platform overlap
 		for (const auto& platform : m_Platforms) {
 			auto rect{ platform.first };
@@ -35,13 +38,11 @@ void dae::BurgerManager::Update()
 			burger->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
 
 		}
-		player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
 
-		for (const auto& ladder : m_pLadders)
-		{
-			auto rect{ ladder.first };
-		}
-		player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+		//for (const auto& ladder : m_pLadders)
+		//{
+		//	auto rect{ ladder.first };
+		//}
 
 		for (const auto& plate : m_pPlates) {
 			auto rect{ plate.first };
@@ -52,21 +53,21 @@ void dae::BurgerManager::Update()
 
 void dae::BurgerManager::Render() const
 {
-	for (const auto& platform : m_Platforms) {
-		auto rect{ platform.first };
-		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
-		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-	}	
-	for (const auto& plate : m_pPlates) {
-		auto rect{ plate.first };
-		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
-		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-	}	
-	for (const auto& ladder : m_pLadders) {
-		auto rect{ ladder.first };
-		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
-		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-	}
+	//for (const auto& platform : m_Platforms) {
+	//	auto rect{ platform.first };
+	//	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
+	//	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+	//}	
+	//for (const auto& plate : m_pPlates) {
+	//	auto rect{ plate.first };
+	//	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
+	//	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+	//}	
+	//for (const auto& ladder : m_pLadders) {
+	//	auto rect{ ladder.first };
+	//	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
+	//	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+	//}
 }
 
 std::map<std::string, dae::GameObject*> dae::BurgerManager::AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger)

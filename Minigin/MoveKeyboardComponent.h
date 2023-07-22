@@ -2,7 +2,7 @@
 #include <string>
 #include <memory>
 #include "TransformComponent.h"
-#include "GalagaMath.h"
+#include "MathLib.h"
 #include <map>
 
 namespace dae
@@ -25,8 +25,10 @@ namespace dae
 		void SetMoveSpeed(const glm::vec3& movespeed);
 		const glm::vec3 GetMoveSpeed() { return m_Movespeed; };
 
-		void SetCanMove(GalagaMath::Side side, bool canMove) { m_Movement[side] = canMove; };
-		const std::map<GalagaMath::Side, bool>& GetCanMove() { return m_Movement; };
+		void SetCanMove(MathLib::Side side, bool canMove) {
+			m_Movement[side] = canMove; 
+		};
+		const std::map<MathLib::Side, bool>& GetCanMove() { return m_Movement; };
 
 
 	private:
@@ -34,11 +36,11 @@ namespace dae
 		glm::vec3 m_StartPos;
 		glm::vec3 m_Movespeed;
 
-		std::map<GalagaMath::Side, bool> m_Movement{
-			  std::make_pair(GalagaMath::Side::Top, false),
-			  std::make_pair(GalagaMath::Side::Left, false),
-			  std::make_pair(GalagaMath::Side::Right, false),
-			  std::make_pair(GalagaMath::Side::Bottom, false),
+		std::map<MathLib::Side, bool> m_Movement{
+			  std::make_pair(MathLib::Side::Top, false),
+			  std::make_pair(MathLib::Side::Left, false),
+			  std::make_pair(MathLib::Side::Right, false),
+			  std::make_pair(MathLib::Side::Bottom, false),
 		};
 	};
 }
