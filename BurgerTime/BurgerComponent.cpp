@@ -96,6 +96,10 @@ void dae::BurgerComponent::HandlePlatformOverlap(SDL_Rect& otherRect, bool isFin
 	auto rect{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
 	if (MathLib::IsOverlapping(otherRect, rect)) {
 		GetGameObject()->GetComponent<BurgerComponent>()->SetState(isFinished ? BurgerState::FINISHED : BurgerState::STATIC);
+		if (isFinished) {
+			Event gameOver{ EventType::GameOver };
+			Notify(GetGameObject(), gameOver);
+		}
 	}
 	
 }

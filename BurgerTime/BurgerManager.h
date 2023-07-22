@@ -21,6 +21,8 @@ namespace dae {
 		void Update() override;
 		void Render() const;
 
+		bool GetAreBurgersFinished();
+
 		std::map<std::string, GameObject*> AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger);
 		std::pair<SDL_Rect, GameObject*> AddPlatform(SDL_Rect rect, GameObject* go);
 		std::pair<SDL_Rect, GameObject*> AddLadder(SDL_Rect rect, GameObject* go);

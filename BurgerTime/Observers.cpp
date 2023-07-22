@@ -6,6 +6,7 @@
 #include "FileReader.h"
 #include "InputManager.h"
 #include "../BurgerTime/AudioComponent.h"
+#include "BurgerManager.h"
 
 void dae::HealthObserver::Notify(GameObject* go, Event& event)
 {
@@ -38,47 +39,40 @@ void dae::HealthObserver::Notify(GameObject* go, Event& event)
 //	}
 //}
 
-void dae::GameOverObserver::Notify(GameObject* /*go*/, Event& event)
+void dae::GameOverObserver::Notify(GameObject* go, Event& event)
 {
 	std::vector<std::shared_ptr<GameObject>> players{ m_Scene->GetGameObjects(EnumStrings[PlayerGeneral], false) };
 	/*auto player0{ m_Scene->GetGameObject("Player0") };
 	auto player1{ m_Scene->GetGameObject("Player1") };*/
-	auto scoreboard{ m_Scene->GetGameObject(EnumStrings[ScoreBoard]) };
-	auto enemies{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
-	auto opposer{ m_Scene->GetGameObject(EnumStrings[Opposer]) };
+	//auto scoreboard{ m_Scene->GetGameObject(EnumStrings[ScoreBoard]) };
+	//auto enemies{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
+	//auto opposer{ m_Scene->GetGameObject(EnumStrings[Opposer]) };
 	auto values{ m_Scene->GetGameObject(EnumStrings[Values]) };
-	auto logo{ m_Scene->GetGameObject(EnumStrings[Logo])->GetTransform() };
+	//auto logo{ m_Scene->GetGameObject(EnumStrings[Logo])->GetTransform() };
 
 	switch (event.GetEvent())
 	{
 	case EventType::GameOver:
-		MakeEndScreen(m_Scene);
 
-		values->GetComponent<ValuesComponent>()->GameEnd();
-		Input::GetInstance().ClearKeys();
+		if (go->GetComponent<BurgerManager>()->GetAreBurgersFinished()) {
+			MakeEndScreen(m_Scene);
+			values->GetComponent<ValuesComponent>()->GameEnd();
+			Input::GetInstance().ClearKeys();
 
-		for (auto player : players) {
-			player->MarkForDestroy();
+			for (auto object : go->GetChildren()) {
+				object->MarkForDestroy();
+			}
+
+			/*for (auto player : players) {
+				player->MarkForDestroy();
+			}
+			if (enemies)
+				enemies->MarkForDestroy();
+			if (opposer)
+				opposer->MarkForDestroy();
+			if (values)
+				values->MarkForDestroy();*/
 		}
-
-		/*if (player0) {
-			player0->MarkForDestroy();
-		}
-		if(player1)
-			player1->MarkForDestroy();*/
-			//if(m_Scene->GetGameObject("Player1")) m_Scene->Remove(m_Scene->GetGameObject("Player1"));
-		scoreboard->MarkForDestroy();
-		/*for (auto& enemy : enemies) {
-			enemy->MarkForDestroy();
-		}*/
-		if (enemies)
-			enemies->MarkForDestroy();
-		if (opposer)
-			opposer->MarkForDestroy();
-		if (values)
-			values->MarkForDestroy();
-
-		logo->AddTranslate(0, WindowSizeY);
 
 		break;
 	case EventType::Reset:

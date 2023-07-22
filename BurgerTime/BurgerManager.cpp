@@ -70,6 +70,20 @@ void dae::BurgerManager::Render() const
 	//}
 }
 
+bool dae::BurgerManager::GetAreBurgersFinished()
+{
+	for (auto burger : m_Burgers)
+	{
+		for (auto burgerPart : burger)
+		{
+			if (burgerPart.second->GetComponent<BurgerComponent>()->GetState() != BurgerState::FINISHED) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 std::map<std::string, dae::GameObject*> dae::BurgerManager::AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger)
 {
 	std::map<std::string, GameObject*> map{

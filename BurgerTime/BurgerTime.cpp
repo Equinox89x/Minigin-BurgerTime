@@ -107,11 +107,6 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	{
 		SDL_Rect rect{ ladders[i][0]+36, ladders[i][1],ladders[i][2],ladders[i][3] };
 		SDL_Rect rect2{ ladders[i][0]-36, ladders[i][1],ladders[i][2],ladders[i][3] };
-
-		//auto ladder = std::make_shared<GameObject>();
-		//ladder->AddComponent(std::make_unique<PlatformComponent>(rect));
-		//burgerManager->GetComponent<BurgerManager>()->AddLadder(rect, ladder.get());
-		//scene->Add(ladder);
 		
 		auto ladder2 = std::make_shared<GameObject>();
 		ladder2->AddComponent(std::make_unique<PlatformComponent>(rect2));
@@ -298,7 +293,7 @@ void MakeMainMenu(dae::Scene* scene) {
 	scene->Add(upText1);
 	container->AddChild(upText1.get());
 	upText1->AddComponent(std::make_unique<TextObjectComponent>("BURGER TIME", font));
-	upText1->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2, Margin);
+	upText1->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 4, Margin);
 	upText1->GetComponent<TextObjectComponent>()->SetColor(SDL_Color{ 220,20,60 });
 
 	//Ti0tle 2
@@ -307,7 +302,7 @@ void MakeMainMenu(dae::Scene* scene) {
 	container->AddChild(upText2.get());
 	upText2->AddComponent(std::make_unique<TextObjectComponent>("C DEGO 1982", font));
 	upText2->GetComponent<TextObjectComponent>()->SetColor(SDL_Color{ 220,20,60 });
-	upText2->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2, Margin * 2);
+	upText2->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 4, Margin * 2);
 
 	//game mode selection
 	std::shared_ptr<GameObject> player1 = std::make_shared<dae::GameObject>();
@@ -322,9 +317,9 @@ void MakeMainMenu(dae::Scene* scene) {
 	player1->AddComponent(std::make_unique<TextObjectComponent>("1 PLAYER", font));
 	player2->AddComponent(std::make_unique<TextObjectComponent>("2 PLAYERS", font));
 	player3->AddComponent(std::make_unique<TextObjectComponent>("VERSUS", font));
-	player1->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 - Margin * 3, WindowSizeY / 2);
-	player2->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 - Margin * 3, WindowSizeY / 2 + Margin);
-	player3->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 - Margin * 3, WindowSizeY / 2 + SubMargin);
+	player1->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 - Margin * 3, 150);
+	player2->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 - Margin * 3, 150 + Margin);
+	player3->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 - Margin * 3, 150 + SubMargin);
 
 	//game mode selector
 	std::shared_ptr<GameObject> selector = std::make_shared<dae::GameObject>();
@@ -333,7 +328,7 @@ void MakeMainMenu(dae::Scene* scene) {
 	container->AddChild(selector.get());
 	selector->AddComponent(std::make_unique<ModeSelector>(scene, &MakeMrPepper, &MakeMrsSalt, &MakeStage, &MakeMrHotdog, &CreateScore));
 	selector->AddComponent(std::make_unique<TextObjectComponent>(">", font));
-	selector->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 - SubMargin * 2, WindowSizeY / 2);
+	selector->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 - SubMargin * 2, 150);
 	CreateSelectorInput(scene);
 
 	auto go{ std::make_shared<GameObject>() };
@@ -342,6 +337,29 @@ void MakeMainMenu(dae::Scene* scene) {
 	//go->AddComponent(new MoveKeyboardComponent(go->GetTransform()->GetPosition()));
 	go->AddComponent(std::make_unique<MoveKeyboardComponent>(go->GetTransform()->GetPosition()));
 	Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_F1, 0 }, std::make_unique<Skip>(&MakeStageOfNr, scene));
+
+	FileReader* file{ new FileReader("../Data/highscore.txt") };
+	auto str{ file->ReadGameDataFile() };
+	auto data{ file->ParseDataSimple(str, '+') };
+
+	float yPos{ WindowSizeY / 2 };
+	int i{ 1 };
+	for (auto field : data)
+	{
+		std::shared_ptr<GameObject> scoreObj = std::make_shared<dae::GameObject>();
+		std::shared_ptr<GameObject> scoreObj2 = std::make_shared<dae::GameObject>();
+		std::string score{ std::to_string(i) + "  " + field.first };
+		std::string score2{ std::any_cast<std::string>(field.second) + " PTS" };
+		scoreObj->AddComponent(std::make_unique<TextObjectComponent>(score, font));
+		scoreObj2->AddComponent(std::make_unique<TextObjectComponent>(score2, font));
+		scoreObj->GetComponent<TextObjectComponent>()->SetPosition(Margin * 2, yPos);
+		scoreObj2->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 + Margin, yPos);
+		scene->Add(scoreObj);
+		scene->Add(scoreObj2);
+		i++;
+		yPos += 50;
+	}
+
 	scene->Add(go);
 }
 

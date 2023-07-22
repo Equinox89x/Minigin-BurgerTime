@@ -19,7 +19,7 @@ void dae::ModeSelector::CycleGameMode(bool isMoveUp)
 
 	auto selector{ GetGameObject() };
 	auto pos{ selector->GetTransform()->GetPosition() };
-	selector->GetTransform()->Translate(pos.x, WindowSizeY/2 + Margin * static_cast<int>(m_SelectedGameMode), pos.z);
+	selector->GetTransform()->Translate(pos.x, 150 + Margin * static_cast<int>(m_SelectedGameMode), pos.z);
 }
 
 void dae::ModeSelector::StartGame(GameObject* pMenu)

@@ -1,2 +1,5 @@
-Highscore:12800
-+
+Jan: 1000+
+Bram: 2000+
+George: 4000+
+Emma: 3000+
+Juliette: 5000+

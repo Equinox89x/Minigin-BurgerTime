@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "GameObject.h"
+#include "Subject.h"
 
 namespace dae {
 	enum class BurgerState {
@@ -10,7 +11,7 @@ namespace dae {
 		FINISHED
 	};
 
-	class BurgerComponent final : public Component
+	class BurgerComponent final : public Component, public Subject
 	{
 	public:
 		BurgerComponent() {};
