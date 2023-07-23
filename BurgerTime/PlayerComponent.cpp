@@ -59,9 +59,6 @@ void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, G
 	bool canMoveLeft{ false };
 	bool isOverlappingLeft{ false };
 
-	SDL_Rect ovelapperLeft{0,0,0,0};
-	SDL_Rect ovelapperRight{ 0,0,0,0 };
-
 	for (auto item : rects)
 	{
 		if (!isVertical) {

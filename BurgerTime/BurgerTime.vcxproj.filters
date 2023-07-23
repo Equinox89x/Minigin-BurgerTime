@@ -69,6 +69,9 @@
     <ClInclude Include="BurgerComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioComponent.cpp">
@@ -99,6 +102,9 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="BurgerComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>

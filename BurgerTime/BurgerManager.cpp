@@ -3,9 +3,11 @@
 #include "BurgerComponent.h"
 #include "Renderer.h"
 #include "PlayerComponent.h"
+#include "EnemyComponent.h"
 
 void dae::BurgerManager::Update()
 {
+	auto enemyHolder{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
 	auto player{ m_Scene->GetGameObject(EnumStrings[Player0]) };
 	SDL_Rect charRect{ player->GetComponent<TextureComponent>()->GetRect() };
 	for (std::map<std::string, GameObject*>& map : m_Burgers) {
@@ -13,6 +15,20 @@ void dae::BurgerManager::Update()
 		auto pattyBottom{ map[EnumStrings[PattyBottom]] };
 		auto veggie{ map[EnumStrings[Veggie]] };
 		auto burger{ map[EnumStrings[Burger]] };
+
+		//platform overlap
+		for (const auto& platform : m_Platforms) {
+			auto rect{ platform.first };
+			pattyTop->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
+			pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
+			veggie->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
+			burger->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
+		}
+
+		for (const auto& plate : m_pPlates) {
+			auto rect{ plate.first };
+			pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect, true);
+		}
 
 		//player overlap
 		pattyTop->GetComponent<BurgerComponent>()->HandleOverlap(charRect);
@@ -25,29 +41,14 @@ void dae::BurgerManager::Update()
 		veggie->GetComponent<BurgerComponent>()->HandleOverlap(burger);
 		burger->GetComponent<BurgerComponent>()->HandleOverlap(pattyBottom);
 
-		//player movement overlap
-		player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
-		player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+	}
+	//player movement overlap
+	player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
+	player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
 
-		//platform overlap
-		for (const auto& platform : m_Platforms) {
-			auto rect{ platform.first };
-			pattyTop->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
-			pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
-			veggie->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
-			burger->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
-
-		}
-
-		//for (const auto& ladder : m_pLadders)
-		//{
-		//	auto rect{ ladder.first };
-		//}
-
-		for (const auto& plate : m_pPlates) {
-			auto rect{ plate.first };
-			pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect, true);
-		}
+	//Enemy movement overlap
+	for (auto enemy : enemyHolder->GetChildren()) {
+		enemy->GetComponent<EnemyComponent>()->CheckMovement(m_Platforms, m_pLadders);
 	}
 }
 

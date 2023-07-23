@@ -36,7 +36,7 @@ namespace dae {
 	private:
 		BurgerState m_BurgerState{ BurgerState::STATIC };
 		const float m_FallSpeed{ 100 };
-		const float m_NoInterruptTimerDefault{ 0.3f };
+		const float m_NoInterruptTimerDefault{ 0.35f };
 		float m_NoInterruptTimer{ m_NoInterruptTimerDefault };
 	};
 }

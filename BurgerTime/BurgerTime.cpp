@@ -136,7 +136,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		pattyTop->AddComponent(std::make_unique<TextureComponent>());
 		pattyTop->GetComponent<TextureComponent>()->SetTexture("pattyTop.png");
 		pattyTop->GetComponent<TextureComponent>()->Scale(3, 3);
-		pattyTop->GetComponent<TransformComponent>()->Translate(static_cast<float>(pattiesTop[i][0]), static_cast<float>(pattiesTop[i][1]));
+		pattyTop->GetTransform()->Translate(static_cast<float>(pattiesTop[i][0]), static_cast<float>(pattiesTop[i][1]));
 		pattyTop->AddComponent(std::make_unique<BurgerComponent>());		
 		burgerManager->AddChild(pattyTop);
 
@@ -145,7 +145,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		veggie->AddComponent(std::make_unique<TextureComponent>());
 		veggie->GetComponent<TextureComponent>()->SetTexture("veggie.png");
 		veggie->GetComponent<TextureComponent>()->Scale(3, 3);
-		veggie->GetComponent<TransformComponent>()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]));
+		veggie->GetTransform()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]));
 		veggie->AddComponent(std::make_unique<BurgerComponent>());
 		burgerManager->AddChild(veggie);
 
@@ -153,7 +153,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		burger->AddComponent(std::make_unique<TextureComponent>());
 		burger->GetComponent<TextureComponent>()->SetTexture("burger.png");
 		burger->GetComponent<TextureComponent>()->Scale(3, 3);
-		burger->GetComponent<TransformComponent>()->Translate(static_cast<float>(burgers[i][0]), static_cast<float>(burgers[i][1]));
+		burger->GetTransform()->Translate(static_cast<float>(burgers[i][0]), static_cast<float>(burgers[i][1]));
 		burger->AddComponent(std::make_unique<BurgerComponent>());
 		burgerManager->AddChild(burger);
 
@@ -161,17 +161,30 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		pattyBottom->AddComponent(std::make_unique<TextureComponent>());
 		pattyBottom->GetComponent<TextureComponent>()->SetTexture("pattyBottom.png");
 		pattyBottom->GetComponent<TextureComponent>()->Scale(3, 3);
-		pattyBottom->GetComponent<TransformComponent>()->Translate(static_cast<float>(pattiesBottom[i][0]), static_cast<float>(pattiesBottom[i][1]));
+		pattyBottom->GetTransform()->Translate(static_cast<float>(pattiesBottom[i][0]), static_cast<float>(pattiesBottom[i][1]));
 		pattyBottom->AddComponent(std::make_unique<BurgerComponent>());
 		burgerManager->AddChild(pattyBottom);
 
 		burgerManager->GetComponent<BurgerManager>()->AddBurger(pattyTop, pattyBottom, veggie, burger);
-		//scene->Add(pattyTop);
-		//scene->Add(veggie);
-		//scene->Add(burger);
-		//scene->Add(pattyBottom);
 	}
 	scene->Add(burgerManager);
+
+	//enemies
+	std::shared_ptr<GameObject> enemyHolder = std::make_shared<dae::GameObject>();
+	enemyHolder->SetName(EnumStrings[EnemyHolder]);
+	//enemyHolder->AddComponent(std::make_unique<EnemyManager>());
+	scene->Add(enemyHolder);
+
+	GameObject* enemy = new GameObject();
+	enemy->SetName(EnumStrings[Opposer]);
+	enemy->AddComponent(std::make_unique<EnemyComponent>(scene, 200));
+	enemy->AddComponent(std::make_unique<TextureComponent>());
+	enemy->GetComponent<TextureComponent>()->SetTexture("moveDown.png");
+	enemy->GetComponent<TextureComponent>()->Scale(3, 3);
+	enemy->GetComponent<TextureComponent>()->SetNrOfFrames(3);
+	enemy->GetComponent<TextureComponent>()->GetRect();
+	enemy->GetTransform()->Translate(Margin, WindowSizeY - Margin * 5);
+	enemyHolder->AddChild(enemy);
 }
 
 void MakeMrHotdog(dae::Scene* scene) {
@@ -183,15 +196,12 @@ void MakeMrHotdog(dae::Scene* scene) {
 	opposer->SetName(EnumStrings[Opposer]);
 	opposer->AddComponent(std::make_unique<TextureComponent>());
 
-	Subject * callback = new Subject();
-	callback->AddObserver(std::make_shared<GameOverObserver>(&CreateEndScreen, scene));
-
 	opposer->GetComponent<TextureComponent>()->SetTexture("boss2.png");
 	opposer->GetComponent<TextureComponent>()->SetName(EnumStrings[Enemy]);
 	opposer->GetComponent<TextureComponent>(EnumStrings[Enemy])->Scale(3, 3);
 	opposer->GetComponent<TextureComponent>(EnumStrings[Enemy])->SetNrOfFrames(2);
 	opposer->GetComponent<TextureComponent>(EnumStrings[Enemy])->GetRect();
-	opposer->GetComponent<TextureComponent>(EnumStrings[Enemy])->SetPosition((GameWindowSizeX) / 2 - Margin, Margin * 2);
+	opposer->GetComponent<TextureComponent>(EnumStrings[Enemy])->SetPosition((GameWindowSizeX) / 2 - Margin, WindowSizeY - Margin * 3);
 
 	scene->Add(opposer);
 	opposer->AddComponent(std::make_unique<MoveControllerComponent>(opposer->GetTransform()->GetPosition()));
