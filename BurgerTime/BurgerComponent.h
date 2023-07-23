@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "Subject.h"
+#include "Scene.h"
 
 namespace dae {
 	enum class BurgerState {
@@ -14,7 +15,7 @@ namespace dae {
 	class BurgerComponent final : public Component, public Subject
 	{
 	public:
-		BurgerComponent() {};
+		BurgerComponent(Scene* scene) : m_Scene{scene} {};
 		~BurgerComponent() = default;
 		BurgerComponent(const BurgerComponent&) = delete;
 		BurgerComponent(BurgerComponent&&) noexcept = delete;
@@ -34,6 +35,7 @@ namespace dae {
 
 
 	private:
+		Scene* m_Scene;
 		BurgerState m_BurgerState{ BurgerState::STATIC };
 		const float m_FallSpeed{ 100 };
 		const float m_NoInterruptTimerDefault{ 0.35f };

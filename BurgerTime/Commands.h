@@ -187,28 +187,4 @@ namespace dae
 		Scene* m_pScene;
 	};
 #pragma endregion
-
-	//class Fall final : public Command
-	//{
-	//public:
-	//	Fall(GameObject* object) : m_pObject(object) {}
-	//	void Execute() override
-	//	{
-	//		m_pObject->GetComponent<ModeSelector>()->StartGame(m_pObject->GetParent());
-	//	}
-	//private:
-	//	GameObject* m_pObject;
-	//};
-
-	//class StopFall final : public Command
-	//{
-	//public:
-	//	StopFall(GameObject* object) : m_pObject(object) {}
-	//	void Execute() override
-	//	{
-	//		m_pObject->GetComponent<ModeSelector>()->StartGame(m_pObject->GetParent());
-	//	}
-	//private:
-	//	GameObject* m_pObject;
-	//};
 }

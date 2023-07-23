@@ -3,6 +3,7 @@
 #include "TextureComponent.h"
 #include "TransformComponent.h"
 #include <MathLib.h>
+#include <ValuesComponent.h>
 
 
 void dae::BurgerComponent::Update()
@@ -43,7 +44,7 @@ void dae::BurgerComponent::HandleOverlap(GameObject* otherObj)
 	case BurgerState::STATIC:
 		if (MathLib::IsOverlapping(otherRect, rect)) {
 			GetGameObject()->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING_NO_INTERUPT);
-
+			m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetComponent<ValuesComponent>()->IncreaseScore(50);
 		}
 		break;
 		//case BurgerState::FALLING_NO_INTERUPT:
@@ -71,7 +72,7 @@ void dae::BurgerComponent::HandleOverlap(SDL_Rect& otherRect)
 	case BurgerState::STATIC:
 		if (MathLib::IsOverlapping(otherRect, rect)) {
 			GetGameObject()->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING_NO_INTERUPT);
-
+			m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetComponent<ValuesComponent>()->IncreaseScore(50);
 		}
 		break;
 		//case BurgerState::FALLING_NO_INTERUPT:

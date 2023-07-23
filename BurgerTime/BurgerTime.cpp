@@ -54,8 +54,32 @@ void CreateEndScreen(dae::Scene* /*scene*/) {
 	
 }
 
-void CreateScore(dae::Scene* /*scene*/) {
-	
+void CreateScore(dae::Scene* scene) {
+	auto font = dae::ResourceManager::GetInstance().LoadFont("Emulogic-zrEw.ttf", 24);
+	std::shared_ptr<GameObject> upText = std::make_shared<GameObject>();
+	std::shared_ptr<GameObject> upScoreText = std::make_shared<GameObject>();
+	upScoreText->SetName(EnumStrings[ScoreHolder]);
+	std::shared_ptr<GameObject> hiscoreText = std::make_shared<GameObject>();
+	std::shared_ptr<GameObject> hiscoreScoreText = std::make_shared<GameObject>();
+
+	upText->AddComponent(std::make_unique<TextObjectComponent>("1UP", font));
+	upScoreText->AddComponent(std::make_unique<TextObjectComponent>("0000", font));
+	upScoreText->AddComponent(std::make_unique<ValuesComponent>(scene));
+	auto observer{ std::make_shared<ScoreObserver>(scene) };
+	upScoreText->GetComponent<ValuesComponent>()->AddObserver(observer);
+
+	hiscoreText->AddComponent(std::make_unique<TextObjectComponent>("HI-SCORE", font));
+	hiscoreScoreText->AddComponent(std::make_unique<TextObjectComponent>("00000", font));
+
+	upText->GetComponent<TextObjectComponent>()->SetPosition(50, 10);
+	upScoreText->GetComponent<TextObjectComponent>()->SetPosition(50, 40);
+	hiscoreText->GetComponent<TextObjectComponent>()->SetPosition(200, 10);
+	hiscoreScoreText->GetComponent<TextObjectComponent>()->SetPosition(200, 40);
+
+	scene->Add(upText);
+	scene->Add(upScoreText);
+	scene->Add(hiscoreText);
+	scene->Add(hiscoreScoreText);
 }
 
 void MakeValues(dae::Scene* /*scene*/) {
@@ -99,14 +123,15 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	std::vector<std::vector<int>> plates = stageItems[EnumStrings[Plates]];
 
 	burgerManager->GetComponent<TextureComponent>()->SetTexture(name2);
+	burgerManager->GetTransform()->AddTranslate(0, WindowBuffer);
 	burgerManager->AddComponent(std::make_unique<BurgerManager>(scene));
 
 	//burger maneger has to detect when another burger piece overlaps with another, if yes they fall down until they detect a platform. If that platform has a burger piece, that piece has to fall down as well.
 
 	for (size_t i = 0; i < ladders.size(); i++)
 	{
-		SDL_Rect rect2{ ladders[i][0]-16, ladders[i][1],ladders[i][2],ladders[i][3] };
-		
+		SDL_Rect rect2{ ladders[i][0]-16, ladders[i][1] + WindowBuffer,ladders[i][2],ladders[i][3] };
+
 		auto ladder2 = std::make_shared<GameObject>();
 		ladder2->AddComponent(std::make_unique<PlatformComponent>(rect2));
 		burgerManager->GetComponent<BurgerManager>()->AddLadder(rect2, ladder2.get());
@@ -114,29 +139,32 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	}
 	for (size_t i = 0; i < platforms.size(); i++)
 	{
-		SDL_Rect rect{ platforms[i][0], platforms[i][1],platforms[i][2],platforms[i][3] };
+		SDL_Rect rect{ platforms[i][0], platforms[i][1] + WindowBuffer,platforms[i][2],platforms[i][3] };
 
 		auto platform = std::make_shared<GameObject>();
 		platform->AddComponent(std::make_unique<PlatformComponent>(rect));
 		burgerManager->GetComponent<BurgerManager>()->AddPlatform(rect, platform.get());
 		scene->Add(platform);
-	}	
+	}
 	for (size_t i = 0; i < plates.size(); i++)
 	{
 		auto plate = std::make_shared<GameObject>();
-		SDL_Rect rect{ plates[i][0], plates[i][1],plates[i][2],plates[i][3] };
+		SDL_Rect rect{ plates[i][0], plates[i][1] + WindowBuffer,plates[i][2],plates[i][3] };
 		plate->AddComponent(std::make_unique<PlatformComponent>(rect));
 		burgerManager->GetComponent<BurgerManager>()->AddPlate(rect, plate.get());
 		scene->Add(plate);
 	}
+
+	//auto observer{ std::make_shared<ScoreObserver>(scene) };
 	for (size_t i = 0; i < pattiesTop.size(); i++)
 	{
 		GameObject* pattyTop = new GameObject();
 		pattyTop->AddComponent(std::make_unique<TextureComponent>());
 		pattyTop->GetComponent<TextureComponent>()->SetTexture("pattyTop.png");
 		pattyTop->GetComponent<TextureComponent>()->Scale(3, 3);
-		pattyTop->GetTransform()->Translate(static_cast<float>(pattiesTop[i][0]), static_cast<float>(pattiesTop[i][1]));
-		pattyTop->AddComponent(std::make_unique<BurgerComponent>());		
+		pattyTop->GetTransform()->Translate(static_cast<float>(pattiesTop[i][0]), static_cast<float>(pattiesTop[i][1])+ WindowBuffer);
+		pattyTop->AddComponent(std::make_unique<BurgerComponent>(scene));	
+		//pattyTop->GetComponent<BurgerComponent>()->AddObserver(observer);
 		burgerManager->AddChild(pattyTop);
 
 
@@ -144,24 +172,27 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		veggie->AddComponent(std::make_unique<TextureComponent>());
 		veggie->GetComponent<TextureComponent>()->SetTexture("veggie.png");
 		veggie->GetComponent<TextureComponent>()->Scale(3, 3);
-		veggie->GetTransform()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]));
-		veggie->AddComponent(std::make_unique<BurgerComponent>());
+		veggie->GetTransform()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]) + WindowBuffer);
+		veggie->AddComponent(std::make_unique<BurgerComponent>(scene));
+		//veggie->GetComponent<BurgerComponent>()->AddObserver(observer);
 		burgerManager->AddChild(veggie);
 
 		GameObject * burger = new GameObject();
 		burger->AddComponent(std::make_unique<TextureComponent>());
 		burger->GetComponent<TextureComponent>()->SetTexture("burger.png");
 		burger->GetComponent<TextureComponent>()->Scale(3, 3);
-		burger->GetTransform()->Translate(static_cast<float>(burgers[i][0]), static_cast<float>(burgers[i][1]));
-		burger->AddComponent(std::make_unique<BurgerComponent>());
+		burger->GetTransform()->Translate(static_cast<float>(burgers[i][0]), static_cast<float>(burgers[i][1]) + WindowBuffer);
+		burger->AddComponent(std::make_unique<BurgerComponent>(scene));
+		//burger->GetComponent<BurgerComponent>()->AddObserver(observer);
 		burgerManager->AddChild(burger);
 
 		GameObject * pattyBottom = new GameObject();
 		pattyBottom->AddComponent(std::make_unique<TextureComponent>());
 		pattyBottom->GetComponent<TextureComponent>()->SetTexture("pattyBottom.png");
 		pattyBottom->GetComponent<TextureComponent>()->Scale(3, 3);
-		pattyBottom->GetTransform()->Translate(static_cast<float>(pattiesBottom[i][0]), static_cast<float>(pattiesBottom[i][1]));
-		pattyBottom->AddComponent(std::make_unique<BurgerComponent>());
+		pattyBottom->GetTransform()->Translate(static_cast<float>(pattiesBottom[i][0]), static_cast<float>(pattiesBottom[i][1]) + WindowBuffer);
+		pattyBottom->AddComponent(std::make_unique<BurgerComponent>(scene));
+		//pattyBottom->GetComponent<BurgerComponent>()->AddObserver(observer);
 		burgerManager->AddChild(pattyBottom);
 
 		burgerManager->GetComponent<BurgerManager>()->AddBurger(pattyTop, pattyBottom, veggie, burger);
@@ -184,7 +215,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		enemy->GetComponent<TextureComponent>()->Scale(3, 3);
 		enemy->GetComponent<TextureComponent>()->SetNrOfFrames(3);
 		enemy->GetComponent<TextureComponent>()->GetRect();
-		enemy->GetTransform()->Translate(Margin, WindowSizeY - Margin * 5);
+		enemy->GetTransform()->Translate(Margin, (WindowSizeY) - Margin * 5);
 		enemyHolder->AddChild(enemy);
 	}
 }
@@ -222,14 +253,14 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVer
 	mainPlayer->GetComponent<TextureComponent>()->SetName(playerName);
 	mainPlayer->GetComponent<TextureComponent>()->SetTexture(textureName);
 	mainPlayer->GetComponent<TextureComponent>()->Scale(3, 3);
-	mainPlayer->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX) / 2 - Margin, WindowSizeY - Margin*3);
+	//mainPlayer->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX / 2) - (Margin*2), WindowSizeY - ((Margin*3)+ WindowBuffer));
 	mainPlayer->GetComponent<TextureComponent>()->SetNrOfFrames(3);
 	mainPlayer->GetComponent<TextureComponent>()->GetRect();
 
 	//bullets
 	mainPlayer->AddComponent(std::make_unique<PlayerComponent>(scene));
 
-	mainPlayer->GetComponent<TransformComponent>()->Translate(320, 525);
+	mainPlayer->GetTransform()->Translate((GameWindowSizeX / 2) - (Margin * 2), WindowSizeY - ((Margin * 3) + WindowBuffer));
 
 	if (id == 0) {
 		//Keyboard

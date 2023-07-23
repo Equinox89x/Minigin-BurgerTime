@@ -10,7 +10,8 @@
 
 #define WindowSizeX 720
 #define GameWindowSizeX WindowSizeX-0
-#define WindowSizeY 720
+#define WindowSizeY 800
+#define WindowBuffer 80
 #define Margin 40.f
 #define SubMargin Margin * 2
 #define Cellsize 48.3f
@@ -39,6 +40,7 @@
 		Global,
 		Opposer,
 		Plates,
+		ScoreHolder,
 		NUM_ENUM_VALUES
 	};
 
@@ -48,7 +50,7 @@
 	"ScoreBoard", "Score", "Life", "Values",
 	"Ladders", "Platforms", "PattyTop", "PattyBottom", "Veggie", "Burger",
 	"MainMenu", "EndScreen", "Selector", "Logo",
-	"Global", "Opposer", "Plates"
+	"Global", "Opposer", "Plates", "ScoreHolder",
 	};
 
 	enum class Stages {
