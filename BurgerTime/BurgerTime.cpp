@@ -105,8 +105,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 
 	for (size_t i = 0; i < ladders.size(); i++)
 	{
-		SDL_Rect rect{ ladders[i][0]+36, ladders[i][1],ladders[i][2],ladders[i][3] };
-		SDL_Rect rect2{ ladders[i][0]-36, ladders[i][1],ladders[i][2],ladders[i][3] };
+		SDL_Rect rect2{ ladders[i][0]-16, ladders[i][1],ladders[i][2],ladders[i][3] };
 		
 		auto ladder2 = std::make_shared<GameObject>();
 		ladder2->AddComponent(std::make_unique<PlatformComponent>(rect2));
@@ -175,16 +174,19 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	//enemyHolder->AddComponent(std::make_unique<EnemyManager>());
 	scene->Add(enemyHolder);
 
-	GameObject* enemy = new GameObject();
-	enemy->SetName(EnumStrings[Opposer]);
-	enemy->AddComponent(std::make_unique<EnemyComponent>(scene, 200));
-	enemy->AddComponent(std::make_unique<TextureComponent>());
-	enemy->GetComponent<TextureComponent>()->SetTexture("moveDown.png");
-	enemy->GetComponent<TextureComponent>()->Scale(3, 3);
-	enemy->GetComponent<TextureComponent>()->SetNrOfFrames(3);
-	enemy->GetComponent<TextureComponent>()->GetRect();
-	enemy->GetTransform()->Translate(Margin, WindowSizeY - Margin * 5);
-	enemyHolder->AddChild(enemy);
+	for (size_t i = 0; i < 4; i++)
+	{
+		GameObject* enemy = new GameObject();
+		enemy->SetName(EnumStrings[Opposer]);
+		enemy->AddComponent(std::make_unique<EnemyComponent>(scene, 200));
+		enemy->AddComponent(std::make_unique<TextureComponent>());
+		enemy->GetComponent<TextureComponent>()->SetTexture("moveDown.png");
+		enemy->GetComponent<TextureComponent>()->Scale(3, 3);
+		enemy->GetComponent<TextureComponent>()->SetNrOfFrames(3);
+		enemy->GetComponent<TextureComponent>()->GetRect();
+		enemy->GetTransform()->Translate(Margin, WindowSizeY - Margin * 5);
+		enemyHolder->AddChild(enemy);
+	}
 }
 
 void MakeMrHotdog(dae::Scene* scene) {

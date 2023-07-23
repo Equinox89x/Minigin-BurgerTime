@@ -54,21 +54,21 @@ void dae::BurgerManager::Update()
 
 void dae::BurgerManager::Render() const
 {
-	//for (const auto& platform : m_Platforms) {
-	//	auto rect{ platform.first };
-	//	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
-	//	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-	//}	
-	//for (const auto& plate : m_pPlates) {
-	//	auto rect{ plate.first };
-	//	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
-	//	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-	//}	
-	//for (const auto& ladder : m_pLadders) {
-	//	auto rect{ ladder.first };
-	//	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
-	//	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-	//}
+	for (const auto& platform : m_Platforms) {
+		auto rect{ platform.first };
+		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
+		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+	}	
+	for (const auto& plate : m_pPlates) {
+		auto rect{ plate.first };
+		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
+		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+	}	
+	for (const auto& ladder : m_pLadders) {
+		auto rect{ ladder.first };
+		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set the color to red
+		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+	}
 }
 
 bool dae::BurgerManager::GetAreBurgersFinished()

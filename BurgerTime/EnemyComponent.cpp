@@ -66,6 +66,7 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 	m_LeftUp = SDL_Rect{ xLeft, m_Rect.y, m_Rect.w / 5, m_Rect.h / 5 };
 	m_LeftDown = SDL_Rect{ xLeft, m_Rect.y, m_Rect.w / 5, m_Rect.h / 5 };
 	m_LeftUp.x -= m_LeftUp.w;
+	m_LeftUp.y += m_Rect.h - int(m_LeftDown.h*1.5f);
 	m_LeftDown.x -= m_LeftDown.w;
 	m_LeftDown.y += m_Rect.h - m_LeftDown.h;
 	bool canMoveRight{ false };
@@ -76,7 +77,6 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 	m_CanChangeState = false;
 
 
-	//TODO: check if you reached end of platform
 	//only try to change state when a new rectangle is detected and when it overlaps
 	for (auto item : platforms)
 	{
@@ -93,6 +93,7 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 
 			}
 		}
+
 	}
 
 	for (auto item : ladders) {
@@ -108,8 +109,46 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 				m_CanChangeState = true;
 			}
 		}
+
 	}
 	
+	if (m_State == State::MovingLeft || m_State == State::MovingRight) {
+		//TODO: check if you reached end of platform
+		if (!MathLib::IsOverlapping(m_BottomRight, m_LastHor)) {
+			canMoveLeft = false;
+			//m_LastHor = SDL_Rect{ 0,0,0,0 };
+			m_CanChangeState = true;
+		}
+		if (!MathLib::IsOverlapping(m_BottomLeft, m_LastHor)) {
+			canMoveRight = false;
+			//m_LastHor = SDL_Rect{ 0,0,0,0 };
+			m_CanChangeState = true;
+		}
+	}
+
+	if (m_State == State::MovingUp || m_State == State::MovingDown) {
+		//TODO: check if you reached end of platform
+		if (!MathLib::IsOverlapping(m_LeftUp, m_LastVert)) {
+			if (MathLib::IsOverlapping(m_LeftDown, m_LastVert)) {
+				canMoveDown = true;
+			}
+			canMoveUp = false;
+			//m_LastVert = SDL_Rect{ 0,0,0,0 };
+			m_CanChangeState = true;
+		}
+		if (!MathLib::IsOverlapping(m_LeftDown, m_LastVert)) {
+			if (MathLib::IsOverlapping(m_LeftUp, m_LastVert)) {
+				canMoveUp = true;
+			}
+			canMoveDown = false;
+			//m_LastVert = SDL_Rect{ 0,0,0,0 };
+			m_CanChangeState = true;
+			
+		}
+	}
+
+
+	//change state depending on overlap results
 	if (m_CanChangeState) {
 
 		//TODO: Calcualte chance of willing to move left or right when coming from a ladder, or to continue
