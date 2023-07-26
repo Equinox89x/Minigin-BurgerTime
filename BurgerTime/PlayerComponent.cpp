@@ -9,19 +9,26 @@
 
 void dae::PlayerComponent::Update()
 {
-	if (HasDied) {
-		auto deltaTime{ Timer::GetInstance().GetDeltaTime() };
+	auto deltaTime{ Timer::GetInstance().GetDeltaTime() };
+	switch (m_PlayerState)
+	{
+	case dae::PlayerComponent::ALIVE:
+		HandleEnemyOverlap();
+		break;
+	case dae::PlayerComponent::DEAD:
 		DeathTimer -= deltaTime;
 		if (DeathTimer < DefaultDeathTimer - 0.3f) {
 			HandleDeathEnd();
 		}
+		break;
+	case dae::PlayerComponent::RESPAWN:
+		DeathTimer -= deltaTime;
 		if (DeathTimer <= 0) {
 			HandleRespawn();
-
 		}
-	}
-	else {
-		HandleEnemyOverlap();
+		break;
+	default:
+		break;
 	}
 }
 
@@ -89,16 +96,14 @@ void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, G
 	}
 }
 
-
 void dae::PlayerComponent::HandleEnemyOverlap()
 {
-	auto go{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
-	if (go) {
+	if(auto go{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) }) {
 		auto children{ go->GetChildren(EnumStrings[Enemy]) };
 		auto rect1{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
 		for (auto enemy : children) {
 			if (enemy->IsMarkedForDestroy()) continue;
-			auto rect2{ enemy->GetComponent<TextureComponent>(EnumStrings[Enemy])->GetRect() };
+			auto rect2{ enemy->GetComponent<TextureComponent>()->GetRect() };
 			if (MathLib::IsOverlapping(rect1, rect2)) {
 				Die();
 				enemy->MarkForDestroy();
@@ -112,32 +117,34 @@ void dae::PlayerComponent::HandleDeathEnd()
 {
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->SetIsVisible(false);
-	player->GetComponent<TextureComponent>()->Scale(0.7f, 0.7f);
-	player->GetComponent<TextureComponent>()->SetTexture(player->GetName() == EnumStrings[Player0] ? "galaga.png" : "galagaRed.png");
+	player->GetComponent<TextureComponent>()->Scale(3,3);
+	player->GetComponent<TextureComponent>()->SetTexture(player->GetName() == EnumStrings[Player0] ? "moveUp.png" : "moveUp.png", 0.1f, 3);
 	auto rect = player->GetComponent<TextureComponent>()->GetRect();
 	player->GetComponent<TextureComponent>()->SetOffset({ (rect.w * 1.5f) - 1.5f, 0.f });
+
+	m_PlayerState = PlayerState::RESPAWN;
 }
 
 void dae::PlayerComponent::HandleRespawn()
 {
 	DeathTimer = DefaultDeathTimer;
-	HasDied = false;
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->SetIsVisible(true);
-	player->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX) / 2 - Margin, WindowSizeY - Margin * 3);
+	player->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX / 2) - (Margin * 2), WindowSizeY - ((Margin * 3) + WindowBuffer));
 	GetGameObject()->EnableCollision(true);
 	CanBeGrabbed = true;
+	m_PlayerState = PlayerState::ALIVE;
 }
 
 void dae::PlayerComponent::Die()
 {
-	HasDied = true;
+	m_PlayerState = PlayerState::DEAD;
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->Scale(2.5f, 2.5f);
-	player->GetComponent<TextureComponent>()->SetTexture("playerExplosion.png", 0.1f, 4);
+	player->GetComponent<TextureComponent>()->SetTexture("playerDeath.png", 0.1f, 5);
 	auto rect = player->GetComponent<TextureComponent>()->GetRect();
 	player->GetComponent<TextureComponent>()->SetOffset({ -rect.w / 2, -rect.h / 2 });
-	auto values{ m_Scene->GetGameObject(EnumStrings[Values])->GetComponent<ValuesComponent>() };
+	auto values{ m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetComponent<ValuesComponent>() };
 	values->Damage();
 
 	player->EnableCollision(false);

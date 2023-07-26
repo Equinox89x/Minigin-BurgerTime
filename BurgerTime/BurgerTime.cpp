@@ -55,18 +55,24 @@ void CreateEndScreen(dae::Scene* /*scene*/) {
 }
 
 void CreateScore(dae::Scene* scene) {
+	scene->GetGameObject(EnumStrings[Selector])->SetIsHidden(true);
+
+	std::shared_ptr<GameObject> scoreHolder = std::make_shared<GameObject>();
+	scoreHolder->AddComponent(std::make_unique<ValuesComponent>(scene));
+	scoreHolder->SetName(EnumStrings[ScoreHolder]);
+	auto observer{ std::make_shared<ScoreObserver>(scene) };
+	scoreHolder->GetComponent<ValuesComponent>()->AddObserver(observer);
+	scoreHolder->GetComponent<ValuesComponent>()->SetLives(3);
+
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Emulogic-zrEw.ttf", 24);
 	std::shared_ptr<GameObject> upText = std::make_shared<GameObject>();
 	std::shared_ptr<GameObject> upScoreText = std::make_shared<GameObject>();
-	upScoreText->SetName(EnumStrings[ScoreHolder]);
+	upScoreText->SetName(EnumStrings[Names::Score]);
 	std::shared_ptr<GameObject> hiscoreText = std::make_shared<GameObject>();
 	std::shared_ptr<GameObject> hiscoreScoreText = std::make_shared<GameObject>();
 
 	upText->AddComponent(std::make_unique<TextObjectComponent>("1UP", font));
 	upScoreText->AddComponent(std::make_unique<TextObjectComponent>("0000", font));
-	upScoreText->AddComponent(std::make_unique<ValuesComponent>(scene));
-	auto observer{ std::make_shared<ScoreObserver>(scene) };
-	upScoreText->GetComponent<ValuesComponent>()->AddObserver(observer);
 
 	hiscoreText->AddComponent(std::make_unique<TextObjectComponent>("HI-SCORE", font));
 	hiscoreScoreText->AddComponent(std::make_unique<TextObjectComponent>("00000", font));
@@ -80,6 +86,22 @@ void CreateScore(dae::Scene* scene) {
 	scene->Add(upScoreText);
 	scene->Add(hiscoreText);
 	scene->Add(hiscoreScoreText);
+
+	auto height{ Margin*3 };
+	for (size_t i = 0; i < 3; i++)
+	{
+		auto life = std::make_shared<GameObject>();
+		life->SetName(EnumStrings[Life]);
+		life->AddComponent(std::make_unique<TextureComponent>());
+		life->GetComponent<TextureComponent>()->SetTexture("life.png");
+		life->GetComponent<TextureComponent>()->SetNrOfFrames(1);
+		life->GetTransform()->Translate(Margin, WindowSizeY);
+		life->GetTransform()->AddTranslate(0, -height);
+		height += Margin;
+		scoreHolder->AddChild(life.get());
+	}
+
+	scene->Add(scoreHolder);
 }
 
 void MakeValues(dae::Scene* /*scene*/) {
@@ -208,12 +230,12 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	for (size_t i = 0; i < 4; i++)
 	{
 		GameObject* enemy = new GameObject();
-		enemy->SetName(EnumStrings[Opposer]);
-		enemy->AddComponent(std::make_unique<EnemyComponent>(scene, 200));
+		enemy->SetName(EnumStrings[Enemy]);
+		enemy->AddComponent(std::make_unique<EnemyComponent>(scene, 100));
 		enemy->AddComponent(std::make_unique<TextureComponent>());
-		enemy->GetComponent<TextureComponent>()->SetTexture("moveDown.png");
+		enemy->GetComponent<TextureComponent>()->SetTexture("hotdogDown.png");
 		enemy->GetComponent<TextureComponent>()->Scale(3, 3);
-		enemy->GetComponent<TextureComponent>()->SetNrOfFrames(3);
+		enemy->GetComponent<TextureComponent>()->SetNrOfFrames(2);
 		enemy->GetComponent<TextureComponent>()->GetRect();
 		enemy->GetTransform()->Translate(Margin, (WindowSizeY) - Margin * 5);
 		enemyHolder->AddChild(enemy);
@@ -229,12 +251,11 @@ void MakeMrHotdog(dae::Scene* scene) {
 	opposer->SetName(EnumStrings[Opposer]);
 	opposer->AddComponent(std::make_unique<TextureComponent>());
 
-	opposer->GetComponent<TextureComponent>()->SetTexture("boss2.png");
-	opposer->GetComponent<TextureComponent>()->SetName(EnumStrings[Enemy]);
-	opposer->GetComponent<TextureComponent>(EnumStrings[Enemy])->Scale(3, 3);
-	opposer->GetComponent<TextureComponent>(EnumStrings[Enemy])->SetNrOfFrames(2);
-	opposer->GetComponent<TextureComponent>(EnumStrings[Enemy])->GetRect();
-	opposer->GetComponent<TextureComponent>(EnumStrings[Enemy])->SetPosition((GameWindowSizeX) / 2 - Margin, WindowSizeY - Margin * 3);
+	opposer->GetComponent<TextureComponent>()->SetTexture("hotdogDown.png");
+	opposer->GetComponent<TextureComponent>()->Scale(3, 3);
+	opposer->GetComponent<TextureComponent>()->SetNrOfFrames(2);
+	opposer->GetComponent<TextureComponent>()->GetRect();
+	opposer->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX) / 2 - Margin, WindowSizeY - Margin * 3);
 
 	scene->Add(opposer);
 	opposer->AddComponent(std::make_unique<MoveControllerComponent>(opposer->GetTransform()->GetPosition()));
@@ -251,10 +272,9 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVer
 	//Texture
 	mainPlayer->AddComponent(std::make_unique<TextureComponent>());
 	mainPlayer->GetComponent<TextureComponent>()->SetName(playerName);
-	mainPlayer->GetComponent<TextureComponent>()->SetTexture(textureName);
+	mainPlayer->GetComponent<TextureComponent>()->SetTexture(textureName, 0.3f, 3);
 	mainPlayer->GetComponent<TextureComponent>()->Scale(3, 3);
 	//mainPlayer->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX / 2) - (Margin*2), WindowSizeY - ((Margin*3)+ WindowBuffer));
-	mainPlayer->GetComponent<TextureComponent>()->SetNrOfFrames(3);
 	mainPlayer->GetComponent<TextureComponent>()->GetRect();
 
 	//bullets

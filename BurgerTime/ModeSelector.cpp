@@ -24,7 +24,6 @@ void dae::ModeSelector::CycleGameMode(bool isMoveUp)
 
 void dae::ModeSelector::StartGame(GameObject* pMenu)
 {
-	// 1. hide menu
 	pMenu->SetIsHidden(true);
 
 	switch (m_SelectedGameMode)

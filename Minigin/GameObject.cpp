@@ -38,6 +38,13 @@ void dae::GameObject::Initialize()
 
 void dae::GameObject::Update(){
 	if (!m_IsHidden) {
+		for (const std::unique_ptr<Component>& comp : m_pComponents) {
+			if (comp->IsMarkedForDestroy()) {
+				RemoveComponent(comp);
+				break;
+			}
+		}		
+		
 		for (size_t i = 0; i < m_pChildren.size(); i++)
 		{
 			if (m_pChildren[i]->IsMarkedForDestroy()) {
@@ -46,13 +53,6 @@ void dae::GameObject::Update(){
 			}
 		}
 
-		for (const std::unique_ptr<Component>& comp : m_pComponents) {
-			if (comp->IsMarkedForDestroy()) {
-				RemoveComponent(comp);
-				break;
-			}
-		}		
-		
 		for (const std::unique_ptr<Component>& comp : m_pComponents) {
 			comp->Update();
 		}
@@ -117,7 +117,7 @@ void dae::GameObject::RemoveChild(GameObject* pObject)
 	//	• Remove itself as a parent of the child.
 	pObject->m_pParent = nullptr;
 	//	• Update position, rotationand scale
-	m_pTransform->UpdateTransforms();
+	//m_pTransform->UpdateTransforms();
 }
 
 void dae::GameObject::AddChild(GameObject* const go)

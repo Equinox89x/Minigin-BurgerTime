@@ -12,20 +12,22 @@ dae::TransformComponent::TransformComponent() :
 
 void dae::TransformComponent::UpdateTransforms()
 {
-	if (const GameObject* parent{ GetGameObject()->GetParent() }) {
-		auto pos{ parent->GetTransform()->GetPosition() };
-		auto rot{ parent->GetTransform()->GetRotation() };
-		m_WorldRotation = rot + GetRotation();
-		m_WorldPosition = pos + GetPosition();
-		//m_Rotation += m_WorldRotation;
-		//m_Position += m_WorldPosition;
-	}
-	else{
-		m_Rotation += m_WorldRotation;
-		m_Position += m_WorldPosition;
-	}
-	for (auto child : GetGameObject()->GetChildren()) {
-		child->GetTransform()->UpdateTransforms();
+	if (GetGameObject()) {
+		if (const GameObject * parent{ GetGameObject()->GetParent() }) {
+			auto pos{ parent->GetTransform()->GetPosition() };
+			auto rot{ parent->GetTransform()->GetRotation() };
+			m_WorldRotation = rot + GetRotation();
+			m_WorldPosition = pos + GetPosition();
+			//m_Rotation += m_WorldRotation;
+			//m_Position += m_WorldPosition;
+		}
+		else {
+			m_Rotation += m_WorldRotation;
+			m_Position += m_WorldPosition;
+		}
+		for (auto child : GetGameObject()->GetChildren()) {
+			child->GetTransform()->UpdateTransforms();
+		}
 	}
 
 

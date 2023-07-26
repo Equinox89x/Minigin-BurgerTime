@@ -15,13 +15,17 @@ namespace dae {
 		Dying
 	};
 
+	enum class EnemyType{
+		HotDog, Pickle, Egg
+	};
+
 	class EnemyComponent final : public Component
 	{
 
 	public:
 		EnemyComponent(Scene* scene, int score) :
 			m_Scene{ scene },
-			Score{ score }
+			m_Score{ score }
 		{};
 
 		~EnemyComponent() = default;
@@ -36,23 +40,25 @@ namespace dae {
 		//virtual void FixedUpdate() override; 
 
 		void DestroyEnemy();
-		int GetLives() { return Lives; };
-		void Damage() { Lives--; };
-		void SetLives(int lives) { Lives = lives; };
+		int GetLives() { return m_Lives; };
+		void Damage() { m_Lives--; };
+		void SetLives(int lives) { m_Lives = lives; };
 
 		void CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& platforms, const std::vector<std::pair<SDL_Rect, GameObject*>>& ladders);
+		void CheckHit(GameObject* go);
 
 	private:
 		Scene* m_Scene;
-		//bool CanDie{ false };
-		float DeathTimer{ .4f };
-		int Lives{ 1 };
-		int Score{};
+		bool m_CanDie{ false };
+		float m_DeathTimer{ .4f };
+		int m_Lives{ 1 };
+		int m_Score{};
 		int m_Speed{ 100 };
 		bool m_CanChangeState{ false };
 
 		SDL_Rect m_LeftDown, m_LeftUp, m_Rect, m_BottomLeft, m_BottomRight, m_LastVert, m_LastHor;
 		State m_State{ State::MovingRight };
+		EnemyType m_EnemyType{ EnemyType::HotDog };
 
 		bool IsSameRect(const SDL_Rect& rect1, const SDL_Rect& rect);
 	};

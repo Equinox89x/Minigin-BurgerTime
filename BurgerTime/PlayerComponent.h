@@ -15,6 +15,10 @@ namespace dae {
         enum Movement {
             UP, DOWN, LEFT, RIGHT
         };
+        
+        enum PlayerState {
+            ALIVE, DEAD, RESPAWN
+        };
         PlayerComponent(Scene* scene) : m_Scene{ scene } { };
         ~PlayerComponent() = default;
         PlayerComponent(const PlayerComponent&) = delete;
@@ -48,6 +52,7 @@ namespace dae {
         bool m_CanMoveHorizontally{ true }, m_CanMoveVertically{ true };
 
         SDL_Rect m_BottomRect, m_LeftRect, m_Rect, m_BottomLeft, m_BottomRight;
+        PlayerState m_PlayerState{ PlayerState::ALIVE };
 
         void HandleEnemyOverlap();
         void HandleDeathEnd();

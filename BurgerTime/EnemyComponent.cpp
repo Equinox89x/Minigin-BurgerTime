@@ -10,6 +10,8 @@
 #include <glm/gtc/random.hpp>
 #include "AudioComponent.h"
 #include "GameObject.h"
+#include <ValuesComponent.h>
+#include "BurgerComponent.h"
 
 void dae::EnemyComponent::Initialize()
 {
@@ -19,7 +21,6 @@ void dae::EnemyComponent::Initialize()
 void dae::EnemyComponent::Update()
 {
 	float deltaTime{ Timer::GetInstance().GetDeltaTime() };
-	//GetGameObject()->GetTransform()->AddTranslate(deltaTime * m_Speed, 0);
 
 	float speed{ deltaTime * m_Speed };
 
@@ -38,6 +39,10 @@ void dae::EnemyComponent::Update()
 		GetGameObject()->GetTransform()->AddTranslate(0, speed);
 		break;
 	case dae::State::Dying:
+		m_DeathTimer -= deltaTime;
+		if (m_DeathTimer <= 0) {
+			GetGameObject()->MarkForDestroy();
+		}
 		break;
 	default:
 		break;
@@ -155,17 +160,21 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 		if (canMoveLeft && canMoveRight) {
 			if (MathLib::CalculateChance() <= 0.5f) {
 				m_State = State::MovingLeft;
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogLeft.png", 0.1f, 2);
 			}
 			else {
 				m_State = State::MovingRight;
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogRight.png", 0.1f, 2);
 			}
 		}
 		else {
 			if (canMoveLeft) {
 				m_State = State::MovingLeft;
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogLeft.png", 0.1f, 2);
 			}
 			if (canMoveRight) {
 				m_State = State::MovingRight;
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogRight.png", 0.1f, 2);
 			}
 		}
 
@@ -174,19 +183,36 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 		if (canMoveDown && canMoveUp) {
 			if (MathLib::CalculateChance() <= 0.5f) {
 				m_State = State::MovingDown;
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogDown.png", 0.1f, 2);
 			}
 			else {
 				m_State = State::MovingUp;
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogUp.png", 0.1f, 2);
 			}
 		}
 		else {
 			if (canMoveDown) {
 				m_State = State::MovingDown;
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogDown.png", 0.1f, 2);
 			}
 			if (canMoveUp) {
 				m_State = State::MovingUp;
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogUp.png", 0.1f, 2);
 			}
 		}
+	}
+}
+
+void dae::EnemyComponent::CheckHit(GameObject* go)
+{
+	if (go->GetComponent<BurgerComponent>()->GetState() != BurgerState::FALLING || go->GetComponent<BurgerComponent>()->GetState() != BurgerState::FALLING_NO_INTERUPT) return;
+
+	auto rect{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
+	rect.h /= 2;
+	rect.y -= rect.h;
+	auto rect2{ go->GetComponent<TextureComponent>()->GetRect() };
+	if (MathLib::IsOverlapping(rect, rect2)) {
+		DestroyEnemy();
 	}
 }
 
@@ -203,5 +229,12 @@ void dae::EnemyComponent::Render() const
 
 void dae::EnemyComponent::DestroyEnemy()
 {
-	
+	auto go{ m_Scene->GetGameObject(EnumStrings[ScoreHolder]) };
+	if (go) {
+		go->GetComponent<ValuesComponent>()->IncreaseScore(m_Score);
+	}
+	m_State = State::Dying;
+	GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogDead.png", 0.1f, 2);
+
+	//GetGameObject()->MarkForDestroy();
 }

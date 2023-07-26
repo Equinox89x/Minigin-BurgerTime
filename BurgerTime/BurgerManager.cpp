@@ -16,13 +16,18 @@ void dae::BurgerManager::Update()
 		auto veggie{ map[EnumStrings[Veggie]] };
 		auto burger{ map[EnumStrings[Burger]] };
 
+		auto pattyTopComponent{ pattyTop->GetComponent<BurgerComponent>()};
+		auto pattyBottomComponent{pattyBottom->GetComponent<BurgerComponent>()};
+		auto veggieComponent{veggie->GetComponent<BurgerComponent>()};
+		auto burgerComponent{ burger->GetComponent<BurgerComponent>() };
+
 		//platform overlap
 		for (const auto& platform : m_Platforms) {
 			auto rect{ platform.first };
-			pattyTop->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
-			pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
-			veggie->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
-			burger->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect);
+			pattyTopComponent->HandlePlatformOverlap(rect);
+			pattyBottomComponent->HandlePlatformOverlap(rect);
+			veggieComponent->HandlePlatformOverlap(rect);
+			burgerComponent->HandlePlatformOverlap(rect);
 		}
 
 		for (const auto& plate : m_pPlates) {
@@ -31,16 +36,23 @@ void dae::BurgerManager::Update()
 		}
 
 		//player overlap
-		pattyTop->GetComponent<BurgerComponent>()->HandleOverlap(charRect);
-		pattyBottom->GetComponent<BurgerComponent>()->HandleOverlap(charRect);
-		veggie->GetComponent<BurgerComponent>()->HandleOverlap(charRect);
-		burger->GetComponent<BurgerComponent>()->HandleOverlap(charRect);
+		pattyTopComponent->HandleOverlap(charRect);
+		pattyBottomComponent->HandleOverlap(charRect);
+		veggieComponent->HandleOverlap(charRect);
+		burgerComponent->HandleOverlap(charRect);
 
 		//burger overlap
-		pattyTop->GetComponent<BurgerComponent>()->HandleOverlap(veggie);
-		veggie->GetComponent<BurgerComponent>()->HandleOverlap(burger);
-		burger->GetComponent<BurgerComponent>()->HandleOverlap(pattyBottom);
+		pattyTopComponent->HandleOverlap(veggie);
+		veggieComponent->HandleOverlap(burger);
+		burgerComponent->HandleOverlap(pattyBottom);
 
+		//Enemy movement overlap
+		for (auto enemy : enemyHolder->GetChildren()) {
+			enemy->GetComponent<EnemyComponent>()->CheckHit(pattyTop);
+			enemy->GetComponent<EnemyComponent>()->CheckHit(pattyBottom);
+			enemy->GetComponent<EnemyComponent>()->CheckHit(veggie);
+			enemy->GetComponent<EnemyComponent>()->CheckHit(burger);
+		}
 	}
 	//player movement overlap
 	player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);

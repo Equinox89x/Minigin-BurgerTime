@@ -8,22 +8,23 @@
 #include "../BurgerTime/AudioComponent.h"
 #include "BurgerManager.h"
 #include <TextObjectComponent.h>
-//
-//void dae::HealthObserver::Notify(GameObject* go, Event& event)
-//{
-//	auto i{ go->GetComponent<ValuesComponent>()->GetLives() };
-//	switch (event.GetEvent())
-//	{
-//	case EventType::Live:
-//		if (i >= 0) {
-//			GameObjects[i]->SetIsHidden(true);
-//		}
-//		break;
-//	case EventType::Reset:
-//		break;
-//	}
-//}
-//
+
+void dae::HealthObserver::Notify(GameObject* go, Event& event)
+{
+	auto kids{ m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetChildren(EnumStrings[Life]) };
+	auto i{ go->GetComponent<ValuesComponent>()->GetLives() };
+	switch (event.GetEvent())
+	{
+	case EventType::Live:
+		if (i >= 0) {
+			kids[i]->SetIsHidden(true);
+		}
+		break;
+	case EventType::Reset:
+		break;
+	}
+}
+
 void dae::ScoreObserver::Notify(GameObject* go, Event& event)
 {
 	ValuesComponent* comp{ go->GetComponent<ValuesComponent>() };
@@ -31,10 +32,12 @@ void dae::ScoreObserver::Notify(GameObject* go, Event& event)
 	switch (event.GetEvent())
 	{
 	case EventType::Score:
-		go->GetComponent<TextObjectComponent>()->SetText(std::to_string(score));
+		if (auto child{ m_pGO->GetGameObject(EnumStrings[Names::Score]) })
+			child->GetComponent<TextObjectComponent>()->SetText(std::to_string(score));
 		break;
 	case EventType::Reset:
-		go->GetComponent<TextObjectComponent>()->SetText(std::to_string(comp->GetScores()));
+		if (auto child{ m_pGO->GetGameObject(EnumStrings[Names::Score]) })
+			child->GetComponent<TextObjectComponent>()->SetText(std::to_string(score));
 		break;
 
 	}
