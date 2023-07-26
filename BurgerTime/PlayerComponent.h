@@ -48,7 +48,7 @@ namespace dae {
     private:
         Scene* m_Scene{};
         bool HasDied{ false };
-        float DefaultDeathTimer{ 4 }, DeathTimer{ DefaultDeathTimer };
+        float DefaultDeathTimer{ 5.5 }, DeathTimer{ DefaultDeathTimer };
         bool m_CanMoveHorizontally{ true }, m_CanMoveVertically{ true };
 
         SDL_Rect m_BottomRect, m_LeftRect, m_Rect, m_BottomLeft, m_BottomRight;

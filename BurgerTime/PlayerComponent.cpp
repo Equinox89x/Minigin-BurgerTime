@@ -6,6 +6,7 @@
 #include <Renderer.h>
 #include "AudioComponent.h"
 #include <MoveKeyboardComponent.h>
+#include "Observers.h"
 
 void dae::PlayerComponent::Update()
 {
@@ -17,7 +18,7 @@ void dae::PlayerComponent::Update()
 		break;
 	case dae::PlayerComponent::DEAD:
 		DeathTimer -= deltaTime;
-		if (DeathTimer < DefaultDeathTimer - 0.3f) {
+		if (DeathTimer < DefaultDeathTimer - 1.5f) {
 			HandleDeathEnd();
 		}
 		break;
@@ -118,9 +119,7 @@ void dae::PlayerComponent::HandleDeathEnd()
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->SetIsVisible(false);
 	player->GetComponent<TextureComponent>()->Scale(3,3);
-	player->GetComponent<TextureComponent>()->SetTexture(player->GetName() == EnumStrings[Player0] ? "moveUp.png" : "moveUp.png", 0.1f, 3);
-	auto rect = player->GetComponent<TextureComponent>()->GetRect();
-	player->GetComponent<TextureComponent>()->SetOffset({ (rect.w * 1.5f) - 1.5f, 0.f });
+	player->GetComponent<TextureComponent>()->SetTexture(player->GetName() == EnumStrings[Player0] ? "moveUp.png" : "moveUp.png", 0.3f, 3);
 
 	m_PlayerState = PlayerState::RESPAWN;
 }
@@ -140,10 +139,8 @@ void dae::PlayerComponent::Die()
 {
 	m_PlayerState = PlayerState::DEAD;
 	auto player{ GetGameObject() };
-	player->GetComponent<TextureComponent>()->Scale(2.5f, 2.5f);
-	player->GetComponent<TextureComponent>()->SetTexture("playerDeath.png", 0.1f, 5);
-	auto rect = player->GetComponent<TextureComponent>()->GetRect();
-	player->GetComponent<TextureComponent>()->SetOffset({ -rect.w / 2, -rect.h / 2 });
+	player->GetComponent<TextureComponent>()->Scale(3, 3);
+	player->GetComponent<TextureComponent>()->SetTexture("playerDeath.png", 0.3f, 5);
 	auto values{ m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetComponent<ValuesComponent>() };
 	values->Damage();
 

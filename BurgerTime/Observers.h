@@ -13,11 +13,10 @@ namespace dae
 	class HealthObserver final : public Observer
 	{
 	public:
-		HealthObserver(const std::vector<GameObject*> gameObjects, Scene* scene) : GameObjects{ gameObjects }, m_Scene{ scene } {};
+		HealthObserver(Scene* scene) : m_Scene{ scene } {};
 		void Notify(GameObject* go, Event& event) override;
 
 	private:
-		const std::vector<GameObject*> GameObjects;
 		Scene* m_Scene;
 	};
 

@@ -205,14 +205,14 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 
 void dae::EnemyComponent::CheckHit(GameObject* go)
 {
-	if (go->GetComponent<BurgerComponent>()->GetState() != BurgerState::FALLING || go->GetComponent<BurgerComponent>()->GetState() != BurgerState::FALLING_NO_INTERUPT) return;
-
-	auto rect{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
-	rect.h /= 2;
-	rect.y -= rect.h;
-	auto rect2{ go->GetComponent<TextureComponent>()->GetRect() };
-	if (MathLib::IsOverlapping(rect, rect2)) {
-		DestroyEnemy();
+	if (go->GetComponent<BurgerComponent>()->GetState() == BurgerState::FALLING || go->GetComponent<BurgerComponent>()->GetState() == BurgerState::FALLING_NO_INTERUPT) {
+		auto rect{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
+		rect.h /= 2;
+		rect.y -= rect.h;
+		auto rect2{ go->GetComponent<TextureComponent>()->GetRect() };
+		if (MathLib::IsOverlapping(rect, rect2)) {
+			DestroyEnemy();
+		}
 	}
 }
 

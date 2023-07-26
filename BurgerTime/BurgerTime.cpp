@@ -63,6 +63,9 @@ void CreateScore(dae::Scene* scene) {
 	auto observer{ std::make_shared<ScoreObserver>(scene) };
 	scoreHolder->GetComponent<ValuesComponent>()->AddObserver(observer);
 	scoreHolder->GetComponent<ValuesComponent>()->SetLives(3);
+	auto observer2{ std::make_shared<HealthObserver>(scene) };
+	scoreHolder->GetComponent<ValuesComponent>()->AddObserver(observer2);
+
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Emulogic-zrEw.ttf", 24);
 	std::shared_ptr<GameObject> upText = std::make_shared<GameObject>();
@@ -87,18 +90,20 @@ void CreateScore(dae::Scene* scene) {
 	scene->Add(hiscoreText);
 	scene->Add(hiscoreScoreText);
 
-	auto height{ Margin*3 };
+	auto height{ 0.f };
 	for (size_t i = 0; i < 3; i++)
 	{
 		auto life = std::make_shared<GameObject>();
 		life->SetName(EnumStrings[Life]);
 		life->AddComponent(std::make_unique<TextureComponent>());
 		life->GetComponent<TextureComponent>()->SetTexture("life.png");
+		life->GetComponent<TextureComponent>()->Scale(3,3);
 		life->GetComponent<TextureComponent>()->SetNrOfFrames(1);
-		life->GetTransform()->Translate(Margin, WindowSizeY);
-		life->GetTransform()->AddTranslate(0, -height);
-		height += Margin;
+		life->GetTransform()->Translate(Margin/4, WindowSizeY - Margin);
+		life->GetTransform()->AddTranslate(0, height);
+		height -= Margin/1.5f;
 		scoreHolder->AddChild(life.get());
+		scene->Add(life);
 	}
 
 	scene->Add(scoreHolder);
