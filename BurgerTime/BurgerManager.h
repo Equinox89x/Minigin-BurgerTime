@@ -19,6 +19,7 @@ namespace dae {
 
 		//void Initialize() override;
 		void Update() override;
+		void HandleBurgerOverlap(std::map<std::string, GameObject*>& map);
 		void Render() const;
 
 		bool GetAreBurgersFinished();

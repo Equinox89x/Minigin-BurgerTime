@@ -55,6 +55,7 @@ void dae::BurgerComponent::HandleOverlap(GameObject* otherObj)
 	case BurgerState::FALLING:
 		if (MathLib::IsOverlapping(otherRect, rect)) {
 			GetGameObject()->GetComponent<BurgerComponent>()->SetState(otherObj->GetComponent<BurgerComponent>()->GetState() == BurgerState::FINISHED ? BurgerState::FINISHED : BurgerState::STATIC);
+			//otherObj->GetComponent<BurgerComponent>()->SetState(BurgerState::FALLING_NO_INTERUPT);
 		}
 		break;
 	default:
