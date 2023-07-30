@@ -100,12 +100,10 @@ void dae::StageCleared::Notify(GameObject* /*go*/, Event& event)
 		if (m_pScene->GetGameObject("Stage 1")) {
 			CreateStage(m_pScene, Stages::Stage2, 3);
 			m_pScene->GetGameObject("Stage 1")->SetName("Stage 2");
-			//m_pScene->GetGameObject("Player0")->GetComponent<ValuesComponent>()->Reset();
 		}
 		else if (m_pScene->GetGameObject("Stage 2")) {
 			CreateStage(m_pScene, Stages::Stage3, 3);
 			m_pScene->GetGameObject("Stage 2")->SetName("Stage 3");
-			//m_pScene->GetGameObject("Player0")->GetComponent<ValuesComponent>()->Reset();
 		}
 		else if (m_pScene->GetGameObject("Stage 3")) {
 
