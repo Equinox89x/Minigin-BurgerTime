@@ -20,29 +20,29 @@ namespace dae
 		Scene* m_Scene;
 	};
 
-	//class GameOverObserver final : public Observer
-	//{
-	//public:
-	//	GameOverObserver(std::function<void(Scene*)> createEndScreen, Scene* scene) : MakeEndScreen{ createEndScreen }, m_Scene{ scene } {};
-	//	void Notify(GameObject* go, Event& event) override;
+	class GameOverObserver final : public Observer
+	{
+	public:
+		GameOverObserver(std::function<void(Scene*)> createEndScreen, Scene* scene) : MakeEndScreen{ createEndScreen }, m_Scene{ scene } {};
+		void Notify(GameObject* go, Event& event) override;
 
-	//private:
-	//	std::function<void(Scene* scene)> MakeEndScreen;
-	//	Scene* m_Scene;
-	//};
+	private:
+		std::function<void(Scene* scene)> MakeEndScreen;
+		Scene* m_Scene;
+	};
 
 
-	//class StageCleared final : public Observer
-	//{
-	//public:
-	//	StageCleared(std::function<void(Scene*, Stages, float)> createStage, std::function<void(Scene*)> makeEndScreen, Scene* scene) : CreateStage(createStage), MakeEndScreen{ makeEndScreen }, m_pScene{ scene } {}
-	//	void Notify(GameObject* go, Event& event) override;
+	class StageCleared final : public Observer
+	{
+	public:
+		StageCleared(std::function<void(Scene*, Stages, float)> createStage, std::function<void(Scene*)> makeEndScreen, Scene* scene) : CreateStage(createStage), MakeEndScreen{ makeEndScreen }, m_pScene{ scene } {}
+		void Notify(GameObject* go, Event& event) override;
 
-	//private:
-	//	std::function<void(Scene*, Stages, float)> CreateStage;
-	//	std::function<void(Scene*)> MakeEndScreen;
-	//	Scene* m_pScene;
-	//};
+	private:
+		std::function<void(Scene*, Stages, float)> CreateStage;
+		std::function<void(Scene*)> MakeEndScreen;
+		Scene* m_pScene;
+	};
 
 	//class ToMenu final : public Observer
 	//{

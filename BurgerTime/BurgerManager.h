@@ -7,7 +7,7 @@
 
 
 namespace dae {
-	class BurgerManager final : public Component
+	class BurgerManager final : public Component, public Subject
 	{
 	public:
 		BurgerManager(Scene* scene) : m_Scene{ scene } {};
@@ -19,10 +19,10 @@ namespace dae {
 
 		//void Initialize() override;
 		void Update() override;
-		void HandleBurgerOverlap(std::map<std::string, GameObject*>& map);
+		void HandleBurgerOverlap(std::map<std::string, GameObject*>& map, const std::shared_ptr<GameObject>& enemyHolder, SDL_Rect& charRect);
 		void Render() const;
 
-		bool GetAreBurgersFinished();
+		bool CheckAreBurgersFinished();
 
 		std::map<std::string, GameObject*> AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger);
 		std::pair<SDL_Rect, GameObject*> AddPlatform(SDL_Rect rect, GameObject* go);
