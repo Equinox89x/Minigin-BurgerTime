@@ -15,7 +15,7 @@
 #define Margin 40.f
 #define SubMargin Margin * 2
 #define Cellsize 48.3f
-#define GalagaSize 14.f
+#define PlayerSize 14.f
 
 	const enum Names {
 		Player0,

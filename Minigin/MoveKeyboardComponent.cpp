@@ -11,7 +11,7 @@ void dae::MoveKeyboardComponent::UpdatePos(float dt)
 		glm::vec3 curPos = go->GetTransform()->GetPosition();
 		glm::vec3 furPos = glm::vec3(curPos.x + (m_Movespeed.x * dt), curPos.y + (m_Movespeed.y * dt), 1);
 
-		if (furPos.x < 0 || furPos.x >(GameWindowSizeX) -GalagaSize) return;
+		if (furPos.x < 0 || furPos.x >(GameWindowSizeX) -PlayerSize) return;
 
 		if (!m_Movement[MathLib::Side::Top] && m_Movespeed.y < 0) return;
 		if (!m_Movement[MathLib::Side::Bottom] && m_Movespeed.y > 0) return;

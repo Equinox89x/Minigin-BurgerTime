@@ -4,7 +4,7 @@
 #include <map>
 #include <Scene.h>
 #include "GameObject.h"
-
+#include "Subject.h"
 
 namespace dae {
 	class BurgerManager final : public Component, public Subject
