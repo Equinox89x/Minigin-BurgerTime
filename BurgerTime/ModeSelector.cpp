@@ -41,7 +41,7 @@ void dae::ModeSelector::StartGame(GameObject* pMenu)
 		break;
 	case dae::ModeSelector::GameMode::VERSUS:
 		CreateScore(m_pScene);
-		CreateVersusGalaga(m_pScene);
+		CreateVersusStage(m_pScene);
 		CreateMainPlayer(m_pScene, true);
 		break;
 	default:

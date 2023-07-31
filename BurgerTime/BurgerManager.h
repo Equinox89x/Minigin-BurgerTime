@@ -7,15 +7,15 @@
 #include "Subject.h"
 
 namespace dae {
-	class BurgerManager final : public Component, public Subject
+	class BurgerManagerComponent final : public Component, public Subject
 	{
 	public:
-		BurgerManager(Scene* scene) : m_Scene{ scene } {};
-		~BurgerManager() = default;
-		BurgerManager(const BurgerManager&) = delete;
-		BurgerManager(BurgerManager&&) noexcept = delete;
-		BurgerManager& operator=(const BurgerManager&) = delete;
-		BurgerManager& operator=(BurgerManager&&) noexcept = delete;
+		BurgerManagerComponent(Scene* scene) : m_Scene{ scene } {};
+		~BurgerManagerComponent() = default;
+		BurgerManagerComponent(const BurgerManagerComponent&) = delete;
+		BurgerManagerComponent(BurgerManagerComponent&&) noexcept = delete;
+		BurgerManagerComponent& operator=(const BurgerManagerComponent&) = delete;
+		BurgerManagerComponent& operator=(BurgerManagerComponent&&) noexcept = delete;
 
 		//void Initialize() override;
 		void Update() override;

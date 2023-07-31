@@ -116,6 +116,7 @@ void MakeValues(dae::Scene* /*scene*/) {
 void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	std::shared_ptr<GameObject> burgerManager = std::make_shared<GameObject>();
 	burgerManager->AddComponent(std::make_unique<TextureComponent>());
+	burgerManager->SetName(EnumStrings[Names::BurgerManager]);
 
 	std::string name;
 	std::string name2;
@@ -151,7 +152,12 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 
 	burgerManager->GetComponent<TextureComponent>()->SetTexture(name2);
 	burgerManager->GetTransform()->AddTranslate(0, WindowBuffer);
-	burgerManager->AddComponent(std::make_unique<BurgerManager>(scene));
+	burgerManager->AddComponent(std::make_unique<BurgerManagerComponent>(scene));
+
+	auto observer{ std::make_shared<StageClearedObserver>(&MakeStageOfNr, &CreateEndScreen, scene) };
+
+	auto burgerManagerComp{ burgerManager->GetComponent<BurgerManagerComponent>() };
+	burgerManagerComp->AddObserver(observer);
 
 	//burger maneger has to detect when another burger piece overlaps with another, if yes they fall down until they detect a platform. If that platform has a burger piece, that piece has to fall down as well.
 
@@ -161,7 +167,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 
 		auto ladder2 = std::make_shared<GameObject>();
 		ladder2->AddComponent(std::make_unique<PlatformComponent>(rect2));
-		burgerManager->GetComponent<BurgerManager>()->AddLadder(rect2, ladder2.get());
+		burgerManagerComp->AddLadder(rect2, ladder2.get());
 		scene->Add(ladder2);
 	}
 	for (size_t i = 0; i < platforms.size(); i++)
@@ -170,7 +176,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 
 		auto platform = std::make_shared<GameObject>();
 		platform->AddComponent(std::make_unique<PlatformComponent>(rect));
-		burgerManager->GetComponent<BurgerManager>()->AddPlatform(rect, platform.get());
+		burgerManagerComp->AddPlatform(rect, platform.get());
 		scene->Add(platform);
 	}
 	for (size_t i = 0; i < plates.size(); i++)
@@ -178,7 +184,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		auto plate = std::make_shared<GameObject>();
 		SDL_Rect rect{ plates[i][0], plates[i][1] + WindowBuffer,plates[i][2],plates[i][3] };
 		plate->AddComponent(std::make_unique<PlatformComponent>(rect));
-		burgerManager->GetComponent<BurgerManager>()->AddPlate(rect, plate.get());
+		burgerManagerComp->AddPlate(rect, plate.get());
 		scene->Add(plate);
 	}
 
@@ -222,7 +228,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		//pattyBottom->GetComponent<BurgerComponent>()->AddObserver(observer);
 		burgerManager->AddChild(pattyBottom);
 
-		burgerManager->GetComponent<BurgerManager>()->AddBurger(pattyTop, pattyBottom, veggie, burger);
+		burgerManagerComp->AddBurger(pattyTop, pattyBottom, veggie, burger);
 	}
 	scene->Add(burgerManager);
 
@@ -345,8 +351,10 @@ void MakeStage(dae::Scene* scene) {
 }
 
 void MakeVersusStage(dae::Scene* scene) {
-	std::shared_ptr<GameObject> container = std::make_shared<dae::GameObject>();
-	scene->Add(container);
+	//std::shared_ptr<GameObject> container = std::make_shared<dae::GameObject>();
+	MakeStageOfNr(scene, Stages::Stage1);
+	MakeMrHotdog(scene);
+	//scene->Add(container);
 }
 
 void MakeMainMenu(dae::Scene* scene) {
@@ -424,6 +432,10 @@ void MakeMainMenu(dae::Scene* scene) {
 		scoreObj2->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 + Margin, yPos);
 		scene->Add(scoreObj);
 		scene->Add(scoreObj2);
+
+		container->AddChild(scoreObj.get());
+		container->AddChild(scoreObj2.get());
+
 		i++;
 		yPos += 50;
 	}

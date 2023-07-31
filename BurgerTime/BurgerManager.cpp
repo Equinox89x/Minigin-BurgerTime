@@ -5,25 +5,32 @@
 #include "PlayerComponent.h"
 #include "EnemyComponent.h"
 
-void dae::BurgerManager::Update()
+void dae::BurgerManagerComponent::Update()
 {
 	const auto enemyHolder{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
 	const auto player{ m_Scene->GetGameObject(EnumStrings[Player0]) };
 	SDL_Rect charRect{ player->GetComponent<TextureComponent>()->GetRect() };
-	for (std::map<std::string, GameObject*>& map : m_Burgers) {
-		HandleBurgerOverlap(map, enemyHolder, charRect);
+	if (m_Burgers.size() > 0) {
+		for (std::map<std::string, GameObject*>& map : m_Burgers) {
+			HandleBurgerOverlap(map, enemyHolder, charRect);
+		}
 	}
+
 	//player movement overlap
-	player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
+	if (m_Platforms.size() > 0)
+		player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
+	if (m_pLadders.size() > 0)
 	player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
 
 	//Enemy movement overlap
-	for (auto enemy : enemyHolder->GetChildren()) {
-		enemy->GetComponent<EnemyComponent>()->CheckMovement(m_Platforms, m_pLadders);
+	if (enemyHolder && enemyHolder->GetChildren().size() > 0) {
+		for (auto enemy : enemyHolder->GetChildren()) {
+			enemy->GetComponent<EnemyComponent>()->CheckMovement(m_Platforms, m_pLadders);
+		}
 	}
 }
 
-void dae::BurgerManager::HandleBurgerOverlap(std::map<std::string, GameObject*>& map, const std::shared_ptr<GameObject>& enemyHolder, SDL_Rect& charRect)
+void dae::BurgerManagerComponent::HandleBurgerOverlap(std::map<std::string, GameObject*>& map, const std::shared_ptr<GameObject>& enemyHolder, SDL_Rect& charRect)
 {
 	
 	auto pattyTop{ map[EnumStrings[PattyTop]] };
@@ -102,7 +109,7 @@ void dae::BurgerManager::HandleBurgerOverlap(std::map<std::string, GameObject*>&
 	}
 }
 
-void dae::BurgerManager::Render() const
+void dae::BurgerManagerComponent::Render() const
 {
 	for (const auto& platform : m_Platforms) {
 		auto rect{ platform.first };
@@ -121,7 +128,7 @@ void dae::BurgerManager::Render() const
 	}
 }
 
-bool dae::BurgerManager::CheckAreBurgersFinished()
+bool dae::BurgerManagerComponent::CheckAreBurgersFinished()
 {
 	for (auto burger : m_Burgers)
 	{
@@ -137,7 +144,7 @@ bool dae::BurgerManager::CheckAreBurgersFinished()
 	return true;
 }
 
-std::map<std::string, dae::GameObject*> dae::BurgerManager::AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger)
+std::map<std::string, dae::GameObject*> dae::BurgerManagerComponent::AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger)
 {
 	std::map<std::string, GameObject*> map{
 		std::make_pair(EnumStrings[PattyTop], pattyTop),
@@ -149,21 +156,21 @@ std::map<std::string, dae::GameObject*> dae::BurgerManager::AddBurger(GameObject
 	return map;
 }
 
-std::pair<SDL_Rect, dae::GameObject*> dae::BurgerManager::AddPlatform(SDL_Rect rect, GameObject* go)
+std::pair<SDL_Rect, dae::GameObject*> dae::BurgerManagerComponent::AddPlatform(SDL_Rect rect, GameObject* go)
 {
 	auto pair{ std::make_pair(rect, go) };
 	m_Platforms.push_back(pair);
 	return pair;
 }
 
-std::pair<SDL_Rect, dae::GameObject*> dae::BurgerManager::AddLadder(SDL_Rect rect, GameObject* go)
+std::pair<SDL_Rect, dae::GameObject*> dae::BurgerManagerComponent::AddLadder(SDL_Rect rect, GameObject* go)
 {
 	auto pair{ std::make_pair(rect, go) };
 	m_pLadders.push_back(pair);
 	return pair;
 }
 
-std::pair<SDL_Rect, dae::GameObject*> dae::BurgerManager::AddPlate(SDL_Rect rect, GameObject* go)
+std::pair<SDL_Rect, dae::GameObject*> dae::BurgerManagerComponent::AddPlate(SDL_Rect rect, GameObject* go)
 {
 	auto pair{ std::make_pair(rect, go) };
 	m_pPlates.push_back(pair);

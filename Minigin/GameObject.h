@@ -41,6 +41,7 @@
 		Opposer,
 		Plates,
 		ScoreHolder,
+		BurgerManager,
 		NUM_ENUM_VALUES
 	};
 
@@ -50,7 +51,7 @@
 	"ScoreBoard", "Score", "Life", "Values",
 	"Ladders", "Platforms", "PattyTop", "PattyBottom", "Veggie", "Burger",
 	"MainMenu", "EndScreen", "Selector", "Logo",
-	"Global", "Opposer", "Plates", "ScoreHolder",
+	"Global", "Opposer", "Plates", "ScoreHolder", "BurgerManager", 
 	};
 
 	enum class Stages {

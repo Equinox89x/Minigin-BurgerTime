@@ -55,7 +55,7 @@ void dae::GameOverObserver::Notify(GameObject* go, Event& event)
 	{
 	case EventType::GameOver:
 
-		if (go->GetComponent<BurgerManager>()->CheckAreBurgersFinished()) {
+		if (go->GetComponent<BurgerManagerComponent>()->CheckAreBurgersFinished()) {
 			MakeEndScreen(m_Scene);
 			values->GetComponent<ValuesComponent>()->GameEnd();
 			Input::GetInstance().ClearKeys();
@@ -84,25 +84,29 @@ void dae::GameOverObserver::Notify(GameObject* go, Event& event)
 	}
 }
 
-void dae::StageCleared::Notify(GameObject* /*go*/, Event& event)
+void dae::StageClearedObserver::Notify(GameObject* /*go*/, Event& event)
 {
 	auto players{ m_pScene->GetGameObjects(EnumStrings[PlayerGeneral], false) };
 	auto scoreboard{ m_pScene->GetGameObject(EnumStrings[ScoreBoard]) };
 	auto enemyHolder{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
 	auto opposer{ m_pScene->GetGameObject(EnumStrings[Opposer]) };
 	auto values{ m_pScene->GetGameObject(EnumStrings[Values]) };
-	auto logo{ m_pScene->GetGameObject(EnumStrings[Logo])->GetTransform() };
+	auto burgerManager{ m_pScene->GetGameObject(EnumStrings[Names::BurgerManager]) };
 
 	switch (event.GetEvent())
 	{
 	case EventType::StageCleared:
 
+		m_pScene->Remove(enemyHolder);
+		m_pScene->Remove(burgerManager);
+		//TODO reset player location
+
 		if (m_pScene->GetGameObject("Stage 1")) {
-			CreateStage(m_pScene, Stages::Stage2, 3);
+			CreateStage(m_pScene, Stages::Stage2);
 			m_pScene->GetGameObject("Stage 1")->SetName("Stage 2");
 		}
 		else if (m_pScene->GetGameObject("Stage 2")) {
-			CreateStage(m_pScene, Stages::Stage3, 3);
+			CreateStage(m_pScene, Stages::Stage3);
 			m_pScene->GetGameObject("Stage 2")->SetName("Stage 3");
 		}
 		else if (m_pScene->GetGameObject("Stage 3")) {
@@ -118,12 +122,9 @@ void dae::StageCleared::Notify(GameObject* /*go*/, Event& event)
 			scoreboard->MarkForDestroy();
 			m_pScene->GetGameObject("Stage 3")->SetName("Stage 1");
 
-			logo->AddTranslate(0, WindowSizeY);
-
 			if (values)
 				values->MarkForDestroy();
 		}
-		m_pScene->Remove(enemyHolder);
 		break;
 	case EventType::Reset:
 		break;
