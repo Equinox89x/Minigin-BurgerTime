@@ -110,20 +110,8 @@ void dae::StageClearedObserver::Notify(GameObject* /*go*/, Event& event)
 			m_pScene->GetGameObject("Stage 2")->SetName("Stage 3");
 		}
 		else if (m_pScene->GetGameObject("Stage 3")) {
-
-			MakeEndScreen(m_pScene);
-
-			values->GetComponent<ValuesComponent>()->GameEnd();
-
-			for (auto player : players) {
-				player->MarkForDestroy();
-			}
-
-			scoreboard->MarkForDestroy();
+			CreateStage(m_pScene, Stages::Stage1);
 			m_pScene->GetGameObject("Stage 3")->SetName("Stage 1");
-
-			if (values)
-				values->MarkForDestroy();
 		}
 		break;
 	case EventType::Reset:

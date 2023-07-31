@@ -155,26 +155,25 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 
 	//change state depending on overlap results
 	if (m_CanChangeState) {
-
 		//TODO: Calcualte chance of willing to move left or right when coming from a ladder, or to continue
 		if (canMoveLeft && canMoveRight) {
 			if (MathLib::CalculateChance() <= 0.5f) {
 				m_State = State::MovingLeft;
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogLeft.png", 0.1f, 2);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName+"Left.png", 0.1f, 2);
 			}
 			else {
 				m_State = State::MovingRight;
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogRight.png", 0.1f, 2);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Right.png", 0.1f, 2);
 			}
 		}
 		else {
 			if (canMoveLeft) {
 				m_State = State::MovingLeft;
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogLeft.png", 0.1f, 2);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Left.png", 0.1f, 2);
 			}
 			if (canMoveRight) {
 				m_State = State::MovingRight;
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogRight.png", 0.1f, 2);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Right.png", 0.1f, 2);
 			}
 		}
 
@@ -183,21 +182,21 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 		if (canMoveDown && canMoveUp) {
 			if (MathLib::CalculateChance() <= 0.5f) {
 				m_State = State::MovingDown;
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogDown.png", 0.1f, 2);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Down.png", 0.1f, 2);
 			}
 			else {
 				m_State = State::MovingUp;
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogUp.png", 0.1f, 2);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Up.png", 0.1f, 2);
 			}
 		}
 		else {
 			if (canMoveDown) {
 				m_State = State::MovingDown;
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogDown.png", 0.1f, 2);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Down.png", 0.1f, 2);
 			}
 			if (canMoveUp) {
 				m_State = State::MovingUp;
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogUp.png", 0.1f, 2);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Up.png", 0.1f, 2);
 			}
 		}
 	}
@@ -234,7 +233,7 @@ void dae::EnemyComponent::DestroyEnemy()
 		go->GetComponent<ValuesComponent>()->IncreaseScore(m_Score);
 	}
 	m_State = State::Dying;
-	GetGameObject()->GetComponent<TextureComponent>()->SetTexture("hotdogDead.png", 0.1f, 2);
+	GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Dead.png", 0.1f, 2);
 
 	//GetGameObject()->MarkForDestroy();
 }

@@ -238,13 +238,15 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	//enemyHolder->AddComponent(std::make_unique<EnemyManager>());
 	scene->Add(enemyHolder);
 
+	std::vector<std::string> names{ "hotdog","egg", "pickle", "hotdog" };
+	std::vector<EnemyType> types{ EnemyType::Hotdog, EnemyType::Egg, EnemyType::Pickle, EnemyType::Hotdog };
 	for (size_t i = 0; i < 4; i++)
 	{
 		GameObject* enemy = new GameObject();
 		enemy->SetName(EnumStrings[Enemy]);
-		enemy->AddComponent(std::make_unique<EnemyComponent>(scene, 100));
+		enemy->AddComponent(std::make_unique<EnemyComponent>(scene, types[i]));
 		enemy->AddComponent(std::make_unique<TextureComponent>());
-		enemy->GetComponent<TextureComponent>()->SetTexture("hotdogDown.png");
+		enemy->GetComponent<TextureComponent>()->SetTexture(names[i]+"Down.png");
 		enemy->GetComponent<TextureComponent>()->Scale(3, 3);
 		enemy->GetComponent<TextureComponent>()->SetNrOfFrames(2);
 		enemy->GetComponent<TextureComponent>()->GetRect();

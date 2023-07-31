@@ -16,17 +16,35 @@ namespace dae {
 	};
 
 	enum class EnemyType{
-		HotDog, Pickle, Egg
+		Hotdog, Pickle, Egg
 	};
 
 	class EnemyComponent final : public Component
 	{
 
 	public:
-		EnemyComponent(Scene* scene, int score) :
+		EnemyComponent(Scene* scene, EnemyType enemyType) :
 			m_Scene{ scene },
-			m_Score{ score }
-		{};
+			m_EnemyType{ enemyType }
+		{
+			switch (m_EnemyType)
+			{
+			case dae::EnemyType::Hotdog:
+				m_EnemyTypeName = "hotdog";
+				m_Score = 100;
+				break;
+			case dae::EnemyType::Pickle:
+				m_EnemyTypeName = "pickle";
+				m_Score = 200;
+				break;
+			case dae::EnemyType::Egg:
+				m_EnemyTypeName = "egg";
+				m_Score = 300;
+				break;
+			default:
+				break;
+			}
+		};
 
 		~EnemyComponent() = default;
 		EnemyComponent(const EnemyComponent&) = delete;
@@ -58,7 +76,8 @@ namespace dae {
 
 		SDL_Rect m_LeftDown, m_LeftUp, m_Rect, m_BottomLeft, m_BottomRight, m_LastVert, m_LastHor;
 		State m_State{ State::MovingRight };
-		EnemyType m_EnemyType{ EnemyType::HotDog };
+		EnemyType m_EnemyType{ EnemyType::Hotdog };
+		std::string m_EnemyTypeName{ "hotdog" };
 
 		bool IsSameRect(const SDL_Rect& rect1, const SDL_Rect& rect);
 	};
