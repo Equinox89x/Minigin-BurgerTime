@@ -54,7 +54,7 @@
     <ClInclude Include="ModeSelector.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="BurgerManager.h">
+    <ClInclude Include="BurgerManagerComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Observers.h">
@@ -92,7 +92,7 @@
     <ClCompile Include="BurgerTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BurgerManager.cpp">
+    <ClCompile Include="BurgerManagerComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Observers.cpp">

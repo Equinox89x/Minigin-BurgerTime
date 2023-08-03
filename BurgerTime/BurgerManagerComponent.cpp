@@ -1,4 +1,4 @@
-#include "BurgerManager.h"
+#include "BurgerManagerComponent.h"
 #include "TextureComponent.h"
 #include "BurgerComponent.h"
 #include "Renderer.h"
@@ -7,25 +7,27 @@
 
 void dae::BurgerManagerComponent::Update()
 {
-	const auto enemyHolder{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
-	const auto player{ m_Scene->GetGameObject(EnumStrings[Player0]) };
-	SDL_Rect charRect{ player->GetComponent<TextureComponent>()->GetRect() };
-	if (m_Burgers.size() > 0) {
-		for (std::map<std::string, GameObject*>& map : m_Burgers) {
-			HandleBurgerOverlap(map, enemyHolder, charRect);
+	if (!IsMarkedForDestroy()) {
+		const auto enemyHolder{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
+		const auto player{ m_Scene->GetGameObject(EnumStrings[Player0]) };
+		SDL_Rect charRect{ player->GetComponent<TextureComponent>()->GetRect() };
+		if (m_Burgers.size() > 0) {
+			for (std::map<std::string, GameObject*>& map : m_Burgers) {
+				HandleBurgerOverlap(map, enemyHolder, charRect);
+			}
 		}
-	}
 
-	//player movement overlap
-	if (m_Platforms.size() > 0)
-		player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
-	if (m_pLadders.size() > 0)
-	player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+		//player movement overlap
+		if (m_Platforms.size() > 0)
+			player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
+		if (m_pLadders.size() > 0)
+			player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
 
-	//Enemy movement overlap
-	if (enemyHolder && enemyHolder->GetChildren().size() > 0) {
-		for (auto enemy : enemyHolder->GetChildren()) {
-			enemy->GetComponent<EnemyComponent>()->CheckMovement(m_Platforms, m_pLadders);
+		//Enemy movement overlap
+		if (enemyHolder && enemyHolder->GetChildren().size() > 0) {
+			for (auto enemy : enemyHolder->GetChildren()) {
+				enemy->GetComponent<EnemyComponent>()->CheckMovement(m_Platforms, m_pLadders);
+			}
 		}
 	}
 }

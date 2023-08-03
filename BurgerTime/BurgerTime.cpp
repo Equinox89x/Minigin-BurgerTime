@@ -37,7 +37,7 @@
 #include <random>
 #include "Observers.h"
 #include "PlatformComponent.h"
-#include "BurgerManager.h"
+#include "BurgerManagerComponent.h"
 #include "BurgerComponent.h"
 
 
@@ -159,8 +159,8 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	auto burgerManagerComp{ burgerManager->GetComponent<BurgerManagerComponent>() };
 	burgerManagerComp->AddObserver(observer);
 
-	//burger maneger has to detect when another burger piece overlaps with another, if yes they fall down until they detect a platform. If that platform has a burger piece, that piece has to fall down as well.
-
+	//burger maneger has to detect when another burger piece overlaps with another, if yes they fall down until they detect a platform. 
+	//If that platform has a burger piece, that piece has to fall down as well.
 	for (size_t i = 0; i < ladders.size(); i++)
 	{
 		SDL_Rect rect2{ ladders[i][0]-16, ladders[i][1] + WindowBuffer,ladders[i][2],ladders[i][3] };
@@ -300,11 +300,8 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVer
 		mainPlayer->AddComponent(std::make_unique<MoveKeyboardComponent>(mainPlayer->GetTransform()->GetPosition()));
 
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveUp.png", glm::vec3(0.f, -200.f, 0.0f)));
-
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_s, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveDown.png", glm::vec3(0.f, 200.f, 0.0f)));
-		 
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_a, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveLeft.png", glm::vec3(-200.f, 0.0f, 0.0f)));
-
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_d, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveRight.png", glm::vec3(200.f, 0.0f, 0.0f)));
 
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_w, id }, std::make_unique<StopMoveKeyboard>(mainPlayer.get()));
@@ -326,10 +323,10 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVer
 		//Controller
 		mainPlayer->AddComponent(std::make_unique<MoveControllerComponent>(mainPlayer->GetTransform()->GetPosition()));
 
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadUp, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveUp.png", glm::vec3(-600.f, 0.0f, 0.0f)));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadDown, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveDown.png", glm::vec3(600.f, 0.0f, 0.0f)));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadLeft, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveLeft.png", glm::vec3(-600.f, 0.0f, 0.0f)));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadRight, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveRight.png", glm::vec3(600.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadUp, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveUpSalt.png", glm::vec3(-600.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadDown, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveDownSalt.png", glm::vec3(600.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadLeft, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveLeftSalt.png", glm::vec3(-600.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadRight, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveRightSalt.png", glm::vec3(600.f, 0.0f, 0.0f)));
 
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadUp, id }, std::make_unique<StopMoveController>(mainPlayer.get()));
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadDown, id }, std::make_unique<StopMoveController>(mainPlayer.get()));
@@ -345,7 +342,7 @@ void MakeMrPepper(dae::Scene* scene, bool isVersus) {
 }
 
 void MakeMrsSalt(dae::Scene* scene) {
-	MakePlayer(scene, "moveUp.png", 1, false);
+	MakePlayer(scene, "moveUpSalt.png", 1, false);
 }
 
 void MakeStage(dae::Scene* scene) {

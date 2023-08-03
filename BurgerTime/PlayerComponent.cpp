@@ -119,7 +119,7 @@ void dae::PlayerComponent::HandleDeathEnd()
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->SetIsVisible(false);
 	player->GetComponent<TextureComponent>()->Scale(3,3);
-	player->GetComponent<TextureComponent>()->SetTexture(player->GetName() == EnumStrings[Player0] ? "moveUp.png" : "moveUp.png", 0.3f, 3);
+	player->GetComponent<TextureComponent>()->SetTexture(player->GetName() == EnumStrings[Player0] ? "moveUp.png" : "moveUpSalt.png", 0.3f, 3);
 
 	m_PlayerState = PlayerState::RESPAWN;
 }
@@ -140,7 +140,7 @@ void dae::PlayerComponent::Die()
 	m_PlayerState = PlayerState::DEAD;
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->Scale(3, 3);
-	player->GetComponent<TextureComponent>()->SetTexture("playerDeath.png", 0.3f, 5);
+	player->GetComponent<TextureComponent>()->SetTexture(player->GetName() == EnumStrings[Player0] ? "playerDeath.png" : "playerDeathSalt.png", 0.3f, 5);
 	auto values{ m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetComponent<ValuesComponent>() };
 	values->Damage();
 

@@ -121,12 +121,10 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 		//TODO: check if you reached end of platform
 		if (!MathLib::IsOverlapping(m_BottomRight, m_LastHor)) {
 			canMoveLeft = false;
-			//m_LastHor = SDL_Rect{ 0,0,0,0 };
 			m_CanChangeState = true;
 		}
 		if (!MathLib::IsOverlapping(m_BottomLeft, m_LastHor)) {
 			canMoveRight = false;
-			//m_LastHor = SDL_Rect{ 0,0,0,0 };
 			m_CanChangeState = true;
 		}
 	}
@@ -138,7 +136,6 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 				canMoveDown = true;
 			}
 			canMoveUp = false;
-			//m_LastVert = SDL_Rect{ 0,0,0,0 };
 			m_CanChangeState = true;
 		}
 		if (!MathLib::IsOverlapping(m_LeftDown, m_LastVert)) {
@@ -146,7 +143,6 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 				canMoveUp = true;
 			}
 			canMoveDown = false;
-			//m_LastVert = SDL_Rect{ 0,0,0,0 };
 			m_CanChangeState = true;
 			
 		}
@@ -159,7 +155,7 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 		if (canMoveLeft && canMoveRight) {
 			if (MathLib::CalculateChance() <= 0.5f) {
 				m_State = State::MovingLeft;
-				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName+"Left.png", 0.1f, 2);
+				GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Left.png", 0.1f, 2);
 			}
 			else {
 				m_State = State::MovingRight;

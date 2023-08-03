@@ -6,7 +6,7 @@
 #include "FileReader.h"
 #include "InputManager.h"
 #include "../BurgerTime/AudioComponent.h"
-#include "BurgerManager.h"
+#include "BurgerManagerComponent.h"
 #include <TextObjectComponent.h>
 
 void dae::HealthObserver::Notify(GameObject* go, Event& event)
