@@ -346,7 +346,7 @@ void MakeMrsSalt(dae::Scene* scene) {
 }
 
 void MakeStage(dae::Scene* scene) {
-	MakeStageOfNr(scene, Stages::Stage1);
+	MakeStageOfNr(scene, Stages::Stage2);
 }
 
 void MakeVersusStage(dae::Scene* scene) {
