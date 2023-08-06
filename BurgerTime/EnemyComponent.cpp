@@ -118,7 +118,7 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 	}
 	
 	if (m_State == State::MovingLeft || m_State == State::MovingRight) {
-		//TODO: check if you reached end of platform
+		//TODO: check if you reached end of map
 		if (!MathLib::IsOverlapping(m_BottomRight, m_LastHor)) {
 			canMoveLeft = false;
 			m_CanChangeState = true;
@@ -127,10 +127,23 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 			canMoveRight = false;
 			m_CanChangeState = true;
 		}
+
+		SDL_Rect leftMap{ 0,0, 10,770 };
+		SDL_Rect rightMap{ 760,0, 10,770 };
+		if (MathLib::IsOverlapping(m_BottomLeft, leftMap)) {
+			canMoveLeft = false;
+			canMoveRight = true;
+			m_CanChangeState = true;
+		}
+		if (MathLib::IsOverlapping(m_BottomRight, rightMap)) {
+			canMoveLeft = true;
+			canMoveRight = false;
+			m_CanChangeState = true;
+		}
 	}
 
 	if (m_State == State::MovingUp || m_State == State::MovingDown) {
-		//TODO: check if you reached end of platform
+		//TODO: check if you reached end of map
 		if (!MathLib::IsOverlapping(m_LeftUp, m_LastVert)) {
 			if (MathLib::IsOverlapping(m_LeftDown, m_LastVert)) {
 				canMoveDown = true;
