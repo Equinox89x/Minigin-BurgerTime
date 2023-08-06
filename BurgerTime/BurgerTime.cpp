@@ -200,15 +200,20 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 		//pattyTop->GetComponent<BurgerComponent>()->AddObserver(observer);
 		burgerManager->AddChild(pattyTop);
 
-
 		GameObject* veggie = new GameObject();
-		veggie->AddComponent(std::make_unique<TextureComponent>());
-		veggie->GetComponent<TextureComponent>()->SetTexture("veggie.png");
-		veggie->GetComponent<TextureComponent>()->Scale(3, 3);
-		veggie->GetTransform()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]) + WindowBuffer);
-		veggie->AddComponent(std::make_unique<BurgerComponent>(scene));
-		//veggie->GetComponent<BurgerComponent>()->AddObserver(observer);
-		burgerManager->AddChild(veggie);
+		if (veggies.size() != 0) {
+			veggie->AddComponent(std::make_unique<TextureComponent>());
+			veggie->GetComponent<TextureComponent>()->SetTexture("veggie.png");
+			veggie->GetComponent<TextureComponent>()->Scale(3, 3);
+			veggie->GetTransform()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]) + WindowBuffer);
+			veggie->AddComponent(std::make_unique<BurgerComponent>(scene));
+			//veggie->GetComponent<BurgerComponent>()->AddObserver(observer);
+			burgerManager->AddChild(veggie);
+		}
+		else {
+			delete veggie;
+			veggie = nullptr;
+		}
 
 		GameObject * burger = new GameObject();
 		burger->AddComponent(std::make_unique<TextureComponent>());
@@ -274,7 +279,7 @@ void MakeMrHotdog(dae::Scene* scene) {
 	opposer->AddComponent(std::make_unique<MoveControllerComponent>(opposer->GetTransform()->GetPosition()));
 }
 
-void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVersus*/) {
+void MakePlayer(dae::Scene* scene, std::string textureName, int id, glm::vec2 startPos) {
 	auto playerName{ EnumStrings[PlayerGeneral] + std::to_string(id) };
 
 	//Main Player
@@ -290,10 +295,9 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVer
 	//mainPlayer->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX / 2) - (Margin*2), WindowSizeY - ((Margin*3)+ WindowBuffer));
 	mainPlayer->GetComponent<TextureComponent>()->GetRect();
 
-	//bullets
 	mainPlayer->AddComponent(std::make_unique<PlayerComponent>(scene));
-
-	mainPlayer->GetTransform()->Translate((GameWindowSizeX / 2) - (Margin * 2), WindowSizeY - ((Margin * 3) + WindowBuffer));
+	//mainPlayer->GetTransform()->Translate((GameWindowSizeX / 2) - (Margin * 2), WindowSizeY - ((Margin * 3) + WindowBuffer));
+	mainPlayer->GetTransform()->Translate(startPos);
 
 	if (id == 0) {
 		//Keyboard
@@ -337,16 +341,16 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, bool /*isVer
 	MakeValues(scene);
 }
 
-void MakeMrPepper(dae::Scene* scene, bool isVersus) {
-	MakePlayer(scene, "moveUp.png", 0, isVersus);
+void MakeMrPepper(dae::Scene* scene, glm::vec2 startPos) {
+	MakePlayer(scene, "moveUp.png", 0, startPos);
 }
 
-void MakeMrsSalt(dae::Scene* scene) {
-	MakePlayer(scene, "moveUpSalt.png", 1, false);
+void MakeMrsSalt(dae::Scene* scene, glm::vec2 startPos) {
+	MakePlayer(scene, "moveUpSalt.png", 1, startPos);
 }
 
 void MakeStage(dae::Scene* scene) {
-	MakeStageOfNr(scene, Stages::Stage2);
+	MakeStageOfNr(scene, Stages::Stage1);
 }
 
 void MakeVersusStage(dae::Scene* scene) {

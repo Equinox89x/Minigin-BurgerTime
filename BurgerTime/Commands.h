@@ -2,7 +2,10 @@
 #include <MoveKeyboardComponent.h>
 #include <MoveControllerComponent.h>
 #include <ValuesComponent.h>
+#include <TransformComponent.h>
 #include <TextureComponent.h>
+#include <GameObject.h>
+#include "Scene.h"
 #include "ModeSelector.h"
 #include <Command.h>
 
@@ -158,6 +161,7 @@ namespace dae
 		void Execute() override
 		{
 			auto enemies{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
+			auto player{ m_pScene->GetGameObject(EnumStrings[Player0]) };
 
 
 			if (enemies)
@@ -172,14 +176,17 @@ namespace dae
 			if (m_pScene->GetGameObject("Stage 1")) {
 				CreateStage(m_pScene, Stages::Stage2);
 				m_pScene->GetGameObject("Stage 1")->SetName("Stage 2");
+				player->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 1.5f) + WindowBuffer));
 			}
 			else if (m_pScene->GetGameObject("Stage 2")) {
 				CreateStage(m_pScene, Stages::Stage3);
 				m_pScene->GetGameObject("Stage 2")->SetName("Stage 3");
+				player->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - (WindowBuffer + 5));
 			}
 			else if (m_pScene->GetGameObject("Stage 3")) {
 				CreateStage(m_pScene, Stages::Stage1);
 				m_pScene->GetGameObject("Stage 3")->SetName("Stage 1");
+				player->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 2) + WindowBuffer));
 			}
 		}
 	private:

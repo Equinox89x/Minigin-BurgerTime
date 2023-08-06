@@ -2,6 +2,9 @@
 #include "Component.h"
 #include "Scene.h"
 #include <functional>
+#include "Minigin.h"
+#include <glm/ext/vector_float2.hpp>
+
 
 namespace dae
 {
@@ -9,10 +12,10 @@ namespace dae
 	{
 
 	public:
-		ModeSelector(dae::Scene* scene, std::function<void(dae::Scene*, bool)> createMainGalaga, std::function<void(dae::Scene*)> createSecondaryGalaga, std::function<void(dae::Scene*)> createStage, std::function<void(dae::Scene*)> createVersusGalaga, std::function<void(dae::Scene*)> createScore) : m_pScene{ scene } {
-			CreateMainPlayer = createMainGalaga;
-			CreateSecondaryPlayer = createSecondaryGalaga;
-			CreateVersusStage = createVersusGalaga;
+		ModeSelector(dae::Scene* scene, std::function<void(dae::Scene*, glm::vec2)> createMainPlayer, std::function<void(dae::Scene*, glm::vec2 startPos)> createSecondaryPlayer, std::function<void(dae::Scene*)> createStage, std::function<void(dae::Scene*)> createVersusStage, std::function<void(dae::Scene*)> createScore) : m_pScene{ scene } {
+			CreateMainPlayer = createMainPlayer;
+			CreateSecondaryPlayer = createSecondaryPlayer;
+			CreateVersusStage = createVersusStage;
 			CreateStage = createStage;
 			CreateScore = createScore;
 
@@ -37,8 +40,8 @@ namespace dae
 
 		dae::Scene* m_pScene;
 
-		std::function<void(dae::Scene* scene, bool isVersus)> CreateMainPlayer;
-		std::function<void(dae::Scene* scene)> CreateSecondaryPlayer;		
+		std::function<void(dae::Scene* scene, glm::vec2 startPos)> CreateMainPlayer;
+		std::function<void(dae::Scene* scene, glm::vec2 startPos)> CreateSecondaryPlayer;
 		std::function<void(dae::Scene* scene)> CreateStage;
 		std::function<void(dae::Scene* scene)> CreateVersusStage;
 		std::function<void(dae::Scene* scene)> CreateScore;

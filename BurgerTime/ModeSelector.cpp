@@ -1,7 +1,6 @@
 #include "ModeSelector.h"
 #include "TextObjectComponent.h"
 #include "Transformcomponent.h"
-#include "Minigin.h"
 #include <GameObject.h>
 
 void dae::ModeSelector::CycleGameMode(bool isMoveUp)
@@ -25,24 +24,23 @@ void dae::ModeSelector::CycleGameMode(bool isMoveUp)
 void dae::ModeSelector::StartGame(GameObject* pMenu)
 {
 	pMenu->SetIsHidden(true);
-
 	switch (m_SelectedGameMode)
 	{
 	case dae::ModeSelector::GameMode::SOLO:
 		CreateStage(m_pScene);
 		CreateScore(m_pScene);
-		CreateMainPlayer(m_pScene, false);
+		CreateMainPlayer(m_pScene, glm::vec2{(WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 3) + WindowBuffer) });
 		break;
 	case dae::ModeSelector::GameMode::COOP:
 		CreateStage(m_pScene);
 		CreateScore(m_pScene);
-		CreateMainPlayer(m_pScene, false);
-		CreateSecondaryPlayer(m_pScene);
+		CreateMainPlayer(m_pScene, glm::vec2{ (WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 3) + WindowBuffer) });
+		CreateSecondaryPlayer(m_pScene, glm::vec2{(GameWindowSizeX / 2) - (Margin * 2), WindowSizeY - ((Margin * 3) + WindowBuffer)});
 		break;
 	case dae::ModeSelector::GameMode::VERSUS:
 		CreateScore(m_pScene);
 		CreateVersusStage(m_pScene);
-		CreateMainPlayer(m_pScene, true);
+		CreateMainPlayer(m_pScene, glm::vec2{ (WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 3) + WindowBuffer) });
 		break;
 	default:
 		break;

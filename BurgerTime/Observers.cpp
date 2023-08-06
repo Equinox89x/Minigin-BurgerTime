@@ -104,14 +104,17 @@ void dae::StageClearedObserver::Notify(GameObject* /*go*/, Event& event)
 		if (m_pScene->GetGameObject("Stage 1")) {
 			CreateStage(m_pScene, Stages::Stage2);
 			m_pScene->GetGameObject("Stage 1")->SetName("Stage 2");
+			players[0]->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 1.5f) + WindowBuffer));
 		}
 		else if (m_pScene->GetGameObject("Stage 2")) {
 			CreateStage(m_pScene, Stages::Stage3);
 			m_pScene->GetGameObject("Stage 2")->SetName("Stage 3");
+			players[0]->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - (WindowBuffer + 5));
 		}
 		else if (m_pScene->GetGameObject("Stage 3")) {
 			CreateStage(m_pScene, Stages::Stage1);
 			m_pScene->GetGameObject("Stage 3")->SetName("Stage 1");
+			players[0]->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 3) + WindowBuffer));
 		}
 		break;
 	case EventType::Reset:
