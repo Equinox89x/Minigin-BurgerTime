@@ -113,7 +113,7 @@ void MakeValues(dae::Scene* /*scene*/) {
 
 }
 
-void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
+void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 	std::shared_ptr<GameObject> burgerManager = std::make_shared<GameObject>();
 	burgerManager->AddComponent(std::make_unique<TextureComponent>());
 	burgerManager->SetName(EnumStrings[Names::BurgerManager]);
@@ -237,46 +237,61 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName) {
 	}
 	scene->Add(burgerManager);
 
-	//enemies
-	std::shared_ptr<GameObject> enemyHolder = std::make_shared<dae::GameObject>();
-	enemyHolder->SetName(EnumStrings[EnemyHolder]);
-	//enemyHolder->AddComponent(std::make_unique<EnemyManager>());
-	scene->Add(enemyHolder);
+	if (!isVersus) {
+		//enemies
+		std::shared_ptr<GameObject> enemyHolder = std::make_shared<dae::GameObject>();
+		enemyHolder->SetName(EnumStrings[EnemyHolder]);
+		//enemyHolder->AddComponent(std::make_unique<EnemyManager>());
+		scene->Add(enemyHolder);
 
-	std::vector<std::string> names{ "hotdog","egg", "pickle", "hotdog" };
-	std::vector<EnemyType> types{ EnemyType::Hotdog, EnemyType::Egg, EnemyType::Pickle, EnemyType::Hotdog };
-	for (size_t i = 0; i < 4; i++)
-	{
-		GameObject* enemy = new GameObject();
-		enemy->SetName(EnumStrings[Enemy]);
-		enemy->AddComponent(std::make_unique<EnemyComponent>(scene, types[i]));
-		enemy->AddComponent(std::make_unique<TextureComponent>());
-		enemy->GetComponent<TextureComponent>()->SetTexture(names[i]+"Down.png");
-		enemy->GetComponent<TextureComponent>()->Scale(3, 3);
-		enemy->GetComponent<TextureComponent>()->SetNrOfFrames(2);
-		enemy->GetComponent<TextureComponent>()->GetRect();
-		enemy->GetTransform()->Translate(Margin, (WindowSizeY) - Margin * 5);
-		enemyHolder->AddChild(enemy);
+		std::vector<std::string> names{ "hotdog","egg", "pickle", "hotdog" };
+		std::vector<EnemyType> types{ EnemyType::Hotdog, EnemyType::Egg, EnemyType::Pickle, EnemyType::Hotdog };
+		for (size_t i = 0; i < 4; i++)
+		{
+			GameObject* enemy = new GameObject();
+			enemy->SetName(EnumStrings[Enemy]);
+			enemy->AddComponent(std::make_unique<EnemyComponent>(scene, types[i]));
+			enemy->AddComponent(std::make_unique<TextureComponent>());
+			enemy->GetComponent<TextureComponent>()->SetTexture(names[i] + "Down.png");
+			enemy->GetComponent<TextureComponent>()->Scale(3, 3);
+			enemy->GetComponent<TextureComponent>()->SetNrOfFrames(2);
+			enemy->GetComponent<TextureComponent>()->GetRect();
+			enemy->GetTransform()->Translate(Margin, (WindowSizeY)-Margin * 5);
+			enemyHolder->AddChild(enemy);
+		}
 	}
 }
 
-void MakeMrHotdog(dae::Scene* scene) {
+void MakeMrHotdog(dae::Scene* scene, glm::vec2 startPos) {
 	std::shared_ptr<GameObject> enemyHolder = std::make_shared<dae::GameObject>();
 	enemyHolder->SetName(EnumStrings[EnemyHolder]);
 	scene->Add(enemyHolder);
 
 	std::shared_ptr<GameObject> opposer = std::make_shared<GameObject>();
 	opposer->SetName(EnumStrings[Opposer]);
-	opposer->AddComponent(std::make_unique<TextureComponent>());
 
+	opposer->AddComponent(std::make_unique<TextureComponent>());
 	opposer->GetComponent<TextureComponent>()->SetTexture("hotdogDown.png");
 	opposer->GetComponent<TextureComponent>()->Scale(3, 3);
 	opposer->GetComponent<TextureComponent>()->SetNrOfFrames(2);
 	opposer->GetComponent<TextureComponent>()->GetRect();
 	opposer->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX) / 2 - Margin, WindowSizeY - Margin * 3);
 
+	opposer->AddComponent(std::make_unique<PlayerComponent>(scene, true, startPos));
+	opposer->GetComponent<PlayerComponent>()->SetIsController(true);
+	opposer->GetTransform()->Translate(startPos);
 	scene->Add(opposer);
+
 	opposer->AddComponent(std::make_unique<MoveControllerComponent>(opposer->GetTransform()->GetPosition()));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadUp, 1 }, std::make_unique<MoveController>(opposer.get(), "hotdogUp.png", glm::vec3(0, -200.0f, 0.0f)));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadDown, 1 }, std::make_unique<MoveController>(opposer.get(), "hotdogDown.png", glm::vec3(0, 200.0f, 0.0f)));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadLeft, 1 }, std::make_unique<MoveController>(opposer.get(), "hotdogLeft.png", glm::vec3(-200.f, 0.0f, 0.0f)));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadRight, 1 }, std::make_unique<MoveController>(opposer.get(), "hotdogRight.png", glm::vec3(200.f, 0.0f, 0.0f)));
+
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadUp, 1 }, std::make_unique<StopMoveController>(opposer.get()));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadDown, 1 }, std::make_unique<StopMoveController>(opposer.get()));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadLeft, 1 }, std::make_unique<StopMoveController>(opposer.get()));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadRight, 1 }, std::make_unique<StopMoveController>(opposer.get()));
 }
 
 void MakePlayer(dae::Scene* scene, std::string textureName, int id, glm::vec2 startPos) {
@@ -295,7 +310,7 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, glm::vec2 st
 	//mainPlayer->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX / 2) - (Margin*2), WindowSizeY - ((Margin*3)+ WindowBuffer));
 	mainPlayer->GetComponent<TextureComponent>()->GetRect();
 
-	mainPlayer->AddComponent(std::make_unique<PlayerComponent>(scene));
+	mainPlayer->AddComponent(std::make_unique<PlayerComponent>(scene, false, startPos));
 	//mainPlayer->GetTransform()->Translate((GameWindowSizeX / 2) - (Margin * 2), WindowSizeY - ((Margin * 3) + WindowBuffer));
 	mainPlayer->GetTransform()->Translate(startPos);
 
@@ -352,13 +367,13 @@ void MakeMrsSalt(dae::Scene* scene, glm::vec2 startPos) {
 }
 
 void MakeStage(dae::Scene* scene) {
-	MakeStageOfNr(scene, Stages::Stage1);
+	MakeStageOfNr(scene, Stages::Stage1, false);
 }
 
-void MakeVersusStage(dae::Scene* scene) {
+void MakeVersusStage(dae::Scene* scene, glm::vec2 startPos) {
 	//std::shared_ptr<GameObject> container = std::make_shared<dae::GameObject>();
-	MakeStageOfNr(scene, Stages::Stage1);
-	MakeMrHotdog(scene);
+	MakeStageOfNr(scene, Stages::Stage1, true);
+	MakeMrHotdog(scene, startPos);
 	//scene->Add(container);
 }
 
@@ -407,7 +422,7 @@ void MakeMainMenu(dae::Scene* scene) {
 	selector->SetName(EnumStrings[Selector]);
 	scene->Add(selector);
 	container->AddChild(selector.get());
-	selector->AddComponent(std::make_unique<ModeSelector>(scene, &MakeMrPepper, &MakeMrsSalt, &MakeStage, &MakeMrHotdog, &CreateScore));
+	selector->AddComponent(std::make_unique<ModeSelector>(scene, &MakeMrPepper, &MakeMrsSalt, &MakeStage, &MakeVersusStage, &CreateScore));
 	selector->AddComponent(std::make_unique<TextObjectComponent>(">", font));
 	selector->GetComponent<TextObjectComponent>()->SetPosition(WindowSizeX / 2 - SubMargin * 2, 150);
 	CreateSelectorInput(scene);

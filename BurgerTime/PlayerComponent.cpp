@@ -15,17 +15,22 @@ void dae::PlayerComponent::Update()
 	switch (m_PlayerState)
 	{
 	case dae::PlayerComponent::ALIVE:
-		HandleEnemyOverlap();
+		if (!m_IsOpposer) {
+			HandleEnemyOverlap();
+		}
+		else {
+			HandlePlayerOverlap();
+		}
 		break;
 	case dae::PlayerComponent::DEAD:
-		DeathTimer -= deltaTime;
-		if (DeathTimer < DefaultDeathTimer - 1.5f) {
+		m_DeathTimer -= deltaTime;
+		if (m_DeathTimer < m_DefaultDeathTimer - 1.5f) {
 			HandleDeathEnd();
 		}
 		break;
 	case dae::PlayerComponent::RESPAWN:
-		DeathTimer -= deltaTime;
-		if (DeathTimer <= 0) {
+		m_DeathTimer -= deltaTime;
+		if (m_DeathTimer <= 0) {
 			HandleRespawn();
 		}
 		break;
@@ -110,6 +115,17 @@ void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, G
 	}
 }
 
+void dae::PlayerComponent::HandlePlayerOverlap() {
+	if (auto player{ m_Scene->GetGameObject(EnumStrings[Player0]) }) {
+		if (!player->IsMarkedForDestroy()) {
+			auto rect1{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
+			auto rect2{ player->GetComponent<TextureComponent>()->GetRect() };
+			if (MathLib::IsOverlapping(rect1, rect2)) {
+				player->GetComponent<PlayerComponent>()->Die();
+			}
+		}
+	}
+}
 void dae::PlayerComponent::HandleEnemyOverlap()
 {
 	if(auto go{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) }) {
@@ -132,17 +148,25 @@ void dae::PlayerComponent::HandleDeathEnd()
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->SetIsVisible(false);
 	player->GetComponent<TextureComponent>()->Scale(3,3);
-	player->GetComponent<TextureComponent>()->SetTexture(player->GetName() == EnumStrings[Player0] ? "moveUp.png" : "moveUpSalt.png", 0.3f, 3);
+
+	std::string deathName;
+	if (m_IsOpposer) {
+		deathName = "hotdogDown.png";
+	}
+	else {
+		deathName = player->GetName() == EnumStrings[Player0] ? "moveDown.png" : "moveDownSalt.png";
+	}
+	player->GetComponent<TextureComponent>()->SetTexture(deathName, 0.3f, 3);
 
 	m_PlayerState = PlayerState::RESPAWN;
 }
 
 void dae::PlayerComponent::HandleRespawn()
 {
-	DeathTimer = DefaultDeathTimer;
+	m_DeathTimer = m_DefaultDeathTimer;
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->SetIsVisible(true);
-	player->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX / 2) - (Margin * 2), WindowSizeY - ((Margin * 3) + WindowBuffer));
+	player->GetComponent<TextureComponent>()->SetPosition(m_StartPos.x, m_StartPos.y);
 	GetGameObject()->EnableCollision(true);
 	CanBeGrabbed = true;
 	m_PlayerState = PlayerState::ALIVE;
@@ -153,7 +177,15 @@ void dae::PlayerComponent::Die()
 	m_PlayerState = PlayerState::DEAD;
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->Scale(3, 3);
-	player->GetComponent<TextureComponent>()->SetTexture(player->GetName() == EnumStrings[Player0] ? "playerDeath.png" : "playerDeathSalt.png", 0.3f, 5);
+
+	std::string deathName;
+	if (m_IsOpposer) {
+		deathName = "hotdogDead.png";
+	}
+	else {
+		deathName = player->GetName() == EnumStrings[Player0] ? "playerDeath.png" : "playerDeathSalt.png";
+	}
+	player->GetComponent<TextureComponent>()->SetTexture(deathName, 0.3f, 5);
 	auto values{ m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetComponent<ValuesComponent>() };
 	values->Damage();
 

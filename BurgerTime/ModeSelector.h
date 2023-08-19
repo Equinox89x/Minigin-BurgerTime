@@ -12,7 +12,7 @@ namespace dae
 	{
 
 	public:
-		ModeSelector(dae::Scene* scene, std::function<void(dae::Scene*, glm::vec2)> createMainPlayer, std::function<void(dae::Scene*, glm::vec2 startPos)> createSecondaryPlayer, std::function<void(dae::Scene*)> createStage, std::function<void(dae::Scene*)> createVersusStage, std::function<void(dae::Scene*)> createScore) : m_pScene{ scene } {
+		ModeSelector(dae::Scene* scene, std::function<void(dae::Scene*, glm::vec2)> createMainPlayer, std::function<void(dae::Scene*, glm::vec2 startPos)> createSecondaryPlayer, std::function<void(dae::Scene*)> createStage, std::function<void(dae::Scene*, glm::vec2 startPos)> createVersusStage, std::function<void(dae::Scene*)> createScore) : m_pScene{ scene } {
 			CreateMainPlayer = createMainPlayer;
 			CreateSecondaryPlayer = createSecondaryPlayer;
 			CreateVersusStage = createVersusStage;
@@ -43,7 +43,7 @@ namespace dae
 		std::function<void(dae::Scene* scene, glm::vec2 startPos)> CreateMainPlayer;
 		std::function<void(dae::Scene* scene, glm::vec2 startPos)> CreateSecondaryPlayer;
 		std::function<void(dae::Scene* scene)> CreateStage;
-		std::function<void(dae::Scene* scene)> CreateVersusStage;
+		std::function<void(dae::Scene* scene, glm::vec2 startPos)> CreateVersusStage;
 		std::function<void(dae::Scene* scene)> CreateScore;
 
 		//virtual void Update() override;

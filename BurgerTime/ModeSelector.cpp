@@ -39,7 +39,7 @@ void dae::ModeSelector::StartGame(GameObject* pMenu)
 		break;
 	case dae::ModeSelector::GameMode::VERSUS:
 		CreateScore(m_pScene);
-		CreateVersusStage(m_pScene);
+		CreateVersusStage(m_pScene, glm::vec2{ (GameWindowSizeX / 2) - (Margin * 2), WindowSizeY - ((Margin * 3) + WindowBuffer) });
 		CreateMainPlayer(m_pScene, glm::vec2{ (WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 3) + WindowBuffer) });
 		break;
 	default:

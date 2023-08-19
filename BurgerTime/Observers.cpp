@@ -102,17 +102,17 @@ void dae::StageClearedObserver::Notify(GameObject* /*go*/, Event& event)
 		//TODO reset player location
 
 		if (m_pScene->GetGameObject("Stage 1")) {
-			CreateStage(m_pScene, Stages::Stage2);
+			CreateStage(m_pScene, Stages::Stage2, false);
 			m_pScene->GetGameObject("Stage 1")->SetName("Stage 2");
 			players[0]->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 1.5f) + WindowBuffer));
 		}
 		else if (m_pScene->GetGameObject("Stage 2")) {
-			CreateStage(m_pScene, Stages::Stage3);
+			CreateStage(m_pScene, Stages::Stage3, false);
 			m_pScene->GetGameObject("Stage 2")->SetName("Stage 3");
 			players[0]->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - (WindowBuffer + 5));
 		}
 		else if (m_pScene->GetGameObject("Stage 3")) {
-			CreateStage(m_pScene, Stages::Stage1);
+			CreateStage(m_pScene, Stages::Stage1, false);
 			m_pScene->GetGameObject("Stage 3")->SetName("Stage 1");
 			players[0]->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 3) + WindowBuffer));
 		}

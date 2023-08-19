@@ -11,10 +11,20 @@ void dae::BurgerManagerComponent::Update()
 		const auto enemyHolder{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
 		const auto player{ m_Scene->GetGameObject(EnumStrings[Player0]) };
 		const auto player1{ m_Scene->GetGameObject(EnumStrings[Player1]) };
+		const auto opposer{ m_Scene->GetGameObject(EnumStrings[Opposer]) };
 		SDL_Rect charRect{ player->GetComponent<TextureComponent>()->GetRect() };
 		if (m_Burgers.size() > 0) {
 			for (std::map<std::string, GameObject*>& map : m_Burgers) {
-				HandleBurgerOverlap(map, enemyHolder, charRect);
+				HandleBurgerOverlap(map, enemyHolder, charRect, opposer);
+				
+			}
+		}
+		if (player1) {
+			SDL_Rect charRect2{ player1->GetComponent<TextureComponent>()->GetRect() };
+			if (m_Burgers.size() > 0) {
+				for (std::map<std::string, GameObject*>& map : m_Burgers) {
+					HandleBurgerOverlap(map, enemyHolder, charRect2, opposer);
+				}
 			}
 		}
 
@@ -22,10 +32,12 @@ void dae::BurgerManagerComponent::Update()
 		if (m_Platforms.size() > 0){
 			player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
 			if(player1) player1->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
+			if(opposer) opposer->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
 		}
 		if (m_pLadders.size() > 0) {
 			player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
-			if(player1 )player1->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+			if (player1) player1->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+			if (opposer) opposer->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
 		}
 
 		//Enemy movement overlap
@@ -37,7 +49,7 @@ void dae::BurgerManagerComponent::Update()
 	}
 }
 
-void dae::BurgerManagerComponent::HandleBurgerOverlap(std::map<std::string, GameObject*>& map, const std::shared_ptr<GameObject>& enemyHolder, SDL_Rect& charRect)
+void dae::BurgerManagerComponent::HandleBurgerOverlap(std::map<std::string, GameObject*>& map, const std::shared_ptr<GameObject>& enemyHolder, SDL_Rect& charRect, const std::shared_ptr<GameObject>& opposer)
 {
 	
 	auto pattyTop{ map[EnumStrings[PattyTop]] };
@@ -125,6 +137,13 @@ void dae::BurgerManagerComponent::HandleBurgerOverlap(std::map<std::string, Game
 		enemy->GetComponent<EnemyComponent>()->CheckHit(pattyBottom);
 		if(veggie)enemy->GetComponent<EnemyComponent>()->CheckHit(veggie);
 		enemy->GetComponent<EnemyComponent>()->CheckHit(burger);
+	}
+
+	if (opposer) {
+		opposer->GetComponent<PlayerComponent>()->CheckHit(pattyTop);
+		opposer->GetComponent<PlayerComponent>()->CheckHit(pattyBottom);
+		if (veggie)opposer->GetComponent<PlayerComponent>()->CheckHit(veggie);
+		opposer->GetComponent<PlayerComponent>()->CheckHit(burger);
 	}
 }
 

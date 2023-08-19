@@ -157,7 +157,7 @@ namespace dae
 	class Skip final : public Command
 	{
 	public:
-		Skip(std::function<void(Scene*, Stages)> createStage, Scene* scene) : CreateStage(createStage), m_pScene{ scene } {}
+		Skip(std::function<void(Scene*, Stages, bool)> createStage, Scene* scene) : CreateStage(createStage), m_pScene{ scene } {}
 		void Execute() override
 		{
 			auto enemies{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
@@ -174,23 +174,23 @@ namespace dae
 			}
 
 			if (m_pScene->GetGameObject("Stage 1")) {
-				CreateStage(m_pScene, Stages::Stage2);
+				CreateStage(m_pScene, Stages::Stage2, false);
 				m_pScene->GetGameObject("Stage 1")->SetName("Stage 2");
 				player->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 1.5f) + WindowBuffer));
 			}
 			else if (m_pScene->GetGameObject("Stage 2")) {
-				CreateStage(m_pScene, Stages::Stage3);
+				CreateStage(m_pScene, Stages::Stage3, false);
 				m_pScene->GetGameObject("Stage 2")->SetName("Stage 3");
 				player->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - (WindowBuffer + 5));
 			}
 			else if (m_pScene->GetGameObject("Stage 3")) {
-				CreateStage(m_pScene, Stages::Stage1);
+				CreateStage(m_pScene, Stages::Stage1, false);
 				m_pScene->GetGameObject("Stage 3")->SetName("Stage 1");
 				player->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 2) + WindowBuffer));
 			}
 		}
 	private:
-		std::function<void(Scene*, Stages)> CreateStage;
+		std::function<void(Scene*, Stages, bool)> CreateStage;
 		Scene* m_pScene;
 	};
 #pragma endregion

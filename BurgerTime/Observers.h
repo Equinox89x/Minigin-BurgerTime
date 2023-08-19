@@ -35,11 +35,11 @@ namespace dae
 	class StageClearedObserver final : public Observer
 	{
 	public:
-		StageClearedObserver(std::function<void(Scene*, Stages)> createStage, std::function<void(Scene*)> makeEndScreen, Scene* scene) : CreateStage(createStage), MakeEndScreen{ makeEndScreen }, m_pScene{ scene } {}
+		StageClearedObserver(std::function<void(Scene*, Stages, bool)> createStage, std::function<void(Scene*)> makeEndScreen, Scene* scene) : CreateStage(createStage), MakeEndScreen{ makeEndScreen }, m_pScene{ scene } {}
 		void Notify(GameObject* go, Event& event) override;
 
 	private:
-		std::function<void(Scene*, Stages)> CreateStage;
+		std::function<void(Scene*, Stages, bool)> CreateStage;
 		std::function<void(Scene*)> MakeEndScreen;
 		Scene* m_pScene;
 	};
