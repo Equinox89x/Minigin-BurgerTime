@@ -66,14 +66,14 @@ void dae::ValuesComponent::Reset()
 
 void dae::ValuesComponent::GameEnd()
 {
-	FileReader* file{ new FileReader("../Data/highscore.txt") };
-	auto str{ file->ReadGameDataFile() };
-	auto data{ file->ParseDataSimple(str, '+') };
-	auto score{ data["Highscore"] };
-	std::string scoreStr{ std::any_cast<std::string>(score) };
-	if (GetScores() > std::stoi(scoreStr)) {
-		file->WriteData("Highscore", std::to_string(GetScores()));
-	}
+	//FileReader* file{ new FileReader("../Data/highscore.txt") };
+	//auto str{ file->ReadGameDataFile() };
+	//auto data{ file->ParseDataSimple(str, '+') };
+	//auto score{ data["Highscore"] };
+	//std::string scoreStr{ std::any_cast<std::string>(score) };
+	//if (GetScores() > std::stoi(scoreStr)) {
+	//	file->WriteData("Highscore", std::to_string(GetScores()));
+	//}
 }
 
 int dae::ValuesComponent::GetMissRatio()

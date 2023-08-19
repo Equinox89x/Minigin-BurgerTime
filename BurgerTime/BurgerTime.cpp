@@ -64,7 +64,9 @@ void CreateScore(dae::Scene* scene) {
 	scoreHolder->GetComponent<ValuesComponent>()->AddObserver(observer);
 	scoreHolder->GetComponent<ValuesComponent>()->SetLives(3);
 	auto observer2{ std::make_shared<HealthObserver>(scene) };
-	scoreHolder->GetComponent<ValuesComponent>()->AddObserver(observer2);
+	scoreHolder->GetComponent<ValuesComponent>()->AddObserver(observer2);	
+	auto observer3{ std::make_shared<GameOverObserver>(&CreateEndScreen, scene) };
+	scoreHolder->GetComponent<ValuesComponent>()->AddObserver(observer3);
 
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Emulogic-zrEw.ttf", 24);
@@ -89,6 +91,10 @@ void CreateScore(dae::Scene* scene) {
 	scene->Add(upScoreText);
 	scene->Add(hiscoreText);
 	scene->Add(hiscoreScoreText);
+	scoreHolder->AddChild(upText.get());
+	scoreHolder->AddChild(upScoreText.get());
+	scoreHolder->AddChild(hiscoreText.get());
+	scoreHolder->AddChild(hiscoreScoreText.get());
 
 	auto height{ 0.f };
 	for (size_t i = 0; i < 3; i++)
