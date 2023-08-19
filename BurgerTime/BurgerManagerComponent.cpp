@@ -50,7 +50,7 @@ void dae::BurgerManagerComponent::Update()
 
 void dae::BurgerManagerComponent::HandleBurgerOverlap(std::map<std::string, GameObject*>& map, const std::shared_ptr<GameObject>& enemyHolder, SDL_Rect& charRect, const std::shared_ptr<GameObject>& opposer)
 {
-	if (map.size() > 0) {
+	if (map.size() > 0 && map.size() < 1000) {
 
 		auto pattyTop{ map[EnumStrings[PattyTop]] };
 		auto pattyBottom{ map[EnumStrings[PattyBottom]] };
@@ -195,6 +195,13 @@ void dae::BurgerManagerComponent::DeleteItems()
 	auto burgers = m_Scene->GetGameObjects(EnumStrings[Burger]);
 	auto plates = m_Scene->GetGameObjects(EnumStrings[Plates]);
 
+	for (auto items : m_Burgers) {
+		for (auto obj : items) {
+			obj.second->MarkForDestroy();
+		}
+	}
+	m_Burgers.clear();
+
 	for (auto obj : ladders) {
 		obj->MarkForDestroy();
 	}
@@ -217,8 +224,7 @@ void dae::BurgerManagerComponent::DeleteItems()
 		obj->MarkForDestroy();
 	}
 
-
-	m_Burgers.clear();
+	
 }
 
 std::map<std::string, dae::GameObject*> dae::BurgerManagerComponent::AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger)

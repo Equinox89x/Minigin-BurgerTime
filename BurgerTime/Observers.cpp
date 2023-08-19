@@ -94,7 +94,6 @@ void dae::StageClearedObserver::Notify(GameObject* /*go*/, Event& event)
 	auto values{ m_pScene->GetGameObject(EnumStrings[Values]) };
 	auto burgerManager{ m_pScene->GetGameObject(EnumStrings[BurgerManager]) };
 
-	auto enemies{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
 	auto player{ m_pScene->GetGameObject(EnumStrings[Player0]) };
 	auto scoreHolder{ m_pScene->GetGameObject(EnumStrings[ScoreHolder]) };
 
@@ -109,9 +108,6 @@ void dae::StageClearedObserver::Notify(GameObject* /*go*/, Event& event)
 		if (burgerManager) {
 			burgerManager->GetComponent<BurgerManagerComponent>()->DeleteItems();
 		}
-
-		if (enemies)
-			enemies->MarkForDestroy();
 
 		if (scoreHolder) {
 			auto children{ scoreHolder->GetChildren(EnumStrings[Life]) };
