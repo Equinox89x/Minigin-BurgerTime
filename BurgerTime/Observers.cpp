@@ -47,17 +47,20 @@ void dae::ScoreObserver::Notify(GameObject* go, Event& event)
 
 void dae::GameOverObserver::Notify(GameObject* go, Event& event)
 {
-	std::vector<std::shared_ptr<GameObject>> players{ m_Scene->GetGameObjects(EnumStrings[PlayerGeneral], false) };
+	auto players{ m_Scene->GetGameObjects(EnumStrings[PlayerGeneral], false) };
 	auto scoreboard{ m_Scene->GetGameObject(EnumStrings[ScoreHolder]) };
 	auto enemies{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
 	auto opposer{ m_Scene->GetGameObject(EnumStrings[Opposer]) };
 	auto values{ m_Scene->GetGameObject(EnumStrings[Values]) };
+	auto burgerManager{ m_Scene->GetGameObject(EnumStrings[BurgerManager]) };
+
+
 
 	switch (event.GetEvent())
 	{
 	case EventType::GameOver:
 
-		if (go->GetComponent<BurgerManagerComponent>()->CheckAreBurgersFinished()) {
+		//if (go->GetComponent<BurgerManagerComponent>()->CheckAreBurgersFinished()) {
 			MakeEndScreen(m_Scene);
 			values->GetComponent<ValuesComponent>()->GameEnd();
 			Input::GetInstance().ClearKeys();
@@ -71,13 +74,15 @@ void dae::GameOverObserver::Notify(GameObject* go, Event& event)
 			for (auto player : players) {
 				player->MarkForDestroy();
 			}
-			if (enemies)
-				enemies->MarkForDestroy();
-			if (opposer)
-				opposer->MarkForDestroy();
-			if (values)
-				values->MarkForDestroy();
-		}
+			if (enemies)enemies->MarkForDestroy();
+			if (opposer)opposer->MarkForDestroy();
+			if (values)values->MarkForDestroy();
+
+			if (burgerManager) {
+				burgerManager->GetComponent<BurgerManagerComponent>()->DeleteItems();
+				m_Scene->Remove(burgerManager);
+			}
+		//}
 
 		break;
 	case EventType::Reset:
