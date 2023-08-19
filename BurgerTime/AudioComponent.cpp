@@ -5,13 +5,13 @@ void dae::AudioComponent::PostInitialize()
 	m_pAudioService = Locator::getAudio();
 	if (m_pAudioService == nullptr) return;
 
-	BeamSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeam.wav");
-	ShootSoundId = m_pAudioService->LoadSound("../Data/Sound/ShootSound.wav");
-	BeamCapturedSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeamCaptured.wav");
-	DeathSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyDeathSound.wav");
-	DiveSoundId = m_pAudioService->LoadSound("../Data/Sound/DiveSound.wav");
-	PlayerDeathSoundId = m_pAudioService->LoadSound("../Data/Sound/PlayerDeathSound.wav");
-	MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/MenuMusic.wav");
+	m_BeamSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeam.wav");
+	m_ShootSoundId = m_pAudioService->LoadSound("../Data/Sound/ShootSound.wav");
+	m_BeamCapturedSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeamCaptured.wav");
+	m_DeathSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyDeathSound.wav");
+	m_DiveSoundId = m_pAudioService->LoadSound("../Data/Sound/DiveSound.wav");
+	m_PlayerDeathSoundId = m_pAudioService->LoadSound("../Data/Sound/PlayerDeathSound.wav");
+	m_MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/MenuMusic.wav");
 }
 
 void dae::AudioComponent::Update()
@@ -20,13 +20,13 @@ void dae::AudioComponent::Update()
 		m_pAudioService = Locator::getAudio();
 		if (m_pAudioService == nullptr) return;
 
-		BeamSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeam.wav");
-		ShootSoundId = m_pAudioService->LoadSound("../Data/Sound/ShootSound.wav");
-		BeamCapturedSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeamCaptured.wav");
-		DeathSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyDeathSound.wav");
-		DiveSoundId = m_pAudioService->LoadSound("../Data/Sound/DiveSound.wav");
-		PlayerDeathSoundId = m_pAudioService->LoadSound("../Data/Sound/PlayerDeathSound.wav");
-		MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/MenuMusic.wav");
+		m_BeamSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeam.wav");
+		m_ShootSoundId = m_pAudioService->LoadSound("../Data/Sound/ShootSound.wav");
+		m_BeamCapturedSoundId = m_pAudioService->LoadSound("../Data/Sound/TractorBeamCaptured.wav");
+		m_DeathSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyDeathSound.wav");
+		m_DiveSoundId = m_pAudioService->LoadSound("../Data/Sound/DiveSound.wav");
+		m_PlayerDeathSoundId = m_pAudioService->LoadSound("../Data/Sound/PlayerDeathSound.wav");
+		m_MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/MenuMusic.wav");
 		PlayMenuSound();
 	}
 }
@@ -35,48 +35,48 @@ void dae::AudioComponent::PlayPlayerDeathSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(PlayerDeathSoundId);
+	m_pAudioService->PlaySound(m_PlayerDeathSoundId);
 }
 
 void dae::AudioComponent::PlayDeathSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(DeathSoundId);
+	m_pAudioService->PlaySound(m_DeathSoundId);
 }
 
 void dae::AudioComponent::PlayShootSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(ShootSoundId);
+	m_pAudioService->PlaySound(m_ShootSoundId);
 }
 
 void dae::AudioComponent::PlayDiveSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(DiveSoundId);
+	m_pAudioService->PlaySound(m_DiveSoundId);
 }
 
 void dae::AudioComponent::PlayTractorBeamSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(BeamSoundId);
+	m_pAudioService->PlaySound(m_BeamSoundId);
 }
 
 void dae::AudioComponent::PlayCapturedTractorBeamSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
 	m_pAudioService->SetEffectVolume(60);
-	m_pAudioService->PlaySound(BeamCapturedSoundId);
+	m_pAudioService->PlaySound(m_BeamCapturedSoundId);
 }
 
 void dae::AudioComponent::PlayMenuSound(bool shouldStopPreviousSound)
 {
 	if (shouldStopPreviousSound) m_pAudioService->StopSound();
-	m_pAudioService->PlaySound(MenuSoundId);
+	m_pAudioService->PlaySound(m_MenuSoundId);
 	m_pAudioService->SetEffectVolume(60);
 }
 

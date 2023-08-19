@@ -16,6 +16,10 @@ namespace dae {
     public:
         enum Movement {
             UP, DOWN, LEFT, RIGHT
+        };        
+        
+        enum MovementDirection {
+            VERTICAL, HORIZONTAL
         };
         
         enum PlayerState {
@@ -45,7 +49,7 @@ namespace dae {
         bool GetCanMoveHorizontally() { return m_CanMoveHorizontally; };
         bool GetCanMoveVertically() { return m_CanMoveVertically; };
 
-        void CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& rects, bool isVertical);
+        void CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& rects, MovementDirection moveDirection);
         void SetIsController(bool isController) { m_IsController = isController; };
 
         void CheckHit(GameObject* go)

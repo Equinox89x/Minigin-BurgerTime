@@ -49,7 +49,7 @@ void dae::PlayerComponent::Render() const
 	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftRect);
 }
 
-void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& rects, bool isVertical)
+void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& rects, MovementDirection moveDirection)
 {
 	m_Rect = GetGameObject()->GetComponent<TextureComponent>()->GetRect();
 
@@ -75,35 +75,30 @@ void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, G
 
 	for (auto item : rects)
 	{
-		if (!isVertical) {
-			//if (MathLib::IsOverlapping(m_Rect, item.first)) {
+		switch (moveDirection)
+		{
+		case dae::PlayerComponent::VERTICAL:
+			if (MathLib::IsOverlapping(m_LeftRect, item.first)) {
+				isOverlappingLeft = true;
+				break;
+			}
+			break;
+		case dae::PlayerComponent::HORIZONTAL:
 				if (MathLib::IsOverlapping(m_BottomRight, item.first)) { 
 					canMoveRight = true;
 				}
 				if (MathLib::IsOverlapping(m_BottomLeft, item.first)) { 
 					canMoveLeft = true;
 				}
-				//break;
-			//}
-		}
-		else {
-			if (MathLib::IsOverlapping(m_LeftRect, item.first)) {
-				isOverlappingLeft = true;
-				break;
-			}
+			break;
+		default:
+			break;
 		}
 	}
-	if (!isVertical) {
-		if (!m_IsController) {
-			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Left, canMoveLeft);
-			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Right, canMoveRight);		
-		}
-		else{
-			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Left, canMoveLeft);
-			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Right, canMoveRight);
-		}
-	}
-	else {
+
+	switch (moveDirection)
+	{
+	case dae::PlayerComponent::VERTICAL:
 		if (!m_IsController) {
 			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Top, isOverlappingLeft);
 			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Bottom, isOverlappingLeft);
@@ -112,6 +107,19 @@ void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, G
 			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Top, isOverlappingLeft);
 			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Bottom, isOverlappingLeft);
 		}
+		break;
+	case dae::PlayerComponent::HORIZONTAL:
+		if (!m_IsController) {
+			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Left, canMoveLeft);
+			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Right, canMoveRight);		
+		}
+		else{
+			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Left, canMoveLeft);
+			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Right, canMoveRight);
+		}
+		break;
+	default:
+		break;
 	}
 }
 

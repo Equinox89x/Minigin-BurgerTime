@@ -17,7 +17,7 @@ namespace dae {
 		void Update() override;
 
 	private:
-		float EndTimer{ 5 };
+		float m_EndTimer{ 5 };
 
 	};
 }

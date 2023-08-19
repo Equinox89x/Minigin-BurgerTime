@@ -28,13 +28,13 @@ namespace dae {
 	private:
 		Audio* m_pAudioService{ nullptr };
 
-		int BeamSoundId{ 0 };
-		int ShootSoundId{ 0 };
-		int DiveSoundId{ 0 };
-		int BeamCapturedSoundId{ 0 };
-		int DeathSoundId{ 0 };
-		int PlayerDeathSoundId{ 0 };
-		int MenuSoundId{ 0 };
+		int m_BeamSoundId{ 0 };
+		int m_ShootSoundId{ 0 };
+		int m_DiveSoundId{ 0 };
+		int m_BeamCapturedSoundId{ 0 };
+		int m_DeathSoundId{ 0 };
+		int m_PlayerDeathSoundId{ 0 };
+		int m_MenuSoundId{ 0 };
 
 	};
 }

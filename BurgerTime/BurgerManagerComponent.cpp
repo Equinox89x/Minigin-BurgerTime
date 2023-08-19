@@ -30,14 +30,14 @@ void dae::BurgerManagerComponent::Update()
 
 		//player movement overlap
 		if (m_Platforms.size() > 0){
-			player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
-			if(player1) player1->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
-			if(opposer) opposer->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
+			player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, PlayerComponent::MovementDirection::HORIZONTAL);
+			if (player1) player1->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, PlayerComponent::MovementDirection::HORIZONTAL);
+			if (opposer) opposer->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, PlayerComponent::MovementDirection::HORIZONTAL);
 		}
 		if (m_pLadders.size() > 0) {
-			player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
-			if (player1) player1->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
-			if (opposer) opposer->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+			player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, PlayerComponent::MovementDirection::VERTICAL);
+			if (player1) player1->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, PlayerComponent::MovementDirection::VERTICAL);
+			if (opposer) opposer->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, PlayerComponent::MovementDirection::VERTICAL);
 		}
 
 		//Enemy movement overlap
