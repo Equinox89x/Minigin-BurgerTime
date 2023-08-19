@@ -44,12 +44,12 @@ namespace dae {
         bool GetCanMoveVertically() { return m_CanMoveVertically; };
 
         void CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& rects, bool isVertical);
-
+        void SetIsController(bool isController) { m_IsController = isController; };
     private:
         Scene* m_Scene{};
         bool HasDied{ false };
         float DefaultDeathTimer{ 5.5 }, DeathTimer{ DefaultDeathTimer };
-        bool m_CanMoveHorizontally{ true }, m_CanMoveVertically{ true };
+        bool m_CanMoveHorizontally{ true }, m_CanMoveVertically{ true }, m_IsController{false};
 
         SDL_Rect m_BottomRect, m_LeftRect, m_Rect, m_BottomLeft, m_BottomRight;
         PlayerState m_PlayerState{ PlayerState::ALIVE };

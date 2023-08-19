@@ -128,14 +128,13 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 			m_CanChangeState = true;
 		}
 
-		SDL_Rect leftMap{ 0,0, 10,770 };
-		SDL_Rect rightMap{ 760,0, 10,770 };
-		if (MathLib::IsOverlapping(m_BottomLeft, leftMap)) {
+		
+		if (MathLib::IsOverlapping(m_BottomLeft, m_LeftMapBorder)) {
 			canMoveLeft = false;
 			canMoveRight = true;
 			m_CanChangeState = true;
 		}
-		if (MathLib::IsOverlapping(m_BottomRight, rightMap)) {
+		if (MathLib::IsOverlapping(m_BottomRight, m_RightMapBorder)) {
 			canMoveLeft = true;
 			canMoveRight = false;
 			m_CanChangeState = true;

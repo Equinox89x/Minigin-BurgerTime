@@ -7,6 +7,7 @@
 #include "AudioComponent.h"
 #include <MoveKeyboardComponent.h>
 #include "Observers.h"
+#include <MoveControllerComponent.h>
 
 void dae::PlayerComponent::Update()
 {
@@ -88,12 +89,24 @@ void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, G
 		}
 	}
 	if (!isVertical) {
-		GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Left, canMoveLeft);
-		GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Right, canMoveRight);
+		if (!m_IsController) {
+			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Left, canMoveLeft);
+			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Right, canMoveRight);		
+		}
+		else{
+			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Left, canMoveLeft);
+			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Right, canMoveRight);
+		}
 	}
 	else {
-		GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Top, isOverlappingLeft);
-		GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Bottom, isOverlappingLeft);
+		if (!m_IsController) {
+			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Top, isOverlappingLeft);
+			GetGameObject()->GetComponent<MoveKeyboardComponent>()->SetCanMove(MathLib::Side::Bottom, isOverlappingLeft);
+		}
+		else{
+			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Top, isOverlappingLeft);
+			GetGameObject()->GetComponent<MoveControllerComponent>()->SetCanMove(MathLib::Side::Bottom, isOverlappingLeft);
+		}
 	}
 }
 

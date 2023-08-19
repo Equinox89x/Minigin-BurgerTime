@@ -301,6 +301,7 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, glm::vec2 st
 
 	if (id == 0) {
 		//Keyboard
+		mainPlayer->GetComponent<PlayerComponent>()->SetIsController(false);
 		mainPlayer->AddComponent(std::make_unique<MoveKeyboardComponent>(mainPlayer->GetTransform()->GetPosition()));
 
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_w, id }, std::make_unique<MoveKeyboard>(mainPlayer.get(), "moveUp.png", glm::vec3(0.f, -200.f, 0.0f)));
@@ -325,12 +326,13 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, glm::vec2 st
 	}
 	else {
 		//Controller
+		mainPlayer->GetComponent<PlayerComponent>()->SetIsController(true);
 		mainPlayer->AddComponent(std::make_unique<MoveControllerComponent>(mainPlayer->GetTransform()->GetPosition()));
 
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadUp, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveUpSalt.png", glm::vec3(-600.f, 0.0f, 0.0f)));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadDown, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveDownSalt.png", glm::vec3(600.f, 0.0f, 0.0f)));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadLeft, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveLeftSalt.png", glm::vec3(-600.f, 0.0f, 0.0f)));
-		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadRight, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveRightSalt.png", glm::vec3(600.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadUp, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveUpSalt.png", glm::vec3(0, -200.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadDown, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveDownSalt.png", glm::vec3(0, 200.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadLeft, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveLeftSalt.png", glm::vec3(-200.f, 0.0f, 0.0f)));
+		Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED,dae::ControllerButton::DpadRight, id }, std::make_unique<MoveController>(mainPlayer.get(), "moveRightSalt.png", glm::vec3(200.f, 0.0f, 0.0f)));
 
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadUp, id }, std::make_unique<StopMoveController>(mainPlayer.get()));
 		Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP,dae::ControllerButton::DpadDown, id }, std::make_unique<StopMoveController>(mainPlayer.get()));

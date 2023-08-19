@@ -12,6 +12,11 @@ void dae::MoveControllerComponent::UpdatePos(float dt)
 		glm::vec3 furPos = glm::vec3(curPos.x + (m_Movespeed.x * dt), curPos.y + (m_Movespeed.y * dt), 1);
 
 		if (furPos.x < 0 || furPos.x >(GameWindowSizeX) - PlayerSize) return;
+
+		if (!m_Movement[MathLib::Side::Top] && m_Movespeed.y < 0) return;
+		if (!m_Movement[MathLib::Side::Bottom] && m_Movespeed.y > 0) return;
+		if (!m_Movement[MathLib::Side::Left] && m_Movespeed.x < 0) return;
+		if (!m_Movement[MathLib::Side::Right] && m_Movespeed.x > 0) return;
 		go->GetTransform()->Translate(furPos.x, furPos.y, 0);
 	}
 }

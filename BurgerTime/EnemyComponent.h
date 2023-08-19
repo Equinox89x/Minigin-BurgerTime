@@ -74,6 +74,7 @@ namespace dae {
 		int m_Speed{ 100 };
 		bool m_CanChangeState{ false };
 
+		SDL_Rect m_LeftMapBorder{ 0,0, 10,770 }, m_RightMapBorder{ 760,0, 10,770 };
 		SDL_Rect m_LeftDown, m_LeftUp, m_Rect, m_BottomLeft, m_BottomRight, m_LastVert, m_LastHor;
 		State m_State{ State::MovingRight };
 		EnemyType m_EnemyType{ EnemyType::Hotdog };

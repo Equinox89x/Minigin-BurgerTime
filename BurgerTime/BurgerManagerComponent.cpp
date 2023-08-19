@@ -10,6 +10,7 @@ void dae::BurgerManagerComponent::Update()
 	if (!IsMarkedForDestroy()) {
 		const auto enemyHolder{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) };
 		const auto player{ m_Scene->GetGameObject(EnumStrings[Player0]) };
+		const auto player1{ m_Scene->GetGameObject(EnumStrings[Player1]) };
 		SDL_Rect charRect{ player->GetComponent<TextureComponent>()->GetRect() };
 		if (m_Burgers.size() > 0) {
 			for (std::map<std::string, GameObject*>& map : m_Burgers) {
@@ -18,10 +19,14 @@ void dae::BurgerManagerComponent::Update()
 		}
 
 		//player movement overlap
-		if (m_Platforms.size() > 0)
+		if (m_Platforms.size() > 0){
 			player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
-		if (m_pLadders.size() > 0)
+			if(player1) player1->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, false);
+		}
+		if (m_pLadders.size() > 0) {
 			player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+			if(player1 )player1->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, true);
+		}
 
 		//Enemy movement overlap
 		if (enemyHolder && enemyHolder->GetChildren().size() > 0) {
