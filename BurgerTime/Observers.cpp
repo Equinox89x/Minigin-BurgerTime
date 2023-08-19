@@ -8,6 +8,8 @@
 #include "../BurgerTime/AudioComponent.h"
 #include "BurgerManagerComponent.h"
 #include <TextObjectComponent.h>
+#include <TextureComponent.h>
+#include "PlayerComponent.h"
 
 void dae::HealthObserver::Notify(GameObject* go, Event& event)
 {
@@ -86,35 +88,57 @@ void dae::GameOverObserver::Notify(GameObject* go, Event& event)
 
 void dae::StageClearedObserver::Notify(GameObject* /*go*/, Event& event)
 {
-	auto players{ m_pScene->GetGameObjects(EnumStrings[PlayerGeneral], false) };
 	auto scoreboard{ m_pScene->GetGameObject(EnumStrings[ScoreBoard]) };
 	auto enemyHolder{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
 	auto opposer{ m_pScene->GetGameObject(EnumStrings[Opposer]) };
 	auto values{ m_pScene->GetGameObject(EnumStrings[Values]) };
-	auto burgerManager{ m_pScene->GetGameObject(EnumStrings[Names::BurgerManager]) };
+	auto burgerManager{ m_pScene->GetGameObject(EnumStrings[BurgerManager]) };
+
+	auto enemies{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
+	auto player{ m_pScene->GetGameObject(EnumStrings[Player0]) };
+	auto scoreHolder{ m_pScene->GetGameObject(EnumStrings[ScoreHolder]) };
+
+	
 
 	switch (event.GetEvent())
 	{
 	case EventType::StageCleared:
 
 		m_pScene->Remove(enemyHolder);
-		m_pScene->Remove(burgerManager);
-		//TODO reset player location
 
-		if (m_pScene->GetGameObject("Stage 1")) {
-			CreateStage(m_pScene, Stages::Stage2, false);
-			m_pScene->GetGameObject("Stage 1")->SetName("Stage 2");
-			players[0]->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 1.5f) + WindowBuffer));
+		if (burgerManager) {
+			burgerManager->GetComponent<BurgerManagerComponent>()->DeleteItems();
 		}
-		else if (m_pScene->GetGameObject("Stage 2")) {
-			CreateStage(m_pScene, Stages::Stage3, false);
-			m_pScene->GetGameObject("Stage 2")->SetName("Stage 3");
-			players[0]->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - (WindowBuffer + 5));
+
+		if (enemies)
+			enemies->MarkForDestroy();
+
+		if (scoreHolder) {
+			auto children{ scoreHolder->GetChildren(EnumStrings[Life]) };
+			if (children.size() > 0) {
+				for (size_t i = 0; i < 3; i++)
+				{
+					children[i]->SetIsHidden(false);
+				}
+			}
 		}
-		else if (m_pScene->GetGameObject("Stage 3")) {
-			CreateStage(m_pScene, Stages::Stage1, false);
-			m_pScene->GetGameObject("Stage 3")->SetName("Stage 1");
-			players[0]->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 3) + WindowBuffer));
+
+		if (burgerManager) {
+			if (burgerManager->GetComponent<TextureComponent>()->GetName() == "Stage 3") {
+				CreateStage(m_pScene, Stages::Stage1, false);
+				player->GetComponent<PlayerComponent>()->SetStartPos(glm::vec2{ (WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 3) + WindowBuffer) });
+				player->GetComponent<PlayerComponent>()->Reposition();
+			}
+			else if (burgerManager->GetComponent<TextureComponent>()->GetName() == "Stage 1") {
+				CreateStage(m_pScene, Stages::Stage2, false);
+				player->GetComponent<PlayerComponent>()->SetStartPos(glm::vec2{ (WindowSizeX / 2) - (Margin - 10), WindowSizeY - ((Margin * 1.5f) + WindowBuffer + 5) });
+				player->GetComponent<PlayerComponent>()->Reposition();
+			}
+			else if (burgerManager->GetComponent<TextureComponent>()->GetName() == "Stage 2") {
+				CreateStage(m_pScene, Stages::Stage3, false);
+				player->GetComponent<PlayerComponent>()->SetStartPos(glm::vec2{ (WindowSizeX / 2) - (Margin - 10), WindowSizeY - (WindowBuffer + 10) });
+				player->GetComponent<PlayerComponent>()->Reposition();
+			}
 		}
 		break;
 	case EventType::Reset:

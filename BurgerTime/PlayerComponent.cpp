@@ -173,7 +173,7 @@ void dae::PlayerComponent::HandleRespawn()
 	m_DeathTimer = m_DefaultDeathTimer;
 	auto player{ GetGameObject() };
 	player->GetComponent<TextureComponent>()->SetIsVisible(true);
-	player->GetComponent<TextureComponent>()->SetPosition(m_StartPos.x, m_StartPos.y);
+	Reposition();
 	GetGameObject()->EnableCollision(true);
 	CanBeGrabbed = true;
 	m_PlayerState = PlayerState::ALIVE;

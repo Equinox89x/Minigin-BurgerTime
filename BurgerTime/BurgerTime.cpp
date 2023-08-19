@@ -113,32 +113,7 @@ void MakeValues(dae::Scene* /*scene*/) {
 
 }
 
-void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
-
-	std::shared_ptr<GameObject> burgerManager = std::make_shared<GameObject>();
-	burgerManager->AddComponent(std::make_unique<TextureComponent>());
-	burgerManager->SetName(EnumStrings[Names::BurgerManager]);
-
-	std::string name;
-	std::string name2;
-	switch (stageName)
-	{
-	case Stages::Stage1:
-		name = "Stage 1";
-		name2 = "Stage1.png";
-		break;
-	case Stages::Stage2:
-		name = "Stage 2";
-		name2 = "Stage2.png";
-		break;
-	case Stages::Stage3:
-		name = "Stage 3";
-		name2 = "Stage3.png";
-		break;
-	default:
-		break;
-	}
-
+void CreateObjects(dae::Scene* scene, BurgerManagerComponent* burgerManagerComp, std::shared_ptr<GameObject> burgerManager, bool isVersus, std::string name) {
 	FileReader* file{ new FileReader("../Data/galagamap.txt") };
 	auto str{ file->ReadGameDataFile() };
 	auto data{ file->ParseData(str, '+') };
@@ -150,25 +125,16 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 	std::vector<std::vector<int>> veggies = stageItems[EnumStrings[Veggie]];
 	std::vector<std::vector<int>> burgers = stageItems[EnumStrings[Burger]];
 	std::vector<std::vector<int>> plates = stageItems[EnumStrings[Plates]];
-
-	burgerManager->GetComponent<TextureComponent>()->SetTexture(name2);
-	burgerManager->GetTransform()->AddTranslate(0, WindowBuffer);
-	burgerManager->AddComponent(std::make_unique<BurgerManagerComponent>(scene));
-
-	auto observer{ std::make_shared<StageClearedObserver>(&MakeStageOfNr, &CreateEndScreen, scene) };
-
-	auto burgerManagerComp{ burgerManager->GetComponent<BurgerManagerComponent>() };
-	burgerManagerComp->AddObserver(observer);
-
 	//burger maneger has to detect when another burger piece overlaps with another, if yes they fall down until they detect a platform. 
 	//If that platform has a burger piece, that piece has to fall down as well.
 	for (size_t i = 0; i < ladders.size(); i++)
 	{
-		SDL_Rect rect2{ ladders[i][0]-16, ladders[i][1] + WindowBuffer,ladders[i][2],ladders[i][3] };
+		SDL_Rect rect2{ ladders[i][0] - 16, ladders[i][1] + WindowBuffer,ladders[i][2],ladders[i][3] };
 
 		auto ladder2 = std::make_shared<GameObject>();
 		ladder2->AddComponent(std::make_unique<PlatformComponent>(rect2));
 		burgerManagerComp->AddLadder(rect2, ladder2.get());
+		ladder2->SetName(EnumStrings[Ladders]);
 		scene->Add(ladder2);
 	}
 	for (size_t i = 0; i < platforms.size(); i++)
@@ -178,6 +144,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 		auto platform = std::make_shared<GameObject>();
 		platform->AddComponent(std::make_unique<PlatformComponent>(rect));
 		burgerManagerComp->AddPlatform(rect, platform.get());
+		platform->SetName(EnumStrings[Platforms]);
 		scene->Add(platform);
 	}
 	for (size_t i = 0; i < plates.size(); i++)
@@ -186,6 +153,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 		SDL_Rect rect{ plates[i][0], plates[i][1] + WindowBuffer,plates[i][2],plates[i][3] };
 		plate->AddComponent(std::make_unique<PlatformComponent>(rect));
 		burgerManagerComp->AddPlate(rect, plate.get());
+		plate->SetName(EnumStrings[Plates]);
 		scene->Add(plate);
 	}
 
@@ -195,8 +163,9 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 		pattyTop->AddComponent(std::make_unique<TextureComponent>());
 		pattyTop->GetComponent<TextureComponent>()->SetTexture("pattyTop.png");
 		pattyTop->GetComponent<TextureComponent>()->Scale(3, 3);
-		pattyTop->GetTransform()->Translate(static_cast<float>(pattiesTop[i][0]), static_cast<float>(pattiesTop[i][1])+ WindowBuffer);
-		pattyTop->AddComponent(std::make_unique<BurgerComponent>(scene));	
+		pattyTop->GetTransform()->Translate(static_cast<float>(pattiesTop[i][0]), static_cast<float>(pattiesTop[i][1]) + WindowBuffer);
+		pattyTop->AddComponent(std::make_unique<BurgerComponent>(scene));
+		pattyTop->SetName(EnumStrings[PattyTop]);
 		burgerManager->AddChild(pattyTop);
 
 		GameObject* veggie = new GameObject();
@@ -206,6 +175,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 			veggie->GetComponent<TextureComponent>()->Scale(3, 3);
 			veggie->GetTransform()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]) + WindowBuffer);
 			veggie->AddComponent(std::make_unique<BurgerComponent>(scene));
+			veggie->SetName(EnumStrings[Veggie]);
 			burgerManager->AddChild(veggie);
 		}
 		else {
@@ -213,25 +183,26 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 			veggie = nullptr;
 		}
 
-		GameObject * burger = new GameObject();
+		GameObject* burger = new GameObject();
 		burger->AddComponent(std::make_unique<TextureComponent>());
 		burger->GetComponent<TextureComponent>()->SetTexture("burger.png");
 		burger->GetComponent<TextureComponent>()->Scale(3, 3);
 		burger->GetTransform()->Translate(static_cast<float>(burgers[i][0]), static_cast<float>(burgers[i][1]) + WindowBuffer);
 		burger->AddComponent(std::make_unique<BurgerComponent>(scene));
+		burger->SetName(EnumStrings[Burger]);
 		burgerManager->AddChild(burger);
 
-		GameObject * pattyBottom = new GameObject();
+		GameObject* pattyBottom = new GameObject();
 		pattyBottom->AddComponent(std::make_unique<TextureComponent>());
 		pattyBottom->GetComponent<TextureComponent>()->SetTexture("pattyBottom.png");
 		pattyBottom->GetComponent<TextureComponent>()->Scale(3, 3);
 		pattyBottom->GetTransform()->Translate(static_cast<float>(pattiesBottom[i][0]), static_cast<float>(pattiesBottom[i][1]) + WindowBuffer);
 		pattyBottom->AddComponent(std::make_unique<BurgerComponent>(scene));
+		pattyBottom->SetName(EnumStrings[PattyBottom]);
 		burgerManager->AddChild(pattyBottom);
 
 		burgerManagerComp->AddBurger(pattyTop, pattyBottom, veggie, burger);
 	}
-	scene->Add(burgerManager);
 
 	if (!isVersus) {
 		//enemies
@@ -255,7 +226,206 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 			enemyHolder->AddChild(enemy);
 		}
 	}
-	scene->GetGameObject(EnumStrings[Global])->GetComponent<AudioComponent>()->PlayMenuSound(false);
+}
+
+void ReloadStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
+	std::string name;
+	std::string name2;
+	switch (stageName)
+	{
+	case Stages::Stage1:
+		name = "Stage 1";
+		name2 = "Stage1.png";
+		break;
+	case Stages::Stage2:
+		name = "Stage 2";
+		name2 = "Stage2.png";
+		break;
+	case Stages::Stage3:
+		name = "Stage 3";
+		name2 = "Stage3.png";
+		break;
+	default:
+		break;
+	}
+
+	auto burgerManager{ scene->GetGameObject(EnumStrings[BurgerManager]) };
+	auto burgerManagerComp{ burgerManager->GetComponent<BurgerManagerComponent>()};
+	FileReader* file {new FileReader("../Data/galagamap.txt")};
+	auto str{ file->ReadGameDataFile() };
+	auto data{ file->ParseData(str, '+') };
+	auto stageItems = std::any_cast<std::map<std::string, std::vector<std::vector<int>>>>(data[name]);
+	std::vector<std::vector<int>> ladders = stageItems[EnumStrings[Ladders]];
+	std::vector<std::vector<int>> platforms = stageItems[EnumStrings[Platforms]];
+	std::vector<std::vector<int>> pattiesTop = stageItems[EnumStrings[PattyTop]];
+	std::vector<std::vector<int>> pattiesBottom = stageItems[EnumStrings[PattyBottom]];
+	std::vector<std::vector<int>> veggies = stageItems[EnumStrings[Veggie]];
+	std::vector<std::vector<int>> burgers = stageItems[EnumStrings[Burger]];
+	std::vector<std::vector<int>> plates = stageItems[EnumStrings[Plates]];
+
+	burgerManager->GetComponent<TextureComponent>()->SetTexture(name2);
+	burgerManager->GetComponent<TextureComponent>()->SetName(name);
+	burgerManager->GetComponent<TextureComponent>()->SetName(name);
+
+	CreateObjects(scene, burgerManagerComp, burgerManager, isVersus, name);
+
+	scene->GetGameObject(EnumStrings[Global])->GetComponent<AudioComponent>()->PlayMenuSound(true);
+}
+void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
+
+	std::shared_ptr<GameObject> burgerManager = std::make_shared<GameObject>();
+	burgerManager->AddComponent(std::make_unique<TextureComponent>());
+	burgerManager->SetName(EnumStrings[BurgerManager]);
+
+	std::string name;
+	std::string name2;
+	switch (stageName)
+	{
+	case Stages::Stage1:
+		name = "Stage 1";
+		name2 = "Stage1.png";
+		break;
+	case Stages::Stage2:
+		name = "Stage 2";
+		name2 = "Stage2.png";
+		break;
+	case Stages::Stage3:
+		name = "Stage 3";
+		name2 = "Stage3.png";
+		break;
+	default:
+		break;
+	}
+
+
+	burgerManager->GetComponent<TextureComponent>()->SetTexture(name2);
+	burgerManager->GetComponent<TextureComponent>()->SetName(name);
+	burgerManager->GetTransform()->AddTranslate(0, WindowBuffer);
+	burgerManager->AddComponent(std::make_unique<BurgerManagerComponent>(scene));
+
+	auto observer{ std::make_shared<StageClearedObserver>(&ReloadStageOfNr, &CreateEndScreen, scene) };
+
+	auto burgerManagerComp{ burgerManager->GetComponent<BurgerManagerComponent>() };
+	burgerManagerComp->AddObserver(observer);
+
+	scene->Add(burgerManager);
+	CreateObjects(scene, burgerManagerComp, burgerManager, isVersus, name);
+
+	//FileReader* file{ new FileReader("../Data/galagamap.txt") };
+	//auto str{ file->ReadGameDataFile() };
+	//auto data{ file->ParseData(str, '+') };
+	//auto stageItems = std::any_cast<std::map<std::string, std::vector<std::vector<int>>>>(data[name]);
+	//std::vector<std::vector<int>> ladders = stageItems[EnumStrings[Ladders]];
+	//std::vector<std::vector<int>> platforms = stageItems[EnumStrings[Platforms]];
+	//std::vector<std::vector<int>> pattiesTop = stageItems[EnumStrings[PattyTop]];
+	//std::vector<std::vector<int>> pattiesBottom = stageItems[EnumStrings[PattyBottom]];
+	//std::vector<std::vector<int>> veggies = stageItems[EnumStrings[Veggie]];
+	//std::vector<std::vector<int>> burgers = stageItems[EnumStrings[Burger]];
+	//std::vector<std::vector<int>> plates = stageItems[EnumStrings[Plates]];
+	////burger maneger has to detect when another burger piece overlaps with another, if yes they fall down until they detect a platform. 
+	////If that platform has a burger piece, that piece has to fall down as well.
+	//for (size_t i = 0; i < ladders.size(); i++)
+	//{
+	//	SDL_Rect rect2{ ladders[i][0]-16, ladders[i][1] + WindowBuffer,ladders[i][2],ladders[i][3] };
+
+	//	auto ladder2 = std::make_shared<GameObject>();
+	//	ladder2->AddComponent(std::make_unique<PlatformComponent>(rect2));
+	//	burgerManagerComp->AddLadder(rect2, ladder2.get());
+	//	ladder2->SetName(EnumStrings[Ladders]);
+	//	scene->Add(ladder2);
+	//}
+	//for (size_t i = 0; i < platforms.size(); i++)
+	//{
+	//	SDL_Rect rect{ platforms[i][0], platforms[i][1] + WindowBuffer,platforms[i][2],platforms[i][3] };
+
+	//	auto platform = std::make_shared<GameObject>();
+	//	platform->AddComponent(std::make_unique<PlatformComponent>(rect));
+	//	burgerManagerComp->AddPlatform(rect, platform.get());
+	//	platform->SetName(EnumStrings[Platforms]);
+	//	scene->Add(platform);
+	//}
+	//for (size_t i = 0; i < plates.size(); i++)
+	//{
+	//	auto plate = std::make_shared<GameObject>();
+	//	SDL_Rect rect{ plates[i][0], plates[i][1] + WindowBuffer,plates[i][2],plates[i][3] };
+	//	plate->AddComponent(std::make_unique<PlatformComponent>(rect));
+	//	burgerManagerComp->AddPlate(rect, plate.get());
+	//	plate->SetName(EnumStrings[Plates]);
+	//	scene->Add(plate);
+	//}
+
+	//for (size_t i = 0; i < pattiesTop.size(); i++)
+	//{
+	//	GameObject* pattyTop = new GameObject();
+	//	pattyTop->AddComponent(std::make_unique<TextureComponent>());
+	//	pattyTop->GetComponent<TextureComponent>()->SetTexture("pattyTop.png");
+	//	pattyTop->GetComponent<TextureComponent>()->Scale(3, 3);
+	//	pattyTop->GetTransform()->Translate(static_cast<float>(pattiesTop[i][0]), static_cast<float>(pattiesTop[i][1])+ WindowBuffer);
+	//	pattyTop->AddComponent(std::make_unique<BurgerComponent>(scene));	
+	//	pattyTop->SetName(EnumStrings[PattyTop]);
+	//	burgerManager->AddChild(pattyTop);
+
+	//	GameObject* veggie = new GameObject();
+	//	if (veggies.size() != 0) {
+	//		veggie->AddComponent(std::make_unique<TextureComponent>());
+	//		veggie->GetComponent<TextureComponent>()->SetTexture("veggie.png");
+	//		veggie->GetComponent<TextureComponent>()->Scale(3, 3);
+	//		veggie->GetTransform()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]) + WindowBuffer);
+	//		veggie->AddComponent(std::make_unique<BurgerComponent>(scene));
+	//		veggie->SetName(EnumStrings[Veggie]);
+	//		burgerManager->AddChild(veggie);
+	//	}
+	//	else {
+	//		delete veggie;
+	//		veggie = nullptr;
+	//	}
+
+	//	GameObject* burger = new GameObject();
+	//	burger->AddComponent(std::make_unique<TextureComponent>());
+	//	burger->GetComponent<TextureComponent>()->SetTexture("burger.png");
+	//	burger->GetComponent<TextureComponent>()->Scale(3, 3);
+	//	burger->GetTransform()->Translate(static_cast<float>(burgers[i][0]), static_cast<float>(burgers[i][1]) + WindowBuffer);
+	//	burger->AddComponent(std::make_unique<BurgerComponent>(scene));
+	//	burger->SetName(EnumStrings[Burger]);
+	//	burgerManager->AddChild(burger);
+
+	//	GameObject* pattyBottom = new GameObject();
+	//	pattyBottom->AddComponent(std::make_unique<TextureComponent>());
+	//	pattyBottom->GetComponent<TextureComponent>()->SetTexture("pattyBottom.png");
+	//	pattyBottom->GetComponent<TextureComponent>()->Scale(3, 3);
+	//	pattyBottom->GetTransform()->Translate(static_cast<float>(pattiesBottom[i][0]), static_cast<float>(pattiesBottom[i][1]) + WindowBuffer);
+	//	pattyBottom->AddComponent(std::make_unique<BurgerComponent>(scene));
+	//	pattyBottom->SetName(EnumStrings[PattyBottom]);
+	//	burgerManager->AddChild(pattyBottom);
+
+	//	burgerManagerComp->AddBurger(pattyTop, pattyBottom, veggie, burger);
+	//}
+	//scene->Add(burgerManager);
+
+	//if (!isVersus) {
+	//	//enemies
+	//	std::shared_ptr<GameObject> enemyHolder = std::make_shared<dae::GameObject>();
+	//	enemyHolder->SetName(EnumStrings[EnemyHolder]);
+	//	scene->Add(enemyHolder);
+
+	//	std::vector<std::string> names{ "hotdog","egg", "pickle", "hotdog" };
+	//	std::vector<EnemyType> types{ EnemyType::Hotdog, EnemyType::Egg, EnemyType::Pickle, EnemyType::Hotdog };
+	//	for (size_t i = 0; i < 4; i++)
+	//	{
+	//		GameObject* enemy = new GameObject();
+	//		enemy->SetName(EnumStrings[Enemy]);
+	//		enemy->AddComponent(std::make_unique<EnemyComponent>(scene, types[i]));
+	//		enemy->AddComponent(std::make_unique<TextureComponent>());
+	//		enemy->GetComponent<TextureComponent>()->SetTexture(names[i] + "Down.png");
+	//		enemy->GetComponent<TextureComponent>()->Scale(3, 3);
+	//		enemy->GetComponent<TextureComponent>()->SetNrOfFrames(2);
+	//		enemy->GetComponent<TextureComponent>()->GetRect();
+	//		enemy->GetTransform()->Translate(Margin, (WindowSizeY)-Margin * 5);
+	//		enemyHolder->AddChild(enemy);
+	//	}
+	//}
+
+	scene->GetGameObject(EnumStrings[Global])->GetComponent<AudioComponent>()->PlayMenuSound(true);
 }
 
 void MakeMrHotdog(dae::Scene* scene, glm::vec2 startPos) {
@@ -426,7 +596,7 @@ void MakeMainMenu(dae::Scene* scene) {
 	go->AddComponent(std::make_unique<AudioComponent>());
 	//go->AddComponent(new MoveKeyboardComponent(go->GetTransform()->GetPosition()));
 	go->AddComponent(std::make_unique<MoveKeyboardComponent>(go->GetTransform()->GetPosition()));
-	Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_F1, 0 }, std::make_unique<Skip>(&MakeStageOfNr, scene));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_UP, SDLK_F1, 0 }, std::make_unique<Skip>(&MakeStageOfNr, &MakeMrPepper, scene));
 
 	FileReader* file{ new FileReader("../Data/highscore.txt") };
 	auto str{ file->ReadGameDataFile() };

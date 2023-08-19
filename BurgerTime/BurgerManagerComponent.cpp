@@ -16,7 +16,6 @@ void dae::BurgerManagerComponent::Update()
 		if (m_Burgers.size() > 0) {
 			for (std::map<std::string, GameObject*>& map : m_Burgers) {
 				HandleBurgerOverlap(map, enemyHolder, charRect, opposer);
-				
 			}
 		}
 		if (player1) {
@@ -51,36 +50,26 @@ void dae::BurgerManagerComponent::Update()
 
 void dae::BurgerManagerComponent::HandleBurgerOverlap(std::map<std::string, GameObject*>& map, const std::shared_ptr<GameObject>& enemyHolder, SDL_Rect& charRect, const std::shared_ptr<GameObject>& opposer)
 {
-	
-	auto pattyTop{ map[EnumStrings[PattyTop]] };
-	auto pattyBottom{ map[EnumStrings[PattyBottom]] };
-	auto veggie{ map[EnumStrings[Veggie]] };
-	auto burger{ map[EnumStrings[Burger]] };
+	if (map.size() > 0) {
 
-	auto pattyTopComponent{ pattyTop->GetComponent<BurgerComponent>() };
-	auto pattyBottomComponent{ pattyBottom->GetComponent<BurgerComponent>() };
-	auto veggieComponent{ veggie ? veggie->GetComponent<BurgerComponent>() : nullptr };
-	auto burgerComponent{ burger->GetComponent<BurgerComponent>() };
+		auto pattyTop{ map[EnumStrings[PattyTop]] };
+		auto pattyBottom{ map[EnumStrings[PattyBottom]] };
+		auto veggie{ map[EnumStrings[Veggie]] };
+		auto burger{ map[EnumStrings[Burger]] };
 
-	auto pattyTopRect{ pattyTop->GetComponent<TextureComponent>()->GetRect() };
-	auto pattyBottomRect{ pattyBottom->GetComponent<TextureComponent>()->GetRect() };
-	auto veggieRect{ veggie ? veggie->GetComponent<TextureComponent>()->GetRect() : SDL_Rect{0,0,0,0} };
-	auto burgerRect{ burger->GetComponent<TextureComponent>()->GetRect() };
+		auto pattyTopComponent{ pattyTop->GetComponent<BurgerComponent>() };
+		auto pattyBottomComponent{ pattyBottom->GetComponent<BurgerComponent>() };
+		auto veggieComponent{ veggie ? veggie->GetComponent<BurgerComponent>() : nullptr };
+		auto burgerComponent{ burger->GetComponent<BurgerComponent>() };
 
-	if (MathLib::IsOverlapping(pattyTopRect, burgerRect)) {
-		if (burgerComponent->GetState() != BurgerState::FINISHED) {
-			burgerComponent->SetState(BurgerState::FALLING_NO_INTERUPT);
-		}
-		else {
-			pattyTopComponent->SetState(BurgerState::FINISHED);
-			CheckAreBurgersFinished();
-		}
+		auto pattyTopRect{ pattyTop->GetComponent<TextureComponent>()->GetRect() };
+		auto pattyBottomRect{ pattyBottom->GetComponent<TextureComponent>()->GetRect() };
+		auto veggieRect{ veggie ? veggie->GetComponent<TextureComponent>()->GetRect() : SDL_Rect{0,0,0,0} };
+		auto burgerRect{ burger->GetComponent<TextureComponent>()->GetRect() };
 
-	}
-	if (veggie) {
-		if (MathLib::IsOverlapping(pattyTopRect, veggieRect)) {
-			if (veggieComponent->GetState() != BurgerState::FINISHED) {
-				veggieComponent->SetState(BurgerState::FALLING_NO_INTERUPT);
+		if (MathLib::IsOverlapping(pattyTopRect, burgerRect)) {
+			if (burgerComponent->GetState() != BurgerState::FINISHED) {
+				burgerComponent->SetState(BurgerState::FALLING_NO_INTERUPT);
 			}
 			else {
 				pattyTopComponent->SetState(BurgerState::FINISHED);
@@ -88,62 +77,76 @@ void dae::BurgerManagerComponent::HandleBurgerOverlap(std::map<std::string, Game
 			}
 
 		}
-		if (MathLib::IsOverlapping(veggieRect, burgerRect)) {
-			if (burgerComponent->GetState() != BurgerState::FINISHED) {
-				burgerComponent->SetState(BurgerState::FALLING_NO_INTERUPT);
+		if (veggie) {
+			if (MathLib::IsOverlapping(pattyTopRect, veggieRect)) {
+				if (veggieComponent->GetState() != BurgerState::FINISHED) {
+					veggieComponent->SetState(BurgerState::FALLING_NO_INTERUPT);
+				}
+				else {
+					pattyTopComponent->SetState(BurgerState::FINISHED);
+					CheckAreBurgersFinished();
+				}
+
+			}
+			if (MathLib::IsOverlapping(veggieRect, burgerRect)) {
+				if (burgerComponent->GetState() != BurgerState::FINISHED) {
+					burgerComponent->SetState(BurgerState::FALLING_NO_INTERUPT);
+				}
+				else {
+					veggieComponent->SetState(BurgerState::FINISHED);
+					CheckAreBurgersFinished();
+				}
+
+
+			}
+		}
+		if (MathLib::IsOverlapping(burgerRect, pattyBottomRect)) {
+			if (pattyBottomComponent->GetState() != BurgerState::FINISHED) {
+				pattyBottomComponent->SetState(BurgerState::FALLING_NO_INTERUPT);
 			}
 			else {
-				veggieComponent->SetState(BurgerState::FINISHED);
+				burgerComponent->SetState(BurgerState::FINISHED);
 				CheckAreBurgersFinished();
 			}
 
-
-		}
-	}
-	if (MathLib::IsOverlapping(burgerRect, pattyBottomRect)) {
-		if (pattyBottomComponent->GetState() != BurgerState::FINISHED) {
-			pattyBottomComponent->SetState(BurgerState::FALLING_NO_INTERUPT);
-		}
-		else {
-			burgerComponent->SetState(BurgerState::FINISHED);
-			CheckAreBurgersFinished();
 		}
 
-	}
+		//platform overlap
+		for (const auto& platform : m_Platforms) {
+			auto rect{ platform.first };
+			pattyTopComponent->HandlePlatformOverlap(rect);
+			pattyBottomComponent->HandlePlatformOverlap(rect);
+			if (veggie)veggieComponent->HandlePlatformOverlap(rect);
+			burgerComponent->HandlePlatformOverlap(rect);
+		}
 
-	//platform overlap
-	for (const auto& platform : m_Platforms) {
-		auto rect{ platform.first };
-		pattyTopComponent->HandlePlatformOverlap(rect);
-		pattyBottomComponent->HandlePlatformOverlap(rect);
-		if(veggie)veggieComponent->HandlePlatformOverlap(rect);
-		burgerComponent->HandlePlatformOverlap(rect);
-	}
+		for (const auto& plate : m_pPlates) {
+			auto rect{ plate.first };
+			pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect, true);
+		}
 
-	for (const auto& plate : m_pPlates) {
-		auto rect{ plate.first };
-		pattyBottom->GetComponent<BurgerComponent>()->HandlePlatformOverlap(rect, true);
-	}
+		//player overlap
+		pattyTopComponent->HandleOverlap(charRect);
+		pattyBottomComponent->HandleOverlap(charRect);
+		if (veggie)veggieComponent->HandleOverlap(charRect);
+		burgerComponent->HandleOverlap(charRect);
 
-	//player overlap
-	pattyTopComponent->HandleOverlap(charRect);
-	pattyBottomComponent->HandleOverlap(charRect);
-	if(veggie)veggieComponent->HandleOverlap(charRect);
-	burgerComponent->HandleOverlap(charRect);
+		//Enemy movement overlap
+		if (enemyHolder) {
+			for (auto enemy : enemyHolder->GetChildren()) {
+				enemy->GetComponent<EnemyComponent>()->CheckHit(pattyTop);
+				enemy->GetComponent<EnemyComponent>()->CheckHit(pattyBottom);
+				if (veggie)enemy->GetComponent<EnemyComponent>()->CheckHit(veggie);
+				enemy->GetComponent<EnemyComponent>()->CheckHit(burger);
+			}
+		}
 
-	//Enemy movement overlap
-	for (auto enemy : enemyHolder->GetChildren()) {
-		enemy->GetComponent<EnemyComponent>()->CheckHit(pattyTop);
-		enemy->GetComponent<EnemyComponent>()->CheckHit(pattyBottom);
-		if(veggie)enemy->GetComponent<EnemyComponent>()->CheckHit(veggie);
-		enemy->GetComponent<EnemyComponent>()->CheckHit(burger);
-	}
-
-	if (opposer) {
-		opposer->GetComponent<PlayerComponent>()->CheckHit(pattyTop);
-		opposer->GetComponent<PlayerComponent>()->CheckHit(pattyBottom);
-		if (veggie)opposer->GetComponent<PlayerComponent>()->CheckHit(veggie);
-		opposer->GetComponent<PlayerComponent>()->CheckHit(burger);
+		if (opposer) {
+			opposer->GetComponent<PlayerComponent>()->CheckHit(pattyTop);
+			opposer->GetComponent<PlayerComponent>()->CheckHit(pattyBottom);
+			if (veggie)opposer->GetComponent<PlayerComponent>()->CheckHit(veggie);
+			opposer->GetComponent<PlayerComponent>()->CheckHit(burger);
+		}
 	}
 }
 
@@ -180,6 +183,42 @@ bool dae::BurgerManagerComponent::CheckAreBurgersFinished()
 	Event stageCleared{ EventType::StageCleared };
 	Notify(GetGameObject(), stageCleared);
 	return true;
+}
+
+void dae::BurgerManagerComponent::DeleteItems()
+{
+	auto ladders = m_Scene->GetGameObjects(EnumStrings[Ladders]);
+	auto platforms = m_Scene->GetGameObjects(EnumStrings[Platforms]);
+	auto pattiesTop = m_Scene->GetGameObjects(EnumStrings[PattyTop]);
+	auto pattiesBottom = m_Scene->GetGameObjects(EnumStrings[PattyBottom]);
+	auto veggies = m_Scene->GetGameObjects(EnumStrings[Veggie]);
+	auto burgers = m_Scene->GetGameObjects(EnumStrings[Burger]);
+	auto plates = m_Scene->GetGameObjects(EnumStrings[Plates]);
+
+	for (auto obj : ladders) {
+		obj->MarkForDestroy();
+	}
+	for (auto obj : platforms) {
+		obj->MarkForDestroy();
+	}
+	for (auto obj : pattiesTop) {
+		obj->MarkForDestroy();
+	}
+	for (auto obj : pattiesBottom) {
+		obj->MarkForDestroy();
+	}
+	for (auto obj : veggies) {
+		obj->MarkForDestroy();
+	}
+	for (auto obj : burgers) {
+		obj->MarkForDestroy();
+	}
+	for (auto obj : plates) {
+		obj->MarkForDestroy();
+	}
+
+
+	m_Burgers.clear();
 }
 
 std::map<std::string, dae::GameObject*> dae::BurgerManagerComponent::AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger)

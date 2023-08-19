@@ -23,6 +23,7 @@ namespace dae {
 		void Render() const;
 
 		bool CheckAreBurgersFinished();
+		void DeleteItems();
 
 		std::map<std::string, GameObject*> AddBurger(GameObject* pattyTop, GameObject* pattyBottom, GameObject* veggie, GameObject* burger);
 		std::pair<SDL_Rect, GameObject*> AddPlatform(SDL_Rect rect, GameObject* go);

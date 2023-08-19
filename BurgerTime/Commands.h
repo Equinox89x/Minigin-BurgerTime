@@ -7,6 +7,7 @@
 #include <GameObject.h>
 #include "Scene.h"
 #include "ModeSelector.h"
+#include "BurgerManagerComponent.h"
 #include <Command.h>
 
 namespace dae
@@ -157,13 +158,17 @@ namespace dae
 	class Skip final : public Command
 	{
 	public:
-		Skip(std::function<void(Scene*, Stages, bool)> createStage, Scene* scene) : CreateStage(createStage), m_pScene{ scene } {}
+		Skip(std::function<void(Scene*, Stages, bool)> createStage, std::function <void(Scene* , glm::vec2)>createMainPlayer, Scene* scene) : CreateStage(createStage), CreateMainPlayer{ createMainPlayer }, m_pScene{scene} {}
 		void Execute() override
 		{
 			auto enemies{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
 			auto player{ m_pScene->GetGameObject(EnumStrings[Player0]) };
 			auto scoreHolder{m_pScene->GetGameObject(EnumStrings[ScoreHolder])};
+			auto burgerManager{m_pScene->GetGameObject(EnumStrings[BurgerManager])};
 
+			if (burgerManager) {
+				burgerManager->GetComponent<BurgerManagerComponent>()->DeleteItems();
+			}
 
 			if (enemies)
 				enemies->MarkForDestroy();
@@ -178,24 +183,29 @@ namespace dae
 				}
 			}
 
-			if (m_pScene->GetGameObject("Stage 1")) {
-				CreateStage(m_pScene, Stages::Stage2, false);
-				m_pScene->GetGameObject("Stage 1")->SetName("Stage 2");
-				player->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 1.5f) + WindowBuffer));
-			}
-			else if (m_pScene->GetGameObject("Stage 2")) {
-				CreateStage(m_pScene, Stages::Stage3, false);
-				m_pScene->GetGameObject("Stage 2")->SetName("Stage 3");
-				player->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - (WindowBuffer + 5));
-			}
-			else if (m_pScene->GetGameObject("Stage 3")) {
-				CreateStage(m_pScene, Stages::Stage1, false);
-				m_pScene->GetGameObject("Stage 3")->SetName("Stage 1");
-				player->GetTransform()->Translate((WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 2) + WindowBuffer));
+			if (player) m_pScene->Remove(player);
+
+			if (burgerManager) {
+				if (burgerManager->GetComponent<TextureComponent>()->GetName() == "Stage 3") {
+					m_pScene->Remove(burgerManager);
+					CreateStage(m_pScene, Stages::Stage1, false);
+					CreateMainPlayer(m_pScene, glm::vec2{ (WindowSizeX / 2) - (Margin), WindowSizeY - ((Margin * 3) + WindowBuffer) });
+				}
+				else if (burgerManager->GetComponent<TextureComponent>()->GetName() == "Stage 1") {
+					m_pScene->Remove(burgerManager);
+					CreateStage(m_pScene, Stages::Stage2, false);
+					CreateMainPlayer(m_pScene, glm::vec2{ (WindowSizeX / 2) - (Margin - 10), WindowSizeY - ((Margin * 1.5f) + WindowBuffer + 5) });
+				}
+				else if (burgerManager->GetComponent<TextureComponent>()->GetName() == "Stage 2") {
+					m_pScene->Remove(burgerManager);
+					CreateStage(m_pScene, Stages::Stage3, false);
+					CreateMainPlayer(m_pScene, glm::vec2{ (WindowSizeX / 2) - (Margin-10), WindowSizeY - (WindowBuffer + 10) });
+				}
 			}
 		}
 	private:
 		std::function<void(Scene*, Stages, bool)> CreateStage;
+		std::function<void(Scene*, glm::vec2)> CreateMainPlayer;
 		Scene* m_pScene;
 	};
 #pragma endregion

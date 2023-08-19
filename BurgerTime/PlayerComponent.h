@@ -64,6 +64,9 @@ namespace dae {
                 }
             }
         }
+        void SetStartPos(glm::vec2 startPos) { m_StartPos = startPos; };
+        void Reposition() { GetGameObject()->GetComponent<TextureComponent>()->SetPosition(m_StartPos.x, m_StartPos.y); };
+
     private:
         Scene* m_Scene{};
         bool HasDied{ false };
