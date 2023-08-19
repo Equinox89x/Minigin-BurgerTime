@@ -114,6 +114,7 @@ void MakeValues(dae::Scene* /*scene*/) {
 }
 
 void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
+
 	std::shared_ptr<GameObject> burgerManager = std::make_shared<GameObject>();
 	burgerManager->AddComponent(std::make_unique<TextureComponent>());
 	burgerManager->SetName(EnumStrings[Names::BurgerManager]);
@@ -188,7 +189,6 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 		scene->Add(plate);
 	}
 
-	//auto observer{ std::make_shared<ScoreObserver>(scene) };
 	for (size_t i = 0; i < pattiesTop.size(); i++)
 	{
 		GameObject* pattyTop = new GameObject();
@@ -197,7 +197,6 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 		pattyTop->GetComponent<TextureComponent>()->Scale(3, 3);
 		pattyTop->GetTransform()->Translate(static_cast<float>(pattiesTop[i][0]), static_cast<float>(pattiesTop[i][1])+ WindowBuffer);
 		pattyTop->AddComponent(std::make_unique<BurgerComponent>(scene));	
-		//pattyTop->GetComponent<BurgerComponent>()->AddObserver(observer);
 		burgerManager->AddChild(pattyTop);
 
 		GameObject* veggie = new GameObject();
@@ -207,7 +206,6 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 			veggie->GetComponent<TextureComponent>()->Scale(3, 3);
 			veggie->GetTransform()->Translate(static_cast<float>(veggies[i][0]), static_cast<float>(veggies[i][1]) + WindowBuffer);
 			veggie->AddComponent(std::make_unique<BurgerComponent>(scene));
-			//veggie->GetComponent<BurgerComponent>()->AddObserver(observer);
 			burgerManager->AddChild(veggie);
 		}
 		else {
@@ -221,7 +219,6 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 		burger->GetComponent<TextureComponent>()->Scale(3, 3);
 		burger->GetTransform()->Translate(static_cast<float>(burgers[i][0]), static_cast<float>(burgers[i][1]) + WindowBuffer);
 		burger->AddComponent(std::make_unique<BurgerComponent>(scene));
-		//burger->GetComponent<BurgerComponent>()->AddObserver(observer);
 		burgerManager->AddChild(burger);
 
 		GameObject * pattyBottom = new GameObject();
@@ -230,7 +227,6 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 		pattyBottom->GetComponent<TextureComponent>()->Scale(3, 3);
 		pattyBottom->GetTransform()->Translate(static_cast<float>(pattiesBottom[i][0]), static_cast<float>(pattiesBottom[i][1]) + WindowBuffer);
 		pattyBottom->AddComponent(std::make_unique<BurgerComponent>(scene));
-		//pattyBottom->GetComponent<BurgerComponent>()->AddObserver(observer);
 		burgerManager->AddChild(pattyBottom);
 
 		burgerManagerComp->AddBurger(pattyTop, pattyBottom, veggie, burger);
@@ -241,7 +237,6 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 		//enemies
 		std::shared_ptr<GameObject> enemyHolder = std::make_shared<dae::GameObject>();
 		enemyHolder->SetName(EnumStrings[EnemyHolder]);
-		//enemyHolder->AddComponent(std::make_unique<EnemyManager>());
 		scene->Add(enemyHolder);
 
 		std::vector<std::string> names{ "hotdog","egg", "pickle", "hotdog" };
@@ -260,6 +255,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 			enemyHolder->AddChild(enemy);
 		}
 	}
+	scene->GetGameObject(EnumStrings[Global])->GetComponent<AudioComponent>()->PlayMenuSound(false);
 }
 
 void MakeMrHotdog(dae::Scene* scene, glm::vec2 startPos) {
@@ -307,11 +303,9 @@ void MakePlayer(dae::Scene* scene, std::string textureName, int id, glm::vec2 st
 	mainPlayer->GetComponent<TextureComponent>()->SetName(playerName);
 	mainPlayer->GetComponent<TextureComponent>()->SetTexture(textureName, 0.3f, 3);
 	mainPlayer->GetComponent<TextureComponent>()->Scale(3, 3);
-	//mainPlayer->GetComponent<TextureComponent>()->SetPosition((GameWindowSizeX / 2) - (Margin*2), WindowSizeY - ((Margin*3)+ WindowBuffer));
 	mainPlayer->GetComponent<TextureComponent>()->GetRect();
 
 	mainPlayer->AddComponent(std::make_unique<PlayerComponent>(scene, false, startPos));
-	//mainPlayer->GetTransform()->Translate((GameWindowSizeX / 2) - (Margin * 2), WindowSizeY - ((Margin * 3) + WindowBuffer));
 	mainPlayer->GetTransform()->Translate(startPos);
 
 	if (id == 0) {

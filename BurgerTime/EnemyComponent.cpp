@@ -118,7 +118,6 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 	}
 	
 	if (m_State == State::MovingLeft || m_State == State::MovingRight) {
-		//TODO: check if you reached end of map
 		if (!MathLib::IsOverlapping(m_BottomRight, m_LastHor)) {
 			canMoveLeft = false;
 			m_CanChangeState = true;
@@ -142,7 +141,6 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 	}
 
 	if (m_State == State::MovingUp || m_State == State::MovingDown) {
-		//TODO: check if you reached end of map
 		if (!MathLib::IsOverlapping(m_LeftUp, m_LastVert)) {
 			if (MathLib::IsOverlapping(m_LeftDown, m_LastVert)) {
 				canMoveDown = true;
@@ -225,13 +223,13 @@ void dae::EnemyComponent::CheckHit(GameObject* go)
 
 void dae::EnemyComponent::Render() const
 {
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 0, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomLeft);
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 0, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomRight);
-	SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftUp);
-	SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftDown);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 0, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomLeft);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 0, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_BottomRight);
+	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 255, 255, 255); // Set the color to red
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftUp);
+	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &m_LeftDown);
 }
 
 void dae::EnemyComponent::DestroyEnemy()
@@ -242,6 +240,7 @@ void dae::EnemyComponent::DestroyEnemy()
 	}
 	m_State = State::Dying;
 	GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Dead.png", 0.1f, 2);
+	m_Scene->GetGameObject(EnumStrings[Global])->GetComponent<AudioComponent>()->PlayDeathSound(false);
 
 	//GetGameObject()->MarkForDestroy();
 }

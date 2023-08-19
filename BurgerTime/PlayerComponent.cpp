@@ -144,7 +144,6 @@ void dae::PlayerComponent::HandleEnemyOverlap()
 			auto rect2{ enemy->GetComponent<TextureComponent>()->GetRect() };
 			if (MathLib::IsOverlapping(rect1, rect2)) {
 				Die();
-				enemy->MarkForDestroy();
 				return;
 			}
 		}
@@ -189,9 +188,11 @@ void dae::PlayerComponent::Die()
 	std::string deathName;
 	if (m_IsOpposer) {
 		deathName = "hotdogDead.png";
+		m_Scene->GetGameObject(EnumStrings[Global])->GetComponent<AudioComponent>()->PlayDeathSound(false);
 	}
 	else {
 		deathName = player->GetName() == EnumStrings[Player0] ? "playerDeath.png" : "playerDeathSalt.png";
+		m_Scene->GetGameObject(EnumStrings[Global])->GetComponent<AudioComponent>()->PlayPlayerDeathSound(false);
 	}
 	player->GetComponent<TextureComponent>()->SetTexture(deathName, 0.3f, 5);
 	auto values{ m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetComponent<ValuesComponent>() };
@@ -199,5 +200,4 @@ void dae::PlayerComponent::Die()
 
 	player->EnableCollision(false);
 
-	m_Scene->GetGameObject(EnumStrings[Global])->GetComponent<AudioComponent>()->PlayPlayerDeathSound(false);
 }

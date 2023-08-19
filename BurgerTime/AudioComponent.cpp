@@ -11,7 +11,7 @@ void dae::AudioComponent::PostInitialize()
 	m_DeathSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyDeathSound.wav");
 	m_DiveSoundId = m_pAudioService->LoadSound("../Data/Sound/DiveSound.wav");
 	m_PlayerDeathSoundId = m_pAudioService->LoadSound("../Data/Sound/PlayerDeathSound.wav");
-	m_MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/MenuMusic.wav");
+	m_MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/Music.wav");
 }
 
 void dae::AudioComponent::Update()
@@ -26,7 +26,7 @@ void dae::AudioComponent::Update()
 		m_DeathSoundId = m_pAudioService->LoadSound("../Data/Sound/EnemyDeathSound.wav");
 		m_DiveSoundId = m_pAudioService->LoadSound("../Data/Sound/DiveSound.wav");
 		m_PlayerDeathSoundId = m_pAudioService->LoadSound("../Data/Sound/PlayerDeathSound.wav");
-		m_MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/MenuMusic.wav");
+		m_MenuSoundId = m_pAudioService->LoadSound("../Data/Sound/Music.wav");
 		PlayMenuSound();
 	}
 }

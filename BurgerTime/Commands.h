@@ -162,15 +162,20 @@ namespace dae
 		{
 			auto enemies{ m_pScene->GetGameObject(EnumStrings[EnemyHolder]) };
 			auto player{ m_pScene->GetGameObject(EnumStrings[Player0]) };
+			auto scoreHolder{m_pScene->GetGameObject(EnumStrings[ScoreHolder])};
 
 
 			if (enemies)
 				enemies->MarkForDestroy();
 
-			auto children{ m_pScene->GetGameObject(EnumStrings[ScoreBoard])->GetChildren(EnumStrings[Life]) };
-			for (size_t i = 0; i < 3; i++)
-			{
-				children[i]->SetIsHidden(false);
+			if (scoreHolder) {
+				auto children{ scoreHolder->GetChildren(EnumStrings[Life]) };
+				if (children.size() > 0) {
+					for (size_t i = 0; i < 3; i++)
+					{
+						children[i]->SetIsHidden(false);
+					}
+				}
 			}
 
 			if (m_pScene->GetGameObject("Stage 1")) {
