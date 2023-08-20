@@ -67,10 +67,12 @@ void dae::GameObject::Render() const
 {
 	if(!m_IsHidden){
 		for (const std::unique_ptr<Component>& comp : m_pComponents) {
+			if (comp->MarkedForDelete) continue;
 			comp->Render();
 		}
 
 		for (GameObject* child : m_pChildren) {
+			if (child->MarkedForDelete) continue;
 			child->Render();
 		}
 	}

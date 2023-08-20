@@ -218,17 +218,18 @@ void CreateObjects(dae::Scene* scene, BurgerManagerComponent* burgerManagerComp,
 
 		std::vector<std::string> names{ "hotdog","egg", "pickle", "hotdog" };
 		std::vector<EnemyType> types{ EnemyType::Hotdog, EnemyType::Egg, EnemyType::Pickle, EnemyType::Hotdog };
+		glm::vec2 pos{ Margin, (WindowSizeY)-Margin * 5 };
 		for (size_t i = 0; i < 4; i++)
 		{
 			GameObject* enemy = new GameObject();
 			enemy->SetName(EnumStrings[Enemy]);
-			enemy->AddComponent(std::make_unique<EnemyComponent>(scene, types[i]));
+			enemy->AddComponent(std::make_unique<EnemyComponent>(scene, types[i], pos));
 			enemy->AddComponent(std::make_unique<TextureComponent>());
 			enemy->GetComponent<TextureComponent>()->SetTexture(names[i] + "Down.png");
 			enemy->GetComponent<TextureComponent>()->Scale(3, 3);
 			enemy->GetComponent<TextureComponent>()->SetNrOfFrames(2);
 			enemy->GetComponent<TextureComponent>()->GetRect();
-			enemy->GetTransform()->Translate(Margin, (WindowSizeY)-Margin * 5);
+			enemy->GetTransform()->Translate(pos);
 			enemyHolder->AddChild(enemy);
 		}
 	}

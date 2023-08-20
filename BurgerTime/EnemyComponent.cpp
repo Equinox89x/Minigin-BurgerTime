@@ -41,7 +41,7 @@ void dae::EnemyComponent::Update()
 	case dae::State::Dying:
 		m_DeathTimer -= deltaTime;
 		if (m_DeathTimer <= 0) {
-			GetGameObject()->MarkForDestroy();
+			Respawn();
 		}
 		break;
 	default:
@@ -219,6 +219,17 @@ void dae::EnemyComponent::CheckHit(GameObject* go)
 			DestroyEnemy();
 		}
 	}
+}
+
+void dae::EnemyComponent::Respawn()
+{
+	m_CanDie = false;
+	m_DeathTimer = .4f;
+	m_Lives = 1;
+	m_CanChangeState = false;
+	m_State = State::MovingRight;
+	GetGameObject()->GetTransform()->Translate(m_StartPos);
+	GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Down.png", 0.1f, 2);
 }
 
 void dae::EnemyComponent::Render() const

@@ -23,9 +23,10 @@ namespace dae {
 	{
 
 	public:
-		EnemyComponent(Scene* scene, EnemyType enemyType) :
+		EnemyComponent(Scene* scene, EnemyType enemyType, glm::vec2 startPos) :
 			m_Scene{ scene },
-			m_EnemyType{ enemyType }
+			m_EnemyType{ enemyType },
+			m_StartPos{ startPos }
 		{
 			switch (m_EnemyType)
 			{
@@ -64,6 +65,7 @@ namespace dae {
 
 		void CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& platforms, const std::vector<std::pair<SDL_Rect, GameObject*>>& ladders);
 		void CheckHit(GameObject* go);
+		void Respawn();
 
 	private:
 		Scene* m_Scene;
@@ -79,6 +81,8 @@ namespace dae {
 		State m_State{ State::MovingRight };
 		EnemyType m_EnemyType{ EnemyType::Hotdog };
 		std::string m_EnemyTypeName{ "hotdog" };
+		glm::vec2 m_StartPos;
+
 
 		bool IsSameRect(const SDL_Rect& rect1, const SDL_Rect& rect);
 	};
