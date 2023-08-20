@@ -12,6 +12,7 @@
 #include "GameObject.h"
 #include <ValuesComponent.h>
 #include "BurgerComponent.h"
+#include "FloatingScoreComponent.h"
 
 void dae::EnemyComponent::Initialize()
 {
@@ -216,7 +217,9 @@ void dae::EnemyComponent::CheckHit(GameObject* go)
 		rect.y -= rect.h;
 		auto rect2{ go->GetComponent<TextureComponent>()->GetRect() };
 		if (MathLib::IsOverlapping(rect, rect2)) {
-			DestroyEnemy();
+			if (m_State != State::Dying) {
+				DestroyEnemy();
+			}
 		}
 	}
 }
@@ -253,5 +256,8 @@ void dae::EnemyComponent::DestroyEnemy()
 	GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Dead.png", 0.1f, 2);
 	m_Scene->GetGameObject(EnumStrings[Global])->GetComponent<AudioComponent>()->PlayDeathSound(false);
 
+	auto go2{ std::make_shared<GameObject>() };
+	m_Scene->Add(go2);
+	go2->AddComponent(std::make_unique<FloatingScoreComponent>(std::to_string(m_Score), GetGameObject()->GetTransform()->GetWorldPosition()));
 	//GetGameObject()->MarkForDestroy();
 }

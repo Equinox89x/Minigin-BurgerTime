@@ -205,6 +205,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClInclude Include="EndScreenComponent.h" />
     <ClInclude Include="EnemyComponent.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="FloatingScoreComponent.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ModeSelector.h" />
     <ClInclude Include="Observers.h" />
@@ -221,6 +222,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll" "$(O
     <ClCompile Include="EndScreenComponent.cpp" />
     <ClCompile Include="EnemyComponent.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="FloatingScoreComponent.cpp" />
     <ClCompile Include="ModeSelector.cpp" />
     <ClCompile Include="Observers.cpp" />
     <ClCompile Include="PlatformComponent.cpp" />

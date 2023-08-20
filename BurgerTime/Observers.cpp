@@ -10,6 +10,7 @@
 #include <TextObjectComponent.h>
 #include <TextureComponent.h>
 #include "PlayerComponent.h"
+#include "Commands.h"
 
 void dae::HealthObserver::Notify(GameObject* go, Event& event)
 {
@@ -54,6 +55,7 @@ void dae::GameOverObserver::Notify(GameObject* go, Event& event)
 	auto opposer{ m_Scene->GetGameObject(EnumStrings[Opposer]) };
 	//auto values{ m_Scene->GetGameObject(EnumStrings[Values]) };
 	auto burgerManager{ m_Scene->GetGameObject(EnumStrings[BurgerManager]) };
+	auto selector{ m_Scene->GetGameObject(EnumStrings[Selector]) };
 
 
 
@@ -70,7 +72,7 @@ void dae::GameOverObserver::Notify(GameObject* go, Event& event)
 				object->MarkForDestroy();
 			}
 
-			m_Scene->Remove(scoreboard);
+			scoreboard->MarkForDestroy();
 
 			for (auto player : players) {
 				player->MarkForDestroy();
@@ -85,6 +87,14 @@ void dae::GameOverObserver::Notify(GameObject* go, Event& event)
 			}
 
 			menu->SetIsHidden(false);
+
+			Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_UP, 0 }, std::make_unique<CycleGameMode>(selector.get(), true));
+			Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_DOWN, 0 }, std::make_unique<CycleGameMode>(selector.get(), false));
+			Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_SPACE, 0 }, std::make_unique<StartGame>(selector.get()));			
+			
+			Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, ControllerButton::ButtonY, 0 }, std::make_unique<CycleGameMode>(selector.get(), true));
+			Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, ControllerButton::ButtonA, 0 }, std::make_unique<CycleGameMode>(selector.get(), false));
+			Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, ControllerButton::ButtonX, 0 }, std::make_unique<StartGame>(selector.get()));
 
 			//todo re-enable menu controls
 		//}

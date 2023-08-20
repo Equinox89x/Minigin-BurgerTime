@@ -48,6 +48,10 @@ void CreateSelectorInput(dae::Scene* scene) {
 	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_UP, 0 }, std::make_unique<CycleGameMode>(selector.get(), true));
 	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_DOWN, 0 }, std::make_unique<CycleGameMode>(selector.get(), false));
 	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, SDLK_SPACE, 0 }, std::make_unique<StartGame>(selector.get()));
+
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, ControllerButton::ButtonY, 0 }, std::make_unique<CycleGameMode>(selector.get(), true));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, ControllerButton::ButtonA, 0 }, std::make_unique<CycleGameMode>(selector.get(), false));
+	Input::GetInstance().BindKey({ ButtonStates::BUTTON_PRESSED, ControllerButton::ButtonX, 0 }, std::make_unique<StartGame>(selector.get()));
 }
 
 void CreateEndScreen(dae::Scene* /*scene*/) {

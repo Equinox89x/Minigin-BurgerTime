@@ -66,6 +66,10 @@ void dae::ValuesComponent::Reset()
 
 void dae::ValuesComponent::GameEnd()
 {
+	m_Lives = 3;
+	m_Score = 0;
+	NrOfHits = 0;
+	NrOfShotsFired = 0;
 	//FileReader* file{ new FileReader("../Data/highscore.txt") };
 	//auto str{ file->ReadGameDataFile() };
 	//auto data{ file->ParseDataSimple(str, '+') };

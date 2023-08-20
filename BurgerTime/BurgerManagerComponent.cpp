@@ -12,10 +12,13 @@ void dae::BurgerManagerComponent::Update()
 		const auto player{ m_Scene->GetGameObject(EnumStrings[Player0]) };
 		const auto player1{ m_Scene->GetGameObject(EnumStrings[Player1]) };
 		const auto opposer{ m_Scene->GetGameObject(EnumStrings[Opposer]) };
-		SDL_Rect charRect{ player->GetComponent<TextureComponent>()->GetRect() };
-		if (m_Burgers.size() > 0) {
-			for (std::map<std::string, GameObject*>& map : m_Burgers) {
-				HandleBurgerOverlap(map, enemyHolder, charRect, opposer);
+
+		if (player) {
+			SDL_Rect charRect{ player->GetComponent<TextureComponent>()->GetRect() };
+			if (m_Burgers.size() > 0) {
+				for (std::map<std::string, GameObject*>& map : m_Burgers) {
+					HandleBurgerOverlap(map, enemyHolder, charRect, opposer);
+				}
 			}
 		}
 		if (player1) {
@@ -29,12 +32,12 @@ void dae::BurgerManagerComponent::Update()
 
 		//player movement overlap
 		if (m_Platforms.size() > 0){
-			player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, PlayerComponent::MovementDirection::HORIZONTAL);
+			if (player) player->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, PlayerComponent::MovementDirection::HORIZONTAL);
 			if (player1) player1->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, PlayerComponent::MovementDirection::HORIZONTAL);
 			if (opposer) opposer->GetComponent<PlayerComponent>()->CheckMovement(m_Platforms, PlayerComponent::MovementDirection::HORIZONTAL);
 		}
 		if (m_pLadders.size() > 0) {
-			player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, PlayerComponent::MovementDirection::VERTICAL);
+			if (player) player->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, PlayerComponent::MovementDirection::VERTICAL);
 			if (player1) player1->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, PlayerComponent::MovementDirection::VERTICAL);
 			if (opposer) opposer->GetComponent<PlayerComponent>()->CheckMovement(m_pLadders, PlayerComponent::MovementDirection::VERTICAL);
 		}
