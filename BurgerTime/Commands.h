@@ -30,17 +30,21 @@ namespace dae
 	class MoveKeyboard final : public Command
 	{
 	public:
-		MoveKeyboard(GameObject* object, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
+		MoveKeyboard(GameObject* object, PlayerComponent::Movement movement, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_Movement{ movement }, m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
 		void Execute() override
 		{			
-				m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
-				m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
-				m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
+			auto player{ m_pObject->GetComponent<PlayerComponent>() };
+			if (player->GetState() == PlayerComponent::PlayerState::THROW) return;
+			m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
+			m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
+			m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
+			player->SetMovement(m_Movement);
 		}
 	private:
 		GameObject* m_pObject;
 		glm::vec3 m_MoveSpeed;
-		std::string m_TextureName;
+		std::string m_TextureName; 
+		PlayerComponent::Movement m_Movement;
 	};
 
 	class StopMoveKeyboard final : public Command
@@ -60,16 +64,18 @@ namespace dae
 	class MoveController final : public Command
 	{
 	public:
-		MoveController(GameObject* object, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
+		MoveController(GameObject* object, PlayerComponent::Movement movement, std::string textureName, const glm::vec3& moveSpeed) : m_pObject(object), m_Movement{ movement }, m_MoveSpeed(moveSpeed), m_TextureName(textureName) {}
 		void Execute() override
 		{
 			auto player{ m_pObject->GetComponent<PlayerComponent>() };
-			//if(player->)
+			if (player->GetState() == PlayerComponent::PlayerState::THROW) return;
 			if (m_MoveSpeed.x != 0) {
 				if (player->GetCanMoveHorizontally()) {
 					m_pObject->GetComponent<MoveControllerComponent>()->SetMoveSpeed(m_MoveSpeed);
 					m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
 					m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
+					player->SetMovement(m_Movement);
+
 				}
 			}
 			if (m_MoveSpeed.y != 0) {
@@ -77,6 +83,8 @@ namespace dae
 					m_pObject->GetComponent<MoveControllerComponent>()->SetMoveSpeed(m_MoveSpeed);
 					m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
 					m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
+					player->SetMovement(m_Movement);
+
 				}
 			}
 		}
@@ -84,6 +92,7 @@ namespace dae
 		GameObject* m_pObject;
 		glm::vec3 m_MoveSpeed;
 		std::string m_TextureName;
+		PlayerComponent::Movement m_Movement;
 	};
 
 	class StopMoveController final : public Command

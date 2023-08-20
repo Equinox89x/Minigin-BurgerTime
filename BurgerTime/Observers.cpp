@@ -178,3 +178,21 @@ void dae::StageClearedObserver::Notify(GameObject* /*go*/, Event& event)
 //		break;
 //	}
 //}
+
+void dae::PepperObserver::Notify(GameObject* go, Event& event)
+{
+	ValuesComponent* comp{ go->GetComponent<ValuesComponent>() };
+	auto score{ comp->GetSalt() };
+	switch (event.GetEvent())
+	{
+	case EventType::Pepper:
+		if (auto child{ m_Scene->GetGameObject(EnumStrings[Names::Pepper]) })
+			child->GetComponent<TextObjectComponent>()->SetText(std::to_string(score));
+		break;
+	case EventType::Reset:
+		if (auto child{ m_Scene->GetGameObject(EnumStrings[Names::Pepper]) })
+			child->GetComponent<TextObjectComponent>()->SetText(std::to_string(score));
+		break;
+
+	}
+}

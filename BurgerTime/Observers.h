@@ -18,6 +18,15 @@ namespace dae
 
 	private:
 		Scene* m_Scene;
+	};	
+	class PepperObserver final : public Observer
+	{
+	public:
+		PepperObserver(Scene* scene) : m_Scene{ scene } {};
+		void Notify(GameObject* go, Event& event) override;
+
+	private:
+		Scene* m_Scene;
 	};
 
 	class GameOverObserver final : public Observer

@@ -48,14 +48,36 @@ void dae::EnemyComponent::Update()
 	case dae::State::Stunned:
 		m_StunnedTimer -= deltaTime;
 		if (m_StunnedTimer < 0) {
-			m_StunnedTimer = m_DefaultStunnedTimer;
-			m_State = m_PrevState;
+			HandleStunEnd();
 		}
 		break;
 	default:
 		break;
 	}
 
+}
+
+void dae::EnemyComponent::HandleStunEnd()
+{
+	m_StunnedTimer = m_DefaultStunnedTimer;
+	m_State = m_PrevState;
+	switch (m_State)
+	{
+	case dae::State::MovingUp:
+		GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Up.png", 0.1f, 2);
+		break;
+	case dae::State::MovingLeft:
+		GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Left.png", 0.1f, 2);
+		break;
+	case dae::State::MovingRight:
+		GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Right.png", 0.1f, 2);
+		break;
+	case dae::State::MovingDown:
+		GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Down.png", 0.1f, 2);
+		break;
+	default:
+		break;
+	}
 }
 
 bool dae::EnemyComponent::IsSameRect(const SDL_Rect& rect1, const SDL_Rect& rect)
@@ -244,10 +266,10 @@ void dae::EnemyComponent::Respawn()
 
 void dae::EnemyComponent::Stun()
 {
-	//TODO make enemies gray when stunned
 	if (m_State != State::Stunned) {
 		m_PrevState = m_State;
 		m_State = State::Stunned;
+		GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Stunned.png", 0.1f, 2);
 	}
 }
 

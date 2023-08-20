@@ -25,14 +25,17 @@ namespace dae
 		//Getter
 		int GetLives() const;
 		int GetScores() const;
+		int GetSalt() const;
 		int GetShotsFired() { return NrOfShotsFired; };
 		int GetNumberOfHits() { return NrOfHits; };
 		int GetMissRatio();
 
 		//Setter
 		void SetLives(int lives);
+		void SetSalt(int salt);
 		void SetName(std::string name) { m_ComponentName = name; };
 
+		void DecreaseSalt();
 		//Public functions
 		void Damage();
 		void IncreaseScore(int score);
@@ -48,6 +51,7 @@ namespace dae
 	private:
 		int m_Lives{ 3 };
 		int m_Score{ 0 };
+		int m_Salt{ 5 };
 		std::string m_ComponentName;
 
 		Scene* m_Scene;

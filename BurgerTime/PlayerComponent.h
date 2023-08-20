@@ -68,6 +68,9 @@ namespace dae {
         void Reposition() { GetGameObject()->GetComponent<TextureComponent>()->SetPosition(m_StartPos.x, m_StartPos.y); };
 
         void ThrowSalt();
+        void SetMovement(Movement movement) { m_Movement = movement; };
+
+        PlayerState GetState() { return m_PlayerState; };
 
     private:
         Scene* m_Scene{};
@@ -77,7 +80,10 @@ namespace dae {
 
         SDL_Rect m_BottomRect, m_LeftRect, m_Rect, m_BottomLeft, m_BottomRight;
         PlayerState m_PlayerState{ PlayerState::ALIVE };
+        Movement m_Movement{Movement::DOWN};
+        Movement Prevm_Movement;
         glm::vec2 m_StartPos;
+        glm::vec2 m_PrevLoc;
 
         void HandleEnemyOverlap();
         void HandlePlayerOverlap();

@@ -19,5 +19,6 @@ namespace dae {
         StageCleared,
         ToMenu,
         Reset,
+        Pepper,
     };
 }

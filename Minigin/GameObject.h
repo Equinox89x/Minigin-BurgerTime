@@ -42,6 +42,7 @@
 		Plates,
 		ScoreHolder,
 		BurgerManager,
+		Pepper,
 		NUM_ENUM_VALUES
 	};
 
@@ -52,6 +53,7 @@
 	"Ladders", "Platforms", "PattyTop", "PattyBottom", "Veggie", "Burger",
 	"MainMenu", "EndScreen", "Selector", "Logo",
 	"Global", "Opposer", "Plates", "ScoreHolder", "BurgerManager", 
+	"Pepper"
 	};
 
 	enum class Stages {

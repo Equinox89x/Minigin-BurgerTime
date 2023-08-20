@@ -44,9 +44,26 @@ void dae::ValuesComponent::SetLives(int lives)
 	m_Lives = lives;
 }
 
+void dae::ValuesComponent::SetSalt(int salt)
+{
+	m_Salt = salt;
+}
+
+void dae::ValuesComponent::DecreaseSalt() {
+	m_Salt--;
+	Event pepper{ EventType::Pepper };
+	Notify(GetGameObject(), pepper);
+}
+
+
 int dae::ValuesComponent::GetScores() const
 {
 	return m_Score;
+}
+
+int dae::ValuesComponent::GetSalt() const
+{
+	return m_Salt;
 }
 
 void dae::ValuesComponent::ResetObserver()
@@ -70,6 +87,7 @@ void dae::ValuesComponent::GameEnd()
 	m_Score = 0;
 	NrOfHits = 0;
 	NrOfShotsFired = 0;
+	m_Salt = 5;
 	//FileReader* file{ new FileReader("../Data/highscore.txt") };
 	//auto str{ file->ReadGameDataFile() };
 	//auto data{ file->ParseDataSimple(str, '+') };

@@ -48,7 +48,7 @@ void dae::PlayerComponent::Update()
 				deathName = GetGameObject()->GetName() == EnumStrings[Player0] ? "moveDown.png" : "moveDownSalt.png";
 			}
 			auto rect = GetGameObject()->GetComponent<TextureComponent>()->GetRect();
-			GetGameObject()->GetTransform()->AddTranslate(float(rect.w / 4), 0.f);
+			GetGameObject()->GetTransform()->Translate(m_PrevLoc);
 			GetGameObject()->GetComponent<TextureComponent>()->SetTexture(deathName, 0.3f, 3);
 		}
 		break;
@@ -154,14 +154,32 @@ void dae::PlayerComponent::HandlePlayerOverlap() {
 }
 void dae::PlayerComponent::ThrowSalt()
 {
-	if (m_PlayerState != PlayerState::THROW) {
-
-		//TODO check for which direction to throw salt (use texture names)
+	auto values{m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetComponent<ValuesComponent>()};
+	if (m_PlayerState != PlayerState::THROW && m_Movement != Movement::UP && m_Movement != Movement::DOWN && values->GetSalt()) {
+		values->DecreaseSalt();
 		//TODO check for nr of remaining salts you can throw (values component)
-		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("SaltThrow.png", 0.3f, 3);
+		auto comp{ GetGameObject()->GetComponent<TextureComponent>() };
 		auto rect = GetGameObject()->GetComponent<TextureComponent>()->GetRect();
-		GetGameObject()->GetTransform()->AddTranslate(float(-rect.w / 4), 0);
+		float distance{ 0 };
+		switch (m_Movement)
+		{
+		case dae::PlayerComponent::LEFT:
+			comp->SetTexture("SaltThrowLeft.png", 0.3f, 3);
+			distance = float(-rect.w*6);
+			break;
+		case dae::PlayerComponent::RIGHT:
+			comp->SetTexture("SaltThrow.png", 0.3f, 3);
+			distance = float(-rect.w );
+			break;
+		default:
+			break;
+		}
+
+
+		m_PrevLoc = GetGameObject()->GetTransform()->GetWorldPosition();
+		GetGameObject()->GetTransform()->AddTranslate(distance, 0);
 		m_PlayerState = PlayerState::THROW;
+
 
 		if (auto go{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) }) {
 			auto children{ go->GetChildren(EnumStrings[Enemy]) };

@@ -56,6 +56,7 @@ namespace dae {
 
 		virtual void Initialize() override;
 		virtual void Update() override;
+		void HandleStunEnd();
 		virtual void Render() const override;
 		//virtual void FixedUpdate() override; 
 
