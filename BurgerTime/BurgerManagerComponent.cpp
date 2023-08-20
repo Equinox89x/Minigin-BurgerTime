@@ -226,6 +226,20 @@ void dae::BurgerManagerComponent::DeleteItems()
 	for (auto obj : plates) {
 		obj->MarkForDestroy();
 	}
+	for (auto obj : m_pPlates) {
+		obj.second->MarkForDestroy();
+	}	
+	for (auto obj : m_pLadders) {
+		obj.second->MarkForDestroy();
+	}	
+	for (auto obj : m_Platforms) {
+		obj.second->MarkForDestroy();
+	}
+
+	m_pPlates  .clear();
+	m_pLadders .clear();
+	m_Platforms.clear();
+
 
 	
 }

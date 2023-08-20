@@ -191,7 +191,6 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 
 	//change state depending on overlap results
 	if (m_CanChangeState) {
-		//TODO: Calcualte chance of willing to move left or right when coming from a ladder, or to continue
 		if (canMoveLeft && canMoveRight) {
 			if (MathLib::CalculateChance() <= 0.5f) {
 				m_State = State::MovingLeft;
@@ -213,8 +212,6 @@ void dae::EnemyComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, Ga
 			}
 		}
 
-
-		//TODO: Calcualte chance of willing to move up or down when coming from a platform, or to continue
 		if (canMoveDown && canMoveUp) {
 			if (MathLib::CalculateChance() <= 0.5f) {
 				m_State = State::MovingDown;
@@ -297,5 +294,4 @@ void dae::EnemyComponent::DestroyEnemy()
 	auto go2{ std::make_shared<GameObject>() };
 	m_Scene->Add(go2);
 	go2->AddComponent(std::make_unique<FloatingScoreComponent>(std::to_string(m_Score), GetGameObject()->GetTransform()->GetWorldPosition()));
-	//GetGameObject()->MarkForDestroy();
 }

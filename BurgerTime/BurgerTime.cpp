@@ -279,6 +279,7 @@ void ReloadStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 
 	auto burgerManager{ scene->GetGameObject(EnumStrings[BurgerManager]) };
 	auto burgerManagerComp{ burgerManager->GetComponent<BurgerManagerComponent>()};
+	burgerManagerComp->DeleteItems();
 	FileReader* file {new FileReader("../Data/galagamap.txt")};
 	auto str{ file->ReadGameDataFile() };
 	auto data{ file->ParseData(str, '+') };
@@ -563,7 +564,7 @@ void MakeMrsSalt(dae::Scene* scene, glm::vec2 startPos) {
 }
 
 void MakeStage(dae::Scene* scene) {
-	MakeStageOfNr(scene, Stages::Stage1, false);
+	MakeStageOfNr(scene, Stages::Stage2, false);
 }
 
 void MakeVersusStage(dae::Scene* scene, glm::vec2 startPos) {

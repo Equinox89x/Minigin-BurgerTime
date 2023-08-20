@@ -97,10 +97,3 @@ void dae::ValuesComponent::GameEnd()
 	//	file->WriteData("Highscore", std::to_string(GetScores()));
 	//}
 }
-
-int dae::ValuesComponent::GetMissRatio()
-{
-	if (NrOfHits == 0 || NrOfShotsFired == 0) return 0;
-	auto ratio{ (static_cast<float>(NrOfHits) / static_cast<float>(NrOfShotsFired)) * 100.f };
-	return static_cast<int>(ratio);
-}

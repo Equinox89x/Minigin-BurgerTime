@@ -34,7 +34,7 @@ namespace dae
 		void Execute() override
 		{			
 			auto player{ m_pObject->GetComponent<PlayerComponent>() };
-			if (player->GetState() == PlayerComponent::PlayerState::THROW) return;
+			if (player->GetState() == PlayerComponent::PlayerState::THROW || player->GetState() == PlayerComponent::PlayerState::DEAD) return;
 			m_pObject->GetComponent<MoveKeyboardComponent>()->SetMoveSpeed(m_MoveSpeed);
 			m_pObject->GetComponent<TextureComponent>()->SetTexture(m_TextureName);
 			m_pObject->GetComponent<TextureComponent>()->SetNrOfFrames(3);
@@ -68,7 +68,7 @@ namespace dae
 		void Execute() override
 		{
 			auto player{ m_pObject->GetComponent<PlayerComponent>() };
-			if (player->GetState() == PlayerComponent::PlayerState::THROW) return;
+			if (player->GetState() == PlayerComponent::PlayerState::THROW || player->GetState() == PlayerComponent::PlayerState::DEAD) return;
 			if (m_MoveSpeed.x != 0) {
 				if (player->GetCanMoveHorizontally()) {
 					m_pObject->GetComponent<MoveControllerComponent>()->SetMoveSpeed(m_MoveSpeed);

@@ -83,10 +83,6 @@ void dae::PlayerComponent::CheckMovement(const std::vector<std::pair<SDL_Rect, G
 	m_LeftRect.h /= 2;
 	m_LeftRect.y += m_Rect.h / 4;
 
-	//m_BottomRect = m_Rect;
-	//m_BottomRect.h /= 5;
-	//m_BottomRect.y += m_Rect.h;
-
 	bool canMoveRight{ false };
 	bool canMoveLeft{ false };
 	bool isOverlappingLeft{ false };
@@ -157,7 +153,6 @@ void dae::PlayerComponent::ThrowSalt()
 	auto values{m_Scene->GetGameObject(EnumStrings[ScoreHolder])->GetComponent<ValuesComponent>()};
 	if (m_PlayerState != PlayerState::THROW && m_Movement != Movement::UP && m_Movement != Movement::DOWN && values->GetSalt()) {
 		values->DecreaseSalt();
-		//TODO check for nr of remaining salts you can throw (values component)
 		auto comp{ GetGameObject()->GetComponent<TextureComponent>() };
 		auto rect = GetGameObject()->GetComponent<TextureComponent>()->GetRect();
 		float distance{ 0 };

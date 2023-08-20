@@ -28,7 +28,6 @@ namespace dae
 		int GetSalt() const;
 		int GetShotsFired() { return NrOfShotsFired; };
 		int GetNumberOfHits() { return NrOfHits; };
-		int GetMissRatio();
 
 		//Setter
 		void SetLives(int lives);
