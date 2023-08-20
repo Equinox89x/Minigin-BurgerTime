@@ -17,3 +17,9 @@ Minigin is, despite perhaps the suggestion in its name, not a game engine. It is
 # Use
 
 Download the latest release of this project and compile/run the "Burger Time" project in the solution in visual studio.
+
+# Info
+Project repo on github: https://github.com/Equinox89x/Minigin-BurgerTime
+
+I have created the system to give gameobjects and components a name. This is used to easily get any and all objects of a certain type that can then be used for the purposes one needs.
+

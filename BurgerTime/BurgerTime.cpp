@@ -141,7 +141,7 @@ void MakeValues(dae::Scene* /*scene*/) {
 }
 
 void CreateObjects(dae::Scene* scene, BurgerManagerComponent* burgerManagerComp, std::shared_ptr<GameObject> burgerManager, bool isVersus, std::string name) {
-	FileReader* file{ new FileReader("../Data/galagamap.txt") };
+	FileReader* file{ new FileReader("../Data/map.txt") };
 	auto str{ file->ReadGameDataFile() };
 	auto data{ file->ParseData(str, '+') };
 	auto stageItems = std::any_cast<std::map<std::string, std::vector<std::vector<int>>>>(data[name]);
@@ -280,7 +280,7 @@ void ReloadStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 	auto burgerManager{ scene->GetGameObject(EnumStrings[BurgerManager]) };
 	auto burgerManagerComp{ burgerManager->GetComponent<BurgerManagerComponent>()};
 	burgerManagerComp->DeleteItems();
-	FileReader* file {new FileReader("../Data/galagamap.txt")};
+	FileReader* file {new FileReader("../Data/map.txt")};
 	auto str{ file->ReadGameDataFile() };
 	auto data{ file->ParseData(str, '+') };
 	auto stageItems = std::any_cast<std::map<std::string, std::vector<std::vector<int>>>>(data[name]);
@@ -340,7 +340,7 @@ void MakeStageOfNr(dae::Scene* scene, Stages stageName, bool isVersus) {
 	scene->Add(burgerManager);
 	CreateObjects(scene, burgerManagerComp, burgerManager, isVersus, name);
 
-	//FileReader* file{ new FileReader("../Data/galagamap.txt") };
+	//FileReader* file{ new FileReader("../Data/map.txt") };
 	//auto str{ file->ReadGameDataFile() };
 	//auto data{ file->ParseData(str, '+') };
 	//auto stageItems = std::any_cast<std::map<std::string, std::vector<std::vector<int>>>>(data[name]);
@@ -662,7 +662,7 @@ void MakeMainMenu(dae::Scene* scene) {
 
 void load()
 {
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("Galaga");
+	auto& scene = dae::SceneManager::GetInstance().CreateScene("BurgerTime");
 
 	MakeMainMenu(&scene);
 }
