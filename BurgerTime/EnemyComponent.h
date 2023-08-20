@@ -12,7 +12,8 @@ namespace dae {
 		MovingLeft,
 		MovingRight,
 		MovingDown,
-		Dying
+		Dying,
+		Stunned
 	};
 
 	enum class EnemyType{
@@ -66,6 +67,7 @@ namespace dae {
 		void CheckMovement(const std::vector<std::pair<SDL_Rect, GameObject*>>& platforms, const std::vector<std::pair<SDL_Rect, GameObject*>>& ladders);
 		void CheckHit(GameObject* go);
 		void Respawn();
+		void Stun();
 
 	private:
 		Scene* m_Scene;
@@ -76,9 +78,12 @@ namespace dae {
 		int m_Speed{ 100 };
 		bool m_CanChangeState{ false };
 
+		float m_DefaultStunnedTimer{ 3.5f }, m_StunnedTimer{ m_DefaultStunnedTimer };
+
 		SDL_Rect m_LeftMapBorder{ 0,0, 10,770 }, m_RightMapBorder{ 760,0, 10,770 };
 		SDL_Rect m_LeftDown, m_LeftUp, m_Rect, m_BottomLeft, m_BottomRight, m_LastVert, m_LastHor;
 		State m_State{ State::MovingRight };
+		State m_PrevState{ State::MovingRight };
 		EnemyType m_EnemyType{ EnemyType::Hotdog };
 		std::string m_EnemyTypeName{ "hotdog" };
 		glm::vec2 m_StartPos;

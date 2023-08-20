@@ -8,6 +8,7 @@
 #include <MoveKeyboardComponent.h>
 #include "Observers.h"
 #include <MoveControllerComponent.h>
+#include "EnemyComponent.h"
 
 void dae::PlayerComponent::Update()
 {
@@ -32,6 +33,23 @@ void dae::PlayerComponent::Update()
 		m_DeathTimer -= deltaTime;
 		if (m_DeathTimer <= 0) {
 			HandleRespawn();
+		}
+		break;
+	case PlayerState::THROW:
+		m_SaltThrowTimer -= deltaTime;
+		if (m_SaltThrowTimer <= 0) {
+			m_SaltThrowTimer = m_DefaultSaltThrowTimer;
+			m_PlayerState = PlayerState::ALIVE;
+			std::string deathName;
+			if (m_IsOpposer) {
+				deathName = "hotdogDown.png";
+			}
+			else {
+				deathName = GetGameObject()->GetName() == EnumStrings[Player0] ? "moveDown.png" : "moveDownSalt.png";
+			}
+			auto rect = GetGameObject()->GetComponent<TextureComponent>()->GetRect();
+			GetGameObject()->GetTransform()->AddTranslate(float(rect.w / 4), 0.f);
+			GetGameObject()->GetComponent<TextureComponent>()->SetTexture(deathName, 0.3f, 3);
 		}
 		break;
 	default:
@@ -134,6 +152,29 @@ void dae::PlayerComponent::HandlePlayerOverlap() {
 		}
 	}
 }
+void dae::PlayerComponent::ThrowSalt()
+{
+	if (m_PlayerState != PlayerState::THROW) {
+
+		//TODO check for which direction to throw salt (use texture names)
+		//TODO check for nr of remaining salts you can throw (values component)
+		GetGameObject()->GetComponent<TextureComponent>()->SetTexture("SaltThrow.png", 0.3f, 3);
+		auto rect = GetGameObject()->GetComponent<TextureComponent>()->GetRect();
+		GetGameObject()->GetTransform()->AddTranslate(float(-rect.w / 4), 0);
+		m_PlayerState = PlayerState::THROW;
+
+		if (auto go{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) }) {
+			auto children{ go->GetChildren(EnumStrings[Enemy]) };
+			auto rect1{ GetGameObject()->GetComponent<TextureComponent>()->GetRect() };
+			for (auto enemy : children) {
+				auto rect2{ enemy->GetComponent<TextureComponent>()->GetRect() };
+				if (MathLib::IsOverlapping(rect1, rect2)) {
+					enemy->GetComponent<EnemyComponent>()->Stun();
+				}
+			}
+		}
+	}
+}
 void dae::PlayerComponent::HandleEnemyOverlap()
 {
 	if(auto go{ m_Scene->GetGameObject(EnumStrings[EnemyHolder]) }) {
@@ -143,7 +184,12 @@ void dae::PlayerComponent::HandleEnemyOverlap()
 			if (enemy->IsMarkedForDestroy()) continue;
 			auto rect2{ enemy->GetComponent<TextureComponent>()->GetRect() };
 			if (MathLib::IsOverlapping(rect1, rect2)) {
-				Die();
+				if (m_PlayerState == PlayerState::THROW) {
+					enemy->GetComponent<EnemyComponent>()->Stun();
+				}
+				else {
+					Die();
+				}
 				return;
 			}
 		}

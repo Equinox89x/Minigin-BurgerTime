@@ -23,7 +23,7 @@ namespace dae {
         };
         
         enum PlayerState {
-            ALIVE, DEAD, RESPAWN
+            ALIVE, DEAD, RESPAWN, THROW
         };
         PlayerComponent(Scene* scene, bool isOpposer, glm::vec2 startPos) : m_Scene{ scene }, m_IsOpposer{ isOpposer }, m_StartPos{ startPos } { };
         ~PlayerComponent() = default;
@@ -67,10 +67,12 @@ namespace dae {
         void SetStartPos(glm::vec2 startPos) { m_StartPos = startPos; };
         void Reposition() { GetGameObject()->GetComponent<TextureComponent>()->SetPosition(m_StartPos.x, m_StartPos.y); };
 
+        void ThrowSalt();
+
     private:
         Scene* m_Scene{};
         bool HasDied{ false };
-        float m_DefaultDeathTimer{ 5.5 }, m_DeathTimer{ m_DefaultDeathTimer };
+        float m_DefaultDeathTimer{ 5.5 }, m_DeathTimer{ m_DefaultDeathTimer }, m_DefaultSaltThrowTimer{0.9f}, m_SaltThrowTimer{ m_DefaultSaltThrowTimer };
         bool m_CanMoveHorizontally{ true }, m_CanMoveVertically{ true }, m_IsController{ false }, m_IsOpposer{false};
 
         SDL_Rect m_BottomRect, m_LeftRect, m_Rect, m_BottomLeft, m_BottomRight;

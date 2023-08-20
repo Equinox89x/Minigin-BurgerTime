@@ -45,6 +45,13 @@ void dae::EnemyComponent::Update()
 			Respawn();
 		}
 		break;
+	case dae::State::Stunned:
+		m_StunnedTimer -= deltaTime;
+		if (m_StunnedTimer < 0) {
+			m_StunnedTimer = m_DefaultStunnedTimer;
+			m_State = m_PrevState;
+		}
+		break;
 	default:
 		break;
 	}
@@ -233,6 +240,15 @@ void dae::EnemyComponent::Respawn()
 	m_State = State::MovingRight;
 	GetGameObject()->GetTransform()->Translate(m_StartPos);
 	GetGameObject()->GetComponent<TextureComponent>()->SetTexture(m_EnemyTypeName + "Down.png", 0.1f, 2);
+}
+
+void dae::EnemyComponent::Stun()
+{
+	//TODO make enemies gray when stunned
+	if (m_State != State::Stunned) {
+		m_PrevState = m_State;
+		m_State = State::Stunned;
+	}
 }
 
 void dae::EnemyComponent::Render() const

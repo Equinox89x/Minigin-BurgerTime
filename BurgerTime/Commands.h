@@ -64,6 +64,7 @@ namespace dae
 		void Execute() override
 		{
 			auto player{ m_pObject->GetComponent<PlayerComponent>() };
+			//if(player->)
 			if (m_MoveSpeed.x != 0) {
 				if (player->GetCanMoveHorizontally()) {
 					m_pObject->GetComponent<MoveControllerComponent>()->SetMoveSpeed(m_MoveSpeed);
@@ -151,8 +152,28 @@ namespace dae
 		}
 	private:
 		GameObject* m_pObject;
-	};
+	};	
+	
 #pragma endregion
+	class ThrowSalt final : public Command
+	{
+	public:
+		ThrowSalt(GameObject* object) : m_pObject(object) {}
+		void Execute() override
+		{
+			if (auto comp1{ m_pObject->GetComponent<MoveControllerComponent>() }) {
+				comp1->SetMoveSpeed(glm::vec3{ 0, 0, 0 });
+			}
+			if (auto comp2{ m_pObject->GetComponent<MoveKeyboardComponent>() }) {
+
+				comp2->SetMoveSpeed(glm::vec3{ 0,0,0 });
+			}
+			auto player{ m_pObject->GetComponent<PlayerComponent>() };
+			player->ThrowSalt();
+		}
+	private:
+		GameObject* m_pObject;
+	};
 
 #pragma region Skipping
 	class Skip final : public Command
